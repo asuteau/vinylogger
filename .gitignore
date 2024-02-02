@@ -1,0 +1,10 @@
+node_modules
+
+/.cache
+/public/build
+/build
+.env
+.vscode
+
+# Local Netlify folder
+.netlify
