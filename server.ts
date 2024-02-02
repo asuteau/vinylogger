@@ -1,5 +1,5 @@
-import * as build from "@remix-run/dev/server-build";
-import { createRequestHandler } from "@netlify/remix-adapter";
+import * as build from '@remix-run/dev/server-build';
+import {createRequestHandler} from '@netlify/remix-adapter';
 
 const handler = createRequestHandler({
   build,
@@ -8,4 +8,4 @@ const handler = createRequestHandler({
 
 export default handler;
 
-export const config = { path: "/*", preferStatic: true }
+export const config = {path: '/*', preferStatic: true};
