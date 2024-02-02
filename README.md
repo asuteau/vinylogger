@@ -1,7 +1,5 @@
-# Welcome to Remix!
-
-- [Remix Docs](https://remix.run/docs)
-- [Netlify Functions Overview](https://docs.netlify.com/functions/overview)
+# vinylogger
+A Discogs based web application focusing on a better user experience.
 
 ## Netlify Setup
 
