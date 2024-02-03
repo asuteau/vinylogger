@@ -5,7 +5,8 @@ import { commitSession, getSession } from "~/sessions.server";
 // Provides data to the component
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Initiating the Request Token
-  const redirectUrl = 'http://localhost:3000/auth'
+  const isProduction = process.env.NODE_ENV === "production"
+  const redirectUrl = isProduction ? 'https://vinylogger.netlify.app/auth' : 'http://localhost:3000/auth'
   const { requestToken, requestTokenSecret } = await getRequestToken(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET, redirectUrl)
 
   // Get storage session
