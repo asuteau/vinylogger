@@ -103,7 +103,39 @@ export const getUserIdentity = async (consumerKey: string, consumerSecret: strin
 
     return { id: data.id, userName: data.username, resourceUrl: data.resource_url, consumerName: data.consumer_name };
   } catch (error) {
-    console.error('Error getting Discogs access token:', error.message);
+    console.error('Error getting Discogs user identity:', error.message);
     throw error;
   }
 }
+
+
+export const getUserProfile = async (consumerKey: string, consumerSecret: string, accessToken: string, accessTokenSecret: string, userName: string): Promise<{ collectionItemsCount: number }> => {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const nonce = timestamp.toString();
+
+  const authString = `OAuth oauth_consumer_key="${consumerKey}", oauth_nonce="${nonce}", oauth_token="${accessToken}", oauth_signature="${consumerSecret}&${accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}"`;
+
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': authString,
+    'User-Agent': DISCOGS_USER_ENDPOINT,
+  };
+
+  const url = `${DISCOGS_API_ENDPOINT}/users/${userName}`
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: headers,
+    });
+
+    const data = await response.json();
+    // console.log('response', response)
+
+    return { collectionItemsCount: data.num_collection };
+  } catch (error) {
+    console.error('Error getting Discogs user profile:', error.message);
+    throw error;
+  }
+}
+

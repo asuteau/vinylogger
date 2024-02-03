@@ -25,10 +25,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   session.set('accessToken', accessToken)
   session.set('accessTokenSecret', accessTokenSecret)
 
-  // Fetch user identity
-  const { id, userName, resourceUrl, consumerName } = await getUserIdentity(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET, accessToken, accessTokenSecret)
-  console.log('User identity', id, userName, resourceUrl, consumerName)
-
   return redirect('/', {
     headers: {
       // Commit the session storage
