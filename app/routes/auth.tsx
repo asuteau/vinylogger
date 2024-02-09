@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { getAccessToken, getUserIdentity } from "~/services/discogs";
+import { getAccessToken } from "~/services/discogs";
 import { commitSession, getSession } from "~/sessions.server";
 
 // Provides data to the component
