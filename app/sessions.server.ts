@@ -15,11 +15,9 @@ const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({
     cookie: {
       name: "__remix_session",
-      httpOnly: true,
       path: "/",
       sameSite: "lax",
       secrets: ["s3cret1"],
-      secure: true,
     },
   });
 
