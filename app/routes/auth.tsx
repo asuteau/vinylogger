@@ -1,3 +1,4 @@
+import { DiscogsOAuth } from "@lionralfs/discogs-client";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getAccessToken } from "~/services/discogs";
 import { commitSession, getSession } from "~/sessions.server";
@@ -18,9 +19,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   console.log('userVerifier', userVerifier)
 
   // Retrieve access token
-  const { accessToken, accessTokenSecret } = await getAccessToken(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET, requestToken, requestTokenSecret, userVerifier)
-  console.log('accessToken', accessToken)
-  console.log('accessTokenSecret', accessTokenSecret)
+  const oAuth = new DiscogsOAuth(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET)
+  const {accessToken, accessTokenSecret} = await oAuth.getAccessToken(requestToken, requestTokenSecret, userVerifier)
+  if (accessToken === null || accessTokenSecret === null) throw new Error("Getting access token failed!")
+  console.log('>>> Get access token', accessToken, accessTokenSecret)
 
   session.set('accessToken', accessToken)
   session.set('accessTokenSecret', accessTokenSecret)

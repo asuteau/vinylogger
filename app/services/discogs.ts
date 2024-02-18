@@ -1,5 +1,5 @@
 const DISCOGS_API_ENDPOINT = 'https://api.discogs.com'
-const DISCOGS_USER_ENDPOINT = 'Vinylogger/1.0'
+const DISCOGS_USER_AGENT = 'Vinylogger/1.0'
 
 export const getRequestToken = async (consumerKey: string, consumerSecret: string, callbackUrl: string): Promise<{ requestToken: string, requestTokenSecret: string }> => {
   const timestamp = Math.floor(Date.now() / 1000);
@@ -10,7 +10,7 @@ export const getRequestToken = async (consumerKey: string, consumerSecret: strin
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': authString,
-    'User-Agent': DISCOGS_USER_ENDPOINT,
+    'User-Agent': DISCOGS_USER_AGENT,
   };
 
   const url = `${DISCOGS_API_ENDPOINT}/oauth/request_token`
@@ -50,7 +50,7 @@ export const getAccessToken = async (consumerKey: string, consumerSecret: string
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': authString,
-    'User-Agent': DISCOGS_USER_ENDPOINT,
+    'User-Agent': DISCOGS_USER_AGENT,
   };
 
   const url = `${DISCOGS_API_ENDPOINT}/oauth/access_token`
@@ -87,7 +87,7 @@ export const getUserIdentity = async (consumerKey: string, consumerSecret: strin
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': authString,
-    'User-Agent': DISCOGS_USER_ENDPOINT,
+    'User-Agent': DISCOGS_USER_AGENT,
   };
 
   const url = `${DISCOGS_API_ENDPOINT}/oauth/identity`
@@ -118,7 +118,7 @@ export const getUserProfile = async (consumerKey: string, consumerSecret: string
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': authString,
-    'User-Agent': DISCOGS_USER_ENDPOINT,
+    'User-Agent': DISCOGS_USER_AGENT,
   };
 
   const url = `${DISCOGS_API_ENDPOINT}/users/${userName}`
