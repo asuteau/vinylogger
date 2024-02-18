@@ -1,5 +1,5 @@
+import { DiscogsOAuth } from "@lionralfs/discogs-client";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { buildAuthorizationUrl, getRequestToken } from "~/services/discogs";
 import { commitSession, getSession } from "~/sessions.server";
 
 // Provides data to the component
@@ -7,7 +7,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Initiating the Request Token
   const isProduction = process.env.NODE_ENV === "production"
   const redirectUrl = isProduction ? `${process.env.APP_PRODUCTION_URL}/auth` : 'http://localhost:3000/auth'
-  const { requestToken, requestTokenSecret } = await getRequestToken(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET, redirectUrl)
+  
+  const oAuth = new DiscogsOAuth(process.env.DISCOGS_API_CONSUMER_KEY, process.env.DISCOGS_API_CONSUMER_SECRET)
+  const {authorizeUrl, token: requestToken, tokenSecret: requestTokenSecret} = await oAuth.getRequestToken(redirectUrl)
+  if (requestToken === null || requestTokenSecret === null) throw new Error('Getting request token failed!')
+  console.log('>>> Get request token', authorizeUrl, requestToken, requestTokenSecret)
 
   // Get storage session
   let session = await getSession(request.headers.get("cookie"));
@@ -15,11 +19,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   session.set('requestToken', requestToken)
   session.set('requestTokenSecret', requestTokenSecret)
 
-  // Redirect to Discogs authorization URL
-  return redirect(buildAuthorizationUrl(requestToken), {
+  return redirect(authorizeUrl, {
     headers: {
-      // Commit the session storage
-      "Set-Cookie": await commitSession(session)
+      'Set-Cookie': await commitSession(session)
     }
   })
 }
