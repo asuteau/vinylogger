@@ -9,11 +9,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const oauthSearchParams = ['oauth_token', 'oauth_verifier']
   const hasExtraSearchParams = oauthSearchParams.every(param => url.searchParams.has(param))
   if (hasExtraSearchParams) {
-    oauthSearchParams.forEach(param => {
-      url.searchParams.delete(param)
-    })
-    console.log('Redirecting with removing the extra search params')  
-    return redirect(url.href)
+    console.log('Redirecting with removing the extra search params to', url.pathname)  
+    return redirect(url.pathname)
   }
 
   // Get storage session
