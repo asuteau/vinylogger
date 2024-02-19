@@ -4,13 +4,13 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { getSession } from '~/sessions.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // Hack: remove extra query parameters (Netlify issue)
+  // Hack: remove extra query parameters (Netlify issue in production only)
   const url = new URL(request.url)
   const oauthSearchParams = ['oauth_token', 'oauth_verifier']
   const hasExtraSearchParams = oauthSearchParams.every(param => url.searchParams.has(param))
   if (hasExtraSearchParams) {
-    console.log('Redirecting with removing the extra search params to', url.pathname)  
-    return redirect(url.pathname)
+    console.log('Redirecting with removing the extra search params to', process.env.APP_PRODUCTION_URL)  
+    return redirect(process.env.APP_PRODUCTION_URL)
   }
 
   // Get storage session

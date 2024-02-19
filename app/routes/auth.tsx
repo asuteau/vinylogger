@@ -1,6 +1,5 @@
 import { DiscogsOAuth } from "@lionralfs/discogs-client";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { getAccessToken } from "~/services/discogs";
 import { commitSession, getSession } from "~/sessions.server";
 
 // Provides data to the component
