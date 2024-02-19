@@ -4,11 +4,8 @@ all redirected URLs if a query string is not present in the redirected URL
 This handler fixes it by removing the query string from the redirected URL if the parameters are identical
 */
 
-import { Config, Context } from "@netlify/functions";
-
-export default async (request: Request, context: Context) => {
+export default async (request, context) => {
   try{
-      console.log('>>>>>>>>>>>>>> TOTO')
       const url = new URL(request.url);
       if(!url.search) return;
 
@@ -54,6 +51,6 @@ export default async (request: Request, context: Context) => {
   } 
 }
 
-export const config: Config = {
+export const config = {
   path: "/",
 };
