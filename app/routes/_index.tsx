@@ -1,9 +1,21 @@
 import { DiscogsClient } from '@lionralfs/discogs-client';
-import { LoaderFunctionArgs, json } from '@remix-run/node';
+import { LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 import { getSession } from '~/sessions.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // Hack: remove extra query parameters (Netlify issue)
+  const url = new URL(request.url)
+  const oauthSearchParams = ['oauth_token', 'oauth_verifier']
+  const hasExtraSearchParams = oauthSearchParams.every(param => url.searchParams.has(param))
+  if (hasExtraSearchParams) {
+    oauthSearchParams.forEach(param => {
+      url.searchParams.delete(param)
+    })
+    console.log('Redirecting with removing the extra search params')  
+    return redirect(url.href)
+  }
+
   // Get storage session
   let session = await getSession(request.headers.get("cookie"));
   const accessToken = session.get('accessToken')
