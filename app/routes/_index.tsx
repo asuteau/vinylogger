@@ -2,6 +2,14 @@ import { DiscogsClient } from '@lionralfs/discogs-client';
 import { LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 import { getSession } from '~/sessions.server';
+import type { MetaFunction } from "@vercel/remix";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "New Remix App" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Get storage session

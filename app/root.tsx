@@ -1,3 +1,4 @@
+import { cssBundleHref } from "@remix-run/css-bundle";
 import type {MetaFunction} from '@remix-run/node';
 import {
   Links,
@@ -7,6 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
+import { Analytics } from "@vercel/analytics/react";
+import type { LinksFunction } from "@vercel/remix";
 
 export const meta: MetaFunction = () => [
   {
@@ -14,6 +17,10 @@ export const meta: MetaFunction = () => [
     title: 'New Remix App',
     viewport: 'width=device-width,initial-scale=1',
   },
+];
+
+export const links: LinksFunction = () => [
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export default function App() {
@@ -28,6 +35,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <Analytics />
       </body>
     </html>
   );
