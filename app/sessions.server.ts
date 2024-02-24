@@ -18,7 +18,7 @@ const { getSession, commitSession, destroySession } =
       path: "/",
       sameSite: "lax",
       secrets: ["s3cret1"],
-      maxAge: 356 * 24 * 60 * 60 // 1 year
+      maxAge: 365 * 24 * 60 * 60 // 1 year
     },
   });
 
