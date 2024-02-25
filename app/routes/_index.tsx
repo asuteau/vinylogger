@@ -1,5 +1,6 @@
 import { DiscogsClient } from '@lionralfs/discogs-client';
-import { LoaderFunctionArgs, json, redirect } from '@remix-run/node';
+import type {LoaderFunctionArgs} from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, Link, useLoaderData } from '@remix-run/react';
 import { getSession } from '~/sessions.server';
 import type { MetaFunction } from "@vercel/remix";
@@ -47,8 +48,11 @@ export default function Index() {
   const user = useLoaderData<typeof loader>();
 
   return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
+    <>
       <h1>Vinylogger</h1>
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
       {user ? <><h2>Welcome, {user.name}</h2><h3>You have {user.nbReleases} releases in your collection!</h3>
         <ul>
           <li>
@@ -63,6 +67,6 @@ export default function Index() {
           </li>
         </ul>
       }
-    </main>
+    </>
   );
 }

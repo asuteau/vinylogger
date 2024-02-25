@@ -1,5 +1,5 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type {MetaFunction} from '@remix-run/node';
+import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
   LiveReload,
@@ -11,6 +11,9 @@ import {
 import { Analytics } from "@vercel/analytics/react";
 import type { LinksFunction } from "@vercel/remix";
 
+import tailwind from "~/styles/tailwind.css";
+import fonts from './styles/fonts.css';
+
 export const meta: MetaFunction = () => [
   {
     charset: 'utf-8',
@@ -20,7 +23,11 @@ export const meta: MetaFunction = () => [
 ];
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  { rel: "stylesheet", href: fonts },
+  { rel: "stylesheet", href: tailwind },
+  ...(cssBundleHref
+    ? [{ rel: "stylesheet", href: cssBundleHref }]
+    : []),
 ];
 
 export default function App() {
