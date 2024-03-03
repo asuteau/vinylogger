@@ -1,9 +1,10 @@
-import {DiscogsClient} from '@lionralfs/discogs-client';
-import type {LoaderFunctionArgs} from '@remix-run/node';
-import {json} from '@remix-run/node';
+import type {MetaFunction} from '@vercel/remix';
+import {defer} from '@vercel/remix';
+import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Form, Link, useLoaderData} from '@remix-run/react';
 import {getSession} from '~/sessions.server';
-import type {MetaFunction} from '@vercel/remix';
+import {DiscogsClient} from '@lionralfs/discogs-client';
+import {Heart, Horse, VinylRecord} from '@phosphor-icons/react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'New Remix App'}, {name: 'description', content: 'Welcome to Remix!'}];
@@ -34,7 +35,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   const userProfile = await client.user().getProfile(userName);
 
-  return json({
+  return defer({
     id,
     name: userName,
     nbReleases: userProfile.data.num_collection,
@@ -47,7 +48,6 @@ export default function Index() {
   return (
     <>
       <h1>Vinylogger</h1>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
       {user ? (
         <>
           <h2>Welcome, {user.name}</h2>

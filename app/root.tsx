@@ -1,7 +1,7 @@
-import type {MetaFunction} from '@remix-run/node';
 import {cssBundleHref} from '@remix-run/css-bundle';
 import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react';
 import {Analytics} from '@vercel/analytics/react';
+import type {MetaFunction} from '@vercel/remix';
 import type {LinksFunction} from '@vercel/remix';
 
 import tailwind from '~/styles/tailwind.css';
