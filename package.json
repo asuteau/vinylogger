@@ -6,7 +6,8 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "pretty": "npx prettier . --write"
   },
   "dependencies": {
     "@lionralfs/discogs-client": "^4.0.0",
