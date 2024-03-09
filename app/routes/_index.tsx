@@ -47,26 +47,36 @@ export default function Index() {
 
   return (
     <>
-      <h1>Vinylogger</h1>
-      {user ? (
-        <>
-          <h2>Welcome, {user.name}</h2>
-          <h3>You have {user.nbReleases} releases in your collection!</h3>
-          <ul>
-            <li>
-              <Form method="post">
-                <Link to="/logout">Log out</Link>
-              </Form>
-            </li>
-          </ul>
-        </>
-      ) : (
-        <ul>
-          <li>
-            <Link to="/login">Login with Discogs</Link>
-          </li>
-        </ul>
-      )}
+      <div className="layout bg-gray-200">
+        <section className="layout-navbar bg-red-100 flex justify-center items-center shadow-md md:shadow-none">
+          Navbar
+        </section>
+        <section className="layout-header bg-indigo-100 flex justify-center items-center shadow-md md:shadow-none">
+          Header
+        </section>
+        <section className="layout-main bg-teal-100 p-8 space-y-4">
+          <h1>Vinylogger</h1>
+          {user ? (
+            <>
+              <h2>Welcome, {user.name}</h2>
+              <h3>You have {user.nbReleases} releases in your collection!</h3>
+              <ul>
+                <li>
+                  <Form method="post">
+                    <Link to="/logout">Log out</Link>
+                  </Form>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <ul>
+              <li>
+                <Link to="/login">Login with Discogs</Link>
+              </li>
+            </ul>
+          )}
+        </section>
+      </div>
     </>
   );
 }
