@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from "@remix-run/node";
+import {createCookieSessionStorage} from '@remix-run/node';
 
 type SessionData = {
   requestToken: string;
@@ -11,15 +11,14 @@ type SessionFlashData = {
   error: string;
 };
 
-const { getSession, commitSession, destroySession } =
-  createCookieSessionStorage<SessionData, SessionFlashData>({
-    cookie: {
-      name: "__remix_session",
-      path: "/",
-      sameSite: "lax",
-      secrets: ["s3cret1"],
-      maxAge: 365 * 24 * 60 * 60 // 1 year
-    },
-  });
+const {getSession, commitSession, destroySession} = createCookieSessionStorage<SessionData, SessionFlashData>({
+  cookie: {
+    name: '__remix_session',
+    path: '/',
+    sameSite: 'lax',
+    secrets: ['s3cret1'],
+    maxAge: 365 * 24 * 60 * 60, // 1 year
+  },
+});
 
-export { getSession, commitSession, destroySession };
+export {getSession, commitSession, destroySession};

@@ -1,7 +1,11 @@
-const DISCOGS_API_ENDPOINT = 'https://api.discogs.com'
-const DISCOGS_USER_AGENT = 'Vinylogger/1.0'
+const DISCOGS_API_ENDPOINT = 'https://api.discogs.com';
+const DISCOGS_USER_AGENT = 'Vinylogger/1.0';
 
-export const getRequestToken = async (consumerKey: string, consumerSecret: string, callbackUrl: string): Promise<{ requestToken: string, requestTokenSecret: string }> => {
+export const getRequestToken = async (
+  consumerKey: string,
+  consumerSecret: string,
+  callbackUrl: string,
+): Promise<{requestToken: string; requestTokenSecret: string}> => {
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = timestamp.toString();
 
@@ -9,13 +13,13 @@ export const getRequestToken = async (consumerKey: string, consumerSecret: strin
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': authString,
+    Authorization: authString,
     'User-Agent': DISCOGS_USER_AGENT,
   };
 
-  const url = `${DISCOGS_API_ENDPOINT}/oauth/request_token`
+  const url = `${DISCOGS_API_ENDPOINT}/oauth/request_token`;
 
-  console.log('headers', headers)
+  console.log('headers', headers);
 
   try {
     const response = await fetch(url, {
@@ -26,22 +30,28 @@ export const getRequestToken = async (consumerKey: string, consumerSecret: strin
     const data = await response.text();
 
     const tokenPairs = data.split('&');
-    console.log('tokenPairs', tokenPairs)
+    console.log('tokenPairs', tokenPairs);
     const requestToken = tokenPairs[0].split('=')[1];
     const requestTokenSecret = tokenPairs[1].split('=')[1];
 
-    return { requestToken, requestTokenSecret };
+    return {requestToken, requestTokenSecret};
   } catch (error) {
     console.error('Error getting Discogs request token:', error.message);
     throw error;
   }
-}
+};
 
 export const buildAuthorizationUrl = (requestToken: string): string => {
   return `https://www.discogs.com/oauth/authorize?oauth_token=${requestToken}`;
-}
+};
 
-export const getAccessToken = async (consumerKey: string, consumerSecret: string, requestToken: string, requestTokenSecret: string, userVerifier: string): Promise<{ accessToken: string, accessTokenSecret: string }> => {
+export const getAccessToken = async (
+  consumerKey: string,
+  consumerSecret: string,
+  requestToken: string,
+  requestTokenSecret: string,
+  userVerifier: string,
+): Promise<{accessToken: string; accessTokenSecret: string}> => {
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = timestamp.toString();
 
@@ -49,11 +59,11 @@ export const getAccessToken = async (consumerKey: string, consumerSecret: string
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': authString,
+    Authorization: authString,
     'User-Agent': DISCOGS_USER_AGENT,
   };
 
-  const url = `${DISCOGS_API_ENDPOINT}/oauth/access_token`
+  const url = `${DISCOGS_API_ENDPOINT}/oauth/access_token`;
 
   const body = new URLSearchParams();
 
@@ -71,14 +81,19 @@ export const getAccessToken = async (consumerKey: string, consumerSecret: string
     const accessToken = tokenPairs[0].split('=')[1];
     const accessTokenSecret = tokenPairs[1].split('=')[1];
 
-    return { accessToken, accessTokenSecret };
+    return {accessToken, accessTokenSecret};
   } catch (error) {
     console.error('Error getting Discogs access token:', error.message);
     throw error;
   }
-}
+};
 
-export const getUserIdentity = async (consumerKey: string, consumerSecret: string, accessToken: string, accessTokenSecret: string): Promise<{ id: string, userName: string, resourceUrl: string, consumerName: string }> => {
+export const getUserIdentity = async (
+  consumerKey: string,
+  consumerSecret: string,
+  accessToken: string,
+  accessTokenSecret: string,
+): Promise<{id: string; userName: string; resourceUrl: string; consumerName: string}> => {
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = timestamp.toString();
 
@@ -86,11 +101,11 @@ export const getUserIdentity = async (consumerKey: string, consumerSecret: strin
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': authString,
+    Authorization: authString,
     'User-Agent': DISCOGS_USER_AGENT,
   };
 
-  const url = `${DISCOGS_API_ENDPOINT}/oauth/identity`
+  const url = `${DISCOGS_API_ENDPOINT}/oauth/identity`;
 
   try {
     const response = await fetch(url, {
@@ -101,15 +116,20 @@ export const getUserIdentity = async (consumerKey: string, consumerSecret: strin
     const data = await response.json();
     // console.log('response', response)
 
-    return { id: data.id, userName: data.username, resourceUrl: data.resource_url, consumerName: data.consumer_name };
+    return {id: data.id, userName: data.username, resourceUrl: data.resource_url, consumerName: data.consumer_name};
   } catch (error) {
     console.error('Error getting Discogs user identity:', error.message);
     throw error;
   }
-}
+};
 
-
-export const getUserProfile = async (consumerKey: string, consumerSecret: string, accessToken: string, accessTokenSecret: string, userName: string): Promise<{ collectionItemsCount: number }> => {
+export const getUserProfile = async (
+  consumerKey: string,
+  consumerSecret: string,
+  accessToken: string,
+  accessTokenSecret: string,
+  userName: string,
+): Promise<{collectionItemsCount: number}> => {
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = timestamp.toString();
 
@@ -117,11 +137,11 @@ export const getUserProfile = async (consumerKey: string, consumerSecret: string
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': authString,
+    Authorization: authString,
     'User-Agent': DISCOGS_USER_AGENT,
   };
 
-  const url = `${DISCOGS_API_ENDPOINT}/users/${userName}`
+  const url = `${DISCOGS_API_ENDPOINT}/users/${userName}`;
 
   try {
     const response = await fetch(url, {
@@ -132,10 +152,9 @@ export const getUserProfile = async (consumerKey: string, consumerSecret: string
     const data = await response.json();
     // console.log('response', response)
 
-    return { collectionItemsCount: data.num_collection };
+    return {collectionItemsCount: data.num_collection};
   } catch (error) {
     console.error('Error getting Discogs user profile:', error.message);
     throw error;
   }
-}
-
+};
