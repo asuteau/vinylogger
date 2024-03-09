@@ -1,4 +1,7 @@
-import {HouseLine, Star, Tag, User} from '@phosphor-icons/react/dist/ssr';
+import {HouseLine} from '@phosphor-icons/react/dist/icons/HouseLine';
+import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
+import {User} from '@phosphor-icons/react/dist/icons/User';
 import {ReactNode} from 'react';
 
 type MenuItem = {

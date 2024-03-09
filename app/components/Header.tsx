@@ -1,4 +1,4 @@
-import {VinylRecord} from '@phosphor-icons/react/dist/ssr';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 
 const Header = () => {
   return (
