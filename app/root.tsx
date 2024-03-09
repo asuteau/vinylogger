@@ -4,8 +4,8 @@ import {Analytics} from '@vercel/analytics/react';
 
 import tailwind from '~/styles/tailwind.css';
 import fonts from './styles/fonts.css';
-import {MetaFunction} from '@remix-run/react';
-import {LinksFunction} from '@remix-run/node';
+import type {MetaFunction} from '@vercel/remix';
+import type {LinksFunction} from '@vercel/remix';
 
 export const meta: MetaFunction = () => [
   {

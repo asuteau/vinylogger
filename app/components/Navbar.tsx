@@ -8,7 +8,7 @@ type MenuItem = {
 
 const NavbarItem = ({label, icon}: MenuItem) => {
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2">
+    <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2 md:p-2 hover:cursor-pointer hover:bg-gray-200 hover:rounded-lg">
       {icon}
       <div>{label}</div>
     </div>
