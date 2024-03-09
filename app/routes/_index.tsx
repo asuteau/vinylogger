@@ -4,7 +4,9 @@ import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Form, Link, useLoaderData} from '@remix-run/react';
 import {getSession} from '~/sessions.server';
 import {DiscogsClient} from '@lionralfs/discogs-client';
-import {Heart, Horse, VinylRecord} from '@phosphor-icons/react';
+import {VinylRecord} from '@phosphor-icons/react';
+import Navbar from '~/components/Navbar';
+import Header from '~/components/Header';
 
 export const meta: MetaFunction = () => {
   return [{title: 'New Remix App'}, {name: 'description', content: 'Welcome to Remix!'}];
@@ -47,15 +49,10 @@ export default function Index() {
 
   return (
     <>
-      <div className="layout bg-gray-200">
-        <section className="layout-navbar bg-red-100 flex justify-center items-center shadow-md md:shadow-none">
-          Navbar
-        </section>
-        <section className="layout-header bg-indigo-100 flex justify-center items-center shadow-md md:shadow-none">
-          Header
-        </section>
-        <section className="layout-main bg-teal-100 p-8 space-y-4">
-          <h1>Vinylogger</h1>
+      <div className="layout bg-gray-50">
+        <Navbar />
+        <Header />
+        <section className="layout-main p-8 space-y-4">
           {user ? (
             <>
               <h2>Welcome, {user.name}</h2>
