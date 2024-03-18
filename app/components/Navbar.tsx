@@ -2,19 +2,24 @@ import {HouseLine} from '@phosphor-icons/react/dist/icons/HouseLine';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {User} from '@phosphor-icons/react/dist/icons/User';
+import {NavLink} from '@remix-run/react';
 import {ReactNode} from 'react';
 
 type MenuItem = {
   label: string;
   icon: ReactNode;
+  to: string;
 };
 
-const NavbarItem = ({label, icon}: MenuItem) => {
+const NavbarItem = ({label, icon, to}: MenuItem) => {
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2 md:p-2 hover:cursor-pointer hover:bg-gray-200 hover:rounded-lg">
+    <NavLink
+      to={to}
+      className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2 md:p-2 hover:cursor-pointer hover:bg-gray-200 hover:rounded-lg"
+    >
       {icon}
       <div>{label}</div>
-    </div>
+    </NavLink>
   );
 };
 
@@ -23,18 +28,22 @@ const Navbar = () => {
     {
       label: 'Home',
       icon: <HouseLine size={24} />,
+      to: '/',
     },
     {
       label: 'Collection',
       icon: <Tag size={24} />,
+      to: '/collection',
     },
     {
       label: 'Wantlist',
       icon: <Star size={24} />,
+      to: '/wantlist',
     },
     {
       label: 'Profile',
       icon: <User size={24} />,
+      to: '/profile',
     },
   ];
 
