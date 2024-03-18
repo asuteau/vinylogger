@@ -19,7 +19,7 @@ export default function App() {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
@@ -29,12 +29,13 @@ export default function App() {
           <Header />
           <section className="layout-main p-8 space-y-4">
             <Outlet />
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-            <Analytics />
           </section>
         </div>
+
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+        <Analytics />
       </body>
     </html>
   );
