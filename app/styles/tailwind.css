@@ -10,7 +10,7 @@ body {
 @layer base {
   .layout {
     display: grid;
-    height: 100vh;
+    height: 100dvh;
     grid-template-columns: 1fr;
     grid-template-rows: 80px 1fr 80px;
     @media screen(md) {
