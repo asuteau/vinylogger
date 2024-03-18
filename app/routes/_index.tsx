@@ -4,12 +4,11 @@ import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Form, Link, useLoaderData} from '@remix-run/react';
 import {getSession} from '~/sessions.server';
 import {DiscogsClient} from '@lionralfs/discogs-client';
-import {VinylRecord} from '@phosphor-icons/react';
 import Navbar from '~/components/Navbar';
 import Header from '~/components/Header';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'New Remix App'}, {name: 'description', content: 'Welcome to Remix!'}];
+  return [{title: 'Vinylogger'}, {name: 'description', content: 'Welcome to Vinylogger!'}];
 };
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
