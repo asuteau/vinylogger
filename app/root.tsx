@@ -4,8 +4,9 @@ import {Analytics} from '@vercel/analytics/react';
 
 import tailwind from '~/styles/tailwind.css';
 import fonts from './styles/fonts.css';
-import type {MetaFunction} from '@vercel/remix';
 import type {LinksFunction} from '@vercel/remix';
+import Navbar from './components/Navbar';
+import Header from './components/Header';
 
 export const links: LinksFunction = () => [
   {rel: 'stylesheet', href: fonts},
@@ -23,11 +24,17 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-        <Analytics />
+        <div className="layout bg-gray-50">
+          <Navbar />
+          <Header />
+          <section className="layout-main p-8 space-y-4">
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <Analytics />
+          </section>
+        </div>
       </body>
     </html>
   );
