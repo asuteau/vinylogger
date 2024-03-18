@@ -71,7 +71,7 @@ export default function Index() {
           <h2>Welcome, {user.name}🤘</h2>
           <div className="space-y-1">
             <h3 className="font-bold text-gray-950">Purchased recently</h3>
-            <h3 className="text-gray-600">
+            <h3 className="text-gray-600 pb-4">
               <b>{user.nbReleases}</b> releases in collection
             </h3>
             <section className="flex flex-col gap-4 p-4 bg-gray-100 rounded-xl max-h-60 overflow-auto overflow-x-hidden">
@@ -92,7 +92,7 @@ export default function Index() {
           </div>
 
           <div className="space-y-1">
-            <h3 className="font-bold text-gray-950">Collection value</h3>
+            <h3 className="font-bold text-gray-950 mb-4">Collection value</h3>
             <section className="grid grid-cols-3 divide-x self-stretch bg-gray-100 rounded-xl">
               <div className="flex flex-col gap-2 p-2 items-center">
                 <span className="text-gray-700 text-sm">Min</span>{' '}
