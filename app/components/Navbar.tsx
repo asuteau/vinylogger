@@ -15,6 +15,7 @@ const NavbarItem = ({label, icon, to}: MenuItem) => {
   return (
     <NavLink
       to={to}
+      prefetch="intent"
       className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2 md:p-2 hover:cursor-pointer hover:bg-gray-200 hover:rounded-lg"
     >
       {icon}
