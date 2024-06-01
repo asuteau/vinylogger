@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'BricolageGrotesque';
+  font-family: 'DMSans';
   font-display: swap;
   font-weight: 400;
-  src: url('./fonts/BricolageGrotesque-Regular.ttf') format('truetype');
+  src: url('./fonts/DMSans-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'BricolageGrotesque';
+  font-family: 'DMSans';
   font-display: swap;
   font-weight: 700;
-  src: url('./fonts/BricolageGrotesque-Bold.ttf') format('truetype');
+  src: url('./fonts/DMSans-Bold.ttf') format('truetype');
 }

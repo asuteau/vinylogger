@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['BricolageGrotesque', ...fontFamily.sans],
+        sans: ['DMSans', ...fontFamily.sans],
       },
     },
   },
