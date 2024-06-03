@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await getUser(request);
-  if (!user) throw new Error('Unauthorized');
+  if (!user) return json({user: null, lastPurchases: null});
   const client = await getClient(request);
   const profile = client.user().getProfile(user.username);
   const latestReleases = client.user().collection().getReleases(user.username, 0, {
