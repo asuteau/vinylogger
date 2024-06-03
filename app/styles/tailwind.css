@@ -63,3 +63,7 @@ body {
     @apply text-base md:text-xl;
   }
 }
+
+a.active {
+  @apply text-gray-100 md:bg-gray-800 max-sm:md:border-t-gray-100 md:border-l-gray-100;
+}
