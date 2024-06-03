@@ -1,7 +1,7 @@
 import type {MetaFunction} from '@vercel/remix';
 import {defer, json} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
-import {Await, Form, NavLink, Outlet, useLoaderData} from '@remix-run/react';
+import {Await, NavLink, useLoaderData} from '@remix-run/react';
 import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
 import DashboardProfile from '~/components/DashboardProfile';

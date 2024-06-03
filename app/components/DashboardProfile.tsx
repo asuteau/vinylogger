@@ -5,7 +5,7 @@ type DashboardProfileProps = {
 };
 
 const DashboardProfile = ({user}: DashboardProfileProps) => {
-  return <h2>Welcome, {user.username}🤘</h2>;
+  return <h2>Welcome back🤘</h2>;
 };
 
 export default DashboardProfile;

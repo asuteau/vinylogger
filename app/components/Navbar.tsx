@@ -4,6 +4,7 @@ import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {User} from '@phosphor-icons/react/dist/icons/User';
 import {NavLink} from '@remix-run/react';
 import {ReactNode} from 'react';
+import Logo from './Logo';
 
 type MenuItem = {
   label: string;
@@ -16,10 +17,10 @@ const NavbarItem = ({label, icon, to}: MenuItem) => {
     <NavLink
       to={to}
       prefetch="intent"
-      className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-2 md:p-2 hover:cursor-pointer hover:bg-gray-200 hover:rounded-lg"
+      className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 md:p-2 hover:cursor-pointer hover:bg-gray-700 hover:rounded-lg"
     >
       {icon}
-      <span className="text-sm">{label}</span>
+      <span className=" text-gray-100">{label}</span>
     </NavLink>
   );
 };
@@ -28,28 +29,32 @@ const Navbar = () => {
   const menuItems: MenuItem[] = [
     {
       label: 'Home',
-      icon: <HouseLine size={24} className="text-gray-600" />,
+      icon: <HouseLine weight="bold" size={24} className="text-gray-200" />,
       to: '/',
     },
     {
       label: 'Collection',
-      icon: <Tag size={24} className="text-gray-600" />,
+      icon: <Tag weight="bold" size={24} className="text-gray-200" />,
       to: '/collection',
     },
     {
       label: 'Wantlist',
-      icon: <Star size={24} className="text-gray-600" />,
+      icon: <Star weight="bold" size={24} className="text-gray-200" />,
       to: '/wantlist',
     },
     {
       label: 'Profile',
-      icon: <User size={24} className="text-gray-600" />,
+      icon: <User weight="bold" size={24} className="text-gray-200" />,
       to: '/profile',
     },
   ];
 
   return (
-    <section className="layout-navbar flex md:flex-col px-8 md:p-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none md:border-r md:border-gray-300 bg-gray-100">
+    <section
+      id="navbar"
+      className="layout-navbar flex md:flex-col px-8 md:p-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none md:border-r md:border-gray-300 bg-gray-950"
+    >
+      <Logo color="light" className="hidden md:flex my-8" />
       {menuItems.map((item) => (
         <NavbarItem key={item.label} {...item} />
       ))}

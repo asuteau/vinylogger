@@ -14,7 +14,7 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: 80px 1fr 80px;
     @media screen(md) {
-      grid-template-columns: 2fr 5fr;
+      grid-template-columns: 400px 1fr;
       grid-template-rows: 80px 1fr;
     }
   }
