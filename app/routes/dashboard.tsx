@@ -4,7 +4,6 @@ import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Await, NavLink, useLoaderData} from '@remix-run/react';
 import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
-import DashboardProfile from '~/components/DashboardProfile';
 import DashboardLogout from '~/components/DashboardLogout';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
@@ -26,7 +25,6 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   });
 
   const latestFromWantlist = client.user().wantlist().getReleases(user.username, {per_page: 8});
-
   const lastPurchases = Promise.all([profile, latestReleases]);
 
   // const nbReleases = userProfile.data.num_collection;

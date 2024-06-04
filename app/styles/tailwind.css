@@ -44,9 +44,11 @@ body {
   .layout-main {
     grid-column: 1;
     grid-row: 2;
+    width: 100vw;
     @media screen(md) {
       grid-column: 2;
       grid-row: 2;
+      width: auto;
       overflow: auto;
     }
   }
