@@ -7,6 +7,7 @@ import {Suspense} from 'react';
 import DashboardProfile from '~/components/DashboardProfile';
 import DashboardLogout from '~/components/DashboardLogout';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
+import DashboardLastWanted from '~/components/DashboardLastWanted';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Welcome to Vinylogger!'}];
@@ -14,14 +15,17 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await getUser(request);
-  if (!user) return json({user: null, lastPurchases: null});
+  if (!user) return json({user: null, lastPurchases: null, latestFromWantlist: null});
+
   const client = await getClient(request);
   const profile = client.user().getProfile(user.username);
   const latestReleases = client.user().collection().getReleases(user.username, 0, {
-    per_page: 20,
+    per_page: 8,
     sort: 'added',
     sort_order: 'desc',
   });
+
+  const latestFromWantlist = client.user().wantlist().getReleases(user.username, {per_page: 8});
 
   const lastPurchases = Promise.all([profile, latestReleases]);
 
@@ -46,32 +50,35 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   //   }),
   // });
 
-  return defer({user, lastPurchases});
+  return defer({user, lastPurchases, latestFromWantlist});
 };
 
 const DashboardRoute = () => {
-  const {user, lastPurchases} = useLoaderData<typeof loader>();
+  const {user, lastPurchases, latestFromWantlist} = useLoaderData<typeof loader>();
 
   return (
     <>
-      <h1>Dashboard</h1>
       {user ? (
-        <>
-          <div className="flex flex-col gap-10 h-full">
-            <DashboardProfile user={user} />
-            <div className="space-y-1">
-              <Suspense fallback={<div className="h-72 w-full bg-gray-100 rounded-lg" />}>
-                <Await resolve={lastPurchases}>
-                  {([profile, latestReleases]) => (
-                    <DashboardLastPurchases
-                      lastPurchases={latestReleases.data.releases}
-                      totalItems={profile.data.num_collection}
-                    />
-                  )}
-                </Await>
-              </Suspense>
+        <section id="dashboard" className="space-y-16">
+          <h1>Welcome back🤘</h1>
+          <Suspense fallback={<div className="h-72 w-full bg-gray-100 rounded-lg" />}>
+            <Await resolve={lastPurchases}>
+              {([profile, latestReleases]) => (
+                <DashboardLastPurchases
+                  lastPurchases={latestReleases.data.releases}
+                  totalItems={profile.data.num_collection}
+                />
+              )}
+            </Await>
+          </Suspense>
 
-              {/* <section className="flex flex-col gap-4 p-4 bg-gray-100 rounded-xl max-h-60 overflow-auto overflow-x-hidden">
+          <Suspense fallback={<div className="h-72 w-full bg-gray-100 rounded-lg" />}>
+            <Await resolve={latestFromWantlist}>
+              {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.data.wants} />}
+            </Await>
+          </Suspense>
+
+          {/* <section className="flex flex-col gap-4 p-4 bg-gray-100 rounded-xl max-h-60 overflow-auto overflow-x-hidden">
                 {user.lastPurchased.map((release) => {
                   return (
                     <div className="flex items-center gap-4">
@@ -86,9 +93,8 @@ const DashboardRoute = () => {
                   );
                 })}
               </section> */}
-            </div>
 
-            {/* <div className="space-y-1">
+          {/* <div className="space-y-1">
               <h3 className="font-bold text-gray-950 mb-4">Collection value</h3>
               <section className="grid grid-cols-3 divide-x self-stretch bg-gray-100 rounded-xl">
                 <div className="flex flex-col gap-2 p-2 items-center">
@@ -105,9 +111,8 @@ const DashboardRoute = () => {
                 </div>
               </section>
             </div> */}
-            <DashboardLogout />
-          </div>
-        </>
+          <DashboardLogout />
+        </section>
       ) : (
         <ul>
           <li>

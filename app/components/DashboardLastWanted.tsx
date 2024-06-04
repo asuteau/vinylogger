@@ -1,9 +1,8 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {NavLink} from '@remix-run/react';
 
-type DashboardLastPurchasesProps = {
-  totalItems: number;
-  lastPurchases: any[];
+type DashboardLastWantedProps = {
+  lastWanted: any[];
 };
 
 const DashboardLastPurchasesItem = ({release}: {release: any}) => {
@@ -18,7 +17,7 @@ const DashboardLastPurchasesItem = ({release}: {release: any}) => {
         {release.basic_information.formats.map((format) => format.name).join(', ')}
       </span>
       <span className="hidden md:block text-xs text-gray-500 line-clamp-1">
-        Purchased on {new Date(release.date_added).toLocaleDateString()}
+        Added on {new Date(release.date_added).toLocaleDateString()}
       </span>
       <span className="md:hidden text-xs text-gray-500 line-clamp-1">
         <CalendarDots className="w-4 h-4 mr-1 text-gray-500 inline-block" />
@@ -28,21 +27,18 @@ const DashboardLastPurchasesItem = ({release}: {release: any}) => {
   );
 };
 
-const DashboardLastPurchases = ({totalItems, lastPurchases}: DashboardLastPurchasesProps) => {
+const DashboardLastWanted = ({lastWanted}: DashboardLastWantedProps) => {
   return (
-    <section className="last-purchases">
-      <div className="flex items-end mb-6 ">
-        <h2 className="font-bold text-gray-800">Recently purchased</h2>
-        <NavLink to="/collection" prefetch="intent" className="text-sm text-gray-600 ml-auto">
-          Show collection
+    <section className="last-wanted">
+      <div className="flex items-end mb-6">
+        <h2 className="font-bold text-gray-800">Recently added to wantlist</h2>
+        <NavLink to="/wantlist" prefetch="intent" className="text-sm text-gray-600 ml-auto">
+          Show wantlist
         </NavLink>
       </div>
-      {/* <h3 className="text-gray-600 pb-4">
-        <b>{totalItems}</b> releases in collection
-      </h3> */}
 
-      <div className="flex gap-6   flex-wrap">
-        {lastPurchases.map((release) => {
+      <div className="flex gap-6 flex-wrap">
+        {lastWanted.map((release) => {
           return <DashboardLastPurchasesItem key={release.basic_information.id} release={release} />;
         })}
       </div>
@@ -50,4 +46,4 @@ const DashboardLastPurchases = ({totalItems, lastPurchases}: DashboardLastPurcha
   );
 };
 
-export default DashboardLastPurchases;
+export default DashboardLastWanted;
