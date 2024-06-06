@@ -8,7 +8,7 @@ type DashboardLastPurchasesProps = {
 
 const DashboardLastPurchasesItem = ({release}: {release: any}) => {
   return (
-    <div className="flex-none md:flex-1 flex flex-col justify-start w-32 md:min-w-48">
+    <div className="flex-none flex flex-col justify-start w-32 md:w-auto">
       <img
         src={release.basic_information.cover_image}
         className="w-full h-32 md:h-auto rounded-md shadow-sm aspect-square"
@@ -44,7 +44,7 @@ const DashboardLastPurchases = ({totalItems, lastPurchases}: DashboardLastPurcha
         <b>{totalItems}</b> releases in collection
       </h3> */}
 
-      <div className="flex flex-nowrap md:flex-wrap gap-6 overflow-x-auto md:overflow-hidden md:h-96">
+      <div className="flex flex-nowrap md:grid md:grid-cols-[repeat(auto-fit,_minmax(192px,_1fr))] md:auto-rows-[0] md:grid-rows-[auto] gap-6 md:gap-x-6 md:gap-y-0 overflow-x-auto md:overflow-hidden">
         {lastPurchases.map((release) => {
           return <DashboardLastPurchasesItem key={release.basic_information.id} release={release} />;
         })}
