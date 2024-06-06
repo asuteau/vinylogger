@@ -44,7 +44,7 @@ const DashboardLastPurchases = ({totalItems, lastPurchases}: DashboardLastPurcha
         <b>{totalItems}</b> releases in collection
       </h3> */}
 
-      <div className="flex flex-nowrap md:grid md:grid-cols-[repeat(auto-fit,_minmax(192px,_1fr))] md:auto-rows-[0] md:grid-rows-[auto] gap-6 md:gap-x-6 md:gap-y-0 overflow-x-auto md:overflow-hidden">
+      <div className="flex flex-nowrap md:grid md:grid-cols-[repeat(auto-fit,_minmax(192px,_1fr))] md:auto-rows-[0] md:grid-rows-[auto] gap-6 md:gap-x-6 md:gap-y-0 overflow-x-auto no-scrollbar md:overflow-hidden">
         {lastPurchases.map((release) => {
           return <DashboardLastPurchasesItem key={release.basic_information.id} release={release} />;
         })}
