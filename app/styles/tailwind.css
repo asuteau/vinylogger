@@ -12,7 +12,7 @@ body {
     display: grid;
     height: 100dvh;
     grid-template-columns: 1fr;
-    grid-template-rows: 80px 1fr 80px;
+    grid-template-rows: 72px 1fr 72px;
     @media screen(md) {
       grid-template-columns: 400px 1fr;
       grid-template-rows: 80px 1fr;
@@ -44,7 +44,8 @@ body {
   .layout-main {
     grid-column: 1;
     grid-row: 2;
-    width: 100vw;
+    width: auto;
+    overflow: auto;
     @media screen(md) {
       grid-column: 2;
       grid-row: 2;
