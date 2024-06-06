@@ -6,7 +6,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['DMSans', ...fontFamily.sans],
+        sans: ['DMSans', 'Raleway', ...fontFamily.sans],
+        logo: ['Raleway', ...fontFamily.sans],
       },
     },
   },

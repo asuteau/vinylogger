@@ -19,12 +19,12 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   const client = await getClient(request);
   const profile = client.user().getProfile(user.username);
   const latestReleases = client.user().collection().getReleases(user.username, 0, {
-    per_page: 8,
+    per_page: 10,
     sort: 'added',
     sort_order: 'desc',
   });
 
-  const latestFromWantlist = client.user().wantlist().getReleases(user.username, {per_page: 8});
+  const latestFromWantlist = client.user().wantlist().getReleases(user.username, {per_page: 10});
   const lastPurchases = Promise.all([profile, latestReleases]);
 
   // const nbReleases = userProfile.data.num_collection;

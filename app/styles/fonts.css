@@ -11,3 +11,17 @@
   font-weight: 700;
   src: url('./fonts/DMSans-Bold.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Raleway';
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/Raleway-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-display: swap;
+  font-weight: 700;
+  src: url('./fonts/Raleway-Bold.ttf') format('truetype');
+}
