@@ -59,7 +59,7 @@ const DashboardRoute = () => {
       {user ? (
         <section id="dashboard" className="space-y-16">
           <h1>Welcome back🤘</h1>
-          <Suspense fallback={<div className="h-72 w-full bg-gray-100 rounded-lg" />}>
+          <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={lastPurchases}>
               {([profile, latestReleases]) => (
                 <DashboardLastPurchases
@@ -70,22 +70,22 @@ const DashboardRoute = () => {
             </Await>
           </Suspense>
 
-          <Suspense fallback={<div className="h-72 w-full bg-gray-100 rounded-lg" />}>
+          <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={latestFromWantlist}>
               {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.data.wants} />}
             </Await>
           </Suspense>
 
-          {/* <section className="flex flex-col gap-4 p-4 bg-gray-100 rounded-xl max-h-60 overflow-auto overflow-x-hidden">
+          {/* <section className="flex flex-col gap-4 p-4 bg-slate-100 rounded-xl max-h-60 overflow-auto overflow-x-hidden">
                 {user.lastPurchased.map((release) => {
                   return (
                     <div className="flex items-center gap-4">
                       <img src={release.thumbnail} className="w-24 h-24 rounded-lg shadow-sm" />
-                      <div className="flex flex-col text-xs text-gray-950">
+                      <div className="flex flex-col text-xs text-slate-950">
                         <span className="font-bold">{release.artist}</span>
                         <span>{release.title}</span>
-                        <span className="text-gray-600">{release.releaseType}</span>
-                        <span className="text-gray-500">Purchased on {release.dateAdded}</span>
+                        <span className="text-slate-600">{release.releaseType}</span>
+                        <span className="text-slate-500">Purchased on {release.dateAdded}</span>
                       </div>
                     </div>
                   );
@@ -93,19 +93,19 @@ const DashboardRoute = () => {
               </section> */}
 
           {/* <div className="space-y-1">
-              <h3 className="font-bold text-gray-950 mb-4">Collection value</h3>
-              <section className="grid grid-cols-3 divide-x self-stretch bg-gray-100 rounded-xl">
+              <h3 className="font-bold text-slate-950 mb-4">Collection value</h3>
+              <section className="grid grid-cols-3 divide-x self-stretch bg-slate-100 rounded-xl">
                 <div className="flex flex-col gap-2 p-2 items-center">
-                  <span className="text-gray-700 text-sm">Min</span>{' '}
-                  <span className="text-gray-800 font-bold">{user.collectionMin}</span>
+                  <span className="text-slate-700 text-sm">Min</span>{' '}
+                  <span className="text-slate-800 font-bold">{user.collectionMin}</span>
                 </div>
                 <div className="flex flex-col gap-2 p-2 items-center">
-                  <span className="text-gray-700 text-sm">Median</span>{' '}
-                  <span className="text-gray-800 font-bold">{user.collectionMedian}</span>
+                  <span className="text-slate-700 text-sm">Median</span>{' '}
+                  <span className="text-slate-800 font-bold">{user.collectionMedian}</span>
                 </div>
                 <div className="flex flex-col gap-2 p-2 items-center">
-                  <span className="text-gray-700 text-sm">Max</span>{' '}
-                  <span className="text-gray-800 font-bold">{user.collectionMax}</span>
+                  <span className="text-slate-700 text-sm">Max</span>{' '}
+                  <span className="text-slate-800 font-bold">{user.collectionMax}</span>
                 </div>
               </section>
             </div> */}

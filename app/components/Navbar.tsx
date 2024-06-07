@@ -17,7 +17,7 @@ const NavbarItem = ({label, icon, to}: MenuItem) => {
     <NavLink
       to={to}
       prefetch="intent"
-      className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-gray-800 hover:md:border-l-gray-100 h-full md:h-auto w-full font-bold text-gray-400"
+      className="flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-800 hover:md:border-l-slate-100 h-full md:h-auto w-full font-bold text-slate-400"
     >
       {icon}
       <span>{label}</span>
@@ -29,22 +29,22 @@ const Navbar = () => {
   const menuItems: MenuItem[] = [
     {
       label: 'Home',
-      icon: <HouseLine weight="bold" size={24} />,
+      icon: <HouseLine weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/dashboard',
     },
     {
       label: 'Collection',
-      icon: <Tag weight="bold" size={24} />,
+      icon: <Tag weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/collection',
     },
     {
       label: 'Wantlist',
-      icon: <Star weight="bold" size={24} />,
+      icon: <Star weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/wantlist',
     },
     {
       label: 'Profile',
-      icon: <User weight="bold" size={24} />,
+      icon: <User weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/profile',
     },
   ];
@@ -52,7 +52,7 @@ const Navbar = () => {
   return (
     <section
       id="navbar"
-      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none md:border-r md:border-gray-300 bg-gray-950"
+      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none md:border-r md:border-slate-300 bg-slate-950"
     >
       <Logo color="light" className="hidden md:flex mx-8 my-6" />
       {menuItems.map((item) => (

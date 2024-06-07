@@ -40,7 +40,7 @@ const App = () => {
       </head>
       <body>
         {/* <UserContextProvider value={isAuthenticated}> */}
-        <div className="layout bg-gray-50">
+        <div className="layout bg-slate-50">
           <Navbar />
           <Header profile={profile?.data} />
           <section className="layout-main p-8 space-y-4">
