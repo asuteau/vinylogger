@@ -8,7 +8,7 @@ export const loader = async () => {
 
 // Renders the UI
 const ProfileRoute = () => (
-  <div className="flex w-full justify-center items-center">
+  <div className="flex w-full justify-center items-center md:hidden">
     <Button asChild>
       <UserSignOut />
     </Button>
