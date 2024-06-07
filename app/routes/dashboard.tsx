@@ -4,7 +4,6 @@ import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Await, NavLink, useLoaderData} from '@remix-run/react';
 import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
-import DashboardLogout from '~/components/DashboardLogout';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
 
@@ -57,7 +56,7 @@ const DashboardRoute = () => {
   return (
     <>
       {user ? (
-        <section id="dashboard" className="space-y-16">
+        <section id="dashboard" className="space-y-8 md:space-y-16">
           <h1>Welcome back🤘</h1>
           <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={lastPurchases}>
@@ -109,7 +108,6 @@ const DashboardRoute = () => {
                 </div>
               </section>
             </div> */}
-          <DashboardLogout />
         </section>
       ) : (
         <ul>

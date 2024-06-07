@@ -1,5 +1,6 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {NavLink} from '@remix-run/react';
+import {Button} from './ui/button';
 
 type DashboardLastWantedProps = {
   lastWanted: any[];
@@ -8,10 +9,12 @@ type DashboardLastWantedProps = {
 const DashboardLastPurchasesItem = ({release}: {release: any}) => {
   return (
     <div className="flex-none flex flex-col justify-start w-32 md:w-auto">
-      <img
-        src={release.basic_information.cover_image}
-        className="w-full h-32 md:h-auto rounded-md shadow-sm aspect-square"
-      />
+      <div className="overflow-hidden rounded-md">
+        <img
+          src={release.basic_information.cover_image}
+          className="w-full h-32 md:h-auto aspect-square hover:scale-110 transition-transform duration-300 ease-out"
+        />
+      </div>
       <span className="font-bold line-clamp-1 text-slate-950 mt-2">{release.basic_information.title}</span>
       <span className="text-sm line-clamp-1 text-slate-950">
         {release.basic_information.artists.map((artist) => artist.name).join(', ')}
@@ -35,9 +38,11 @@ const DashboardLastWanted = ({lastWanted}: DashboardLastWantedProps) => {
     <section className="last-wanted w-full">
       <div className="flex items-end mb-6">
         <h2 className="font-bold text-slate-800">Recently added to wantlist</h2>
-        <NavLink to="/wantlist" prefetch="intent" className="hidden md:block text-sm text-slate-600 ml-auto">
-          Show wantlist
-        </NavLink>
+        <Button variant="link" className="hidden md:block ml-auto" asChild>
+          <NavLink to="/wantlist" prefetch="intent" className="ml-auto">
+            Show wantlist
+          </NavLink>
+        </Button>
       </div>
 
       <div className="flex flex-nowrap md:grid md:grid-cols-[repeat(auto-fit,_minmax(192px,_1fr))] md:auto-rows-[0] md:grid-rows-[auto] gap-6 md:gap-x-6 md:gap-y-0 overflow-x-auto no-scrollbar md:overflow-hidden">

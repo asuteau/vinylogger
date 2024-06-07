@@ -1,5 +1,6 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {NavLink} from '@remix-run/react';
+import {Button} from './ui/button';
 
 type DashboardLastPurchasesProps = {
   totalItems: number;
@@ -9,10 +10,12 @@ type DashboardLastPurchasesProps = {
 const DashboardLastPurchasesItem = ({release}: {release: any}) => {
   return (
     <div className="flex-none flex flex-col justify-start w-32 md:w-auto">
-      <img
-        src={release.basic_information.cover_image}
-        className="w-full h-32 md:h-auto rounded-md shadow-sm aspect-square"
-      />
+      <div className="overflow-hidden rounded-md">
+        <img
+          src={release.basic_information.cover_image}
+          className="w-full h-32 md:h-auto aspect-square hover:scale-110 transition-transform duration-300 ease-out"
+        />
+      </div>
       <span className="font-bold line-clamp-1 text-slate-950 mt-2">{release.basic_information.title}</span>
       <span className="text-sm line-clamp-1 text-slate-950">
         {release.basic_information.artists.map((artist) => artist.name).join(', ')}
@@ -36,9 +39,11 @@ const DashboardLastPurchases = ({totalItems, lastPurchases}: DashboardLastPurcha
     <section className="last-purchases w-full">
       <div className="flex items-end mb-6">
         <h2 className="font-bold text-slate-800">Recently purchased</h2>
-        <NavLink to="/collection" prefetch="intent" className="hidden md:block text-sm text-slate-600 ml-auto">
-          Show collection
-        </NavLink>
+        <Button variant="link" className="hidden md:block ml-auto" asChild>
+          <NavLink to="/collection" prefetch="intent">
+            Show collection
+          </NavLink>
+        </Button>
       </div>
       {/* <h3 className="text-slate-600 pb-4">
         <b>{totalItems}</b> releases in collection
