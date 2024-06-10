@@ -1,6 +1,5 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
-import {NavLink} from '@remix-run/react';
-import {Button} from './ui/button';
+import {dateToString, timeFromNow} from '~/utils/dates';
 
 type CollectionItemsProps = {
   lastPurchases: any[];
@@ -19,11 +18,11 @@ const CollectionItem = ({release}: {release: any}) => {
           {release.basic_information.formats.map((format) => format.name).join(', ')}
         </span>
         <span className="hidden md:block text-xs text-slate-500 line-clamp-1">
-          Purchased on {new Date(release.date_added).toLocaleDateString()}
+          Added {timeFromNow(release.date_added)}
         </span>
         <span className="md:hidden text-xs text-slate-500 line-clamp-1">
           <CalendarDots className="w-4 h-4 mr-1 text-slate-500 inline-block" />
-          {new Date(release.date_added).toLocaleDateString()}
+          {timeFromNow(release.date_added)}
         </span>
       </div>
     </div>
