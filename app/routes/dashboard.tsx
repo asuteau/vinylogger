@@ -8,7 +8,7 @@ import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Vinylogger'}, {name: 'description', content: 'Welcome to Vinylogger!'}];
+  return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
 };
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
