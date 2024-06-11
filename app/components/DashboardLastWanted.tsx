@@ -11,10 +11,10 @@ type DashboardLastWantedProps = {
 const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
   return (
     <div className="flex-none flex flex-col justify-start w-32 md:w-auto">
-      <div className="overflow-hidden rounded-md">
+      <div className="overflow-hidden rounded-md shadow-lg">
         <img
           src={release.coverImage}
-          className="w-full h-32 md:h-auto aspect-square hover:scale-110 transition-transform duration-300 ease-out"
+          className="w-full h-32 md:h-auto aspect-square hover:brightness-90 hover:scale-110 transition-all duration-300 ease-out"
         />
       </div>
       <span className="font-bold line-clamp-1 text-slate-950 mt-2">{release.title}</span>
