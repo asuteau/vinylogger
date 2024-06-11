@@ -6,6 +6,7 @@ import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
+import {getAllFromCollection, getAllFromWantlist} from '~/services/discogs';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
@@ -17,14 +18,15 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   const client = await getClient(request);
   const profile = client.user().getProfile(user.username);
-  const latestReleases = client.user().collection().getReleases(user.username, 0, {
+  const latestFromCollection = getAllFromCollection(client, user.username, {
     per_page: 10,
     sort: 'added',
     sort_order: 'desc',
   });
-
-  const latestFromWantlist = client.user().wantlist().getReleases(user.username, {per_page: 10});
-  const lastPurchases = Promise.all([profile, latestReleases]);
+  const latestFromWantlist = getAllFromWantlist(client, user.username, {
+    per_page: 10,
+  });
+  const lastPurchases = Promise.all([profile, latestFromCollection]);
 
   // const nbReleases = userProfile.data.num_collection;
   // const collectionValue = await client.user().collection().getValue(userName);
@@ -61,17 +63,14 @@ const DashboardRoute = () => {
           <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={lastPurchases}>
               {([profile, latestReleases]) => (
-                <DashboardLastPurchases
-                  lastPurchases={latestReleases.data.releases}
-                  totalItems={profile.data.num_collection}
-                />
+                <DashboardLastPurchases lastPurchases={latestReleases} totalItems={profile.data.num_collection} />
               )}
             </Await>
           </Suspense>
 
           <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={latestFromWantlist}>
-              {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.data.wants} />}
+              {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist} />}
             </Await>
           </Suspense>
 

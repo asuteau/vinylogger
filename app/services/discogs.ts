@@ -1,3 +1,6 @@
+import {DiscogsClient, PaginationParameters, SortParameters} from '@lionralfs/discogs-client';
+import Release from '~/entities/release';
+
 const DISCOGS_API_ENDPOINT = 'https://api.discogs.com';
 const DISCOGS_USER_AGENT = 'Vinylogger/1.0';
 
@@ -157,4 +160,41 @@ export const getUserProfile = async (
     console.error('Error getting Discogs user profile:', error.message);
     throw error;
   }
+};
+
+export const getAllFromCollection = async (
+  client: DiscogsClient,
+  user: string,
+  params: PaginationParameters &
+    SortParameters<'label' | 'artist' | 'title' | 'catno' | 'format' | 'rating' | 'added' | 'year'>,
+): Promise<Release[]> => {
+  const releases = await client.user().collection().getReleases(user, 0, params);
+  const response = releases.data.releases;
+
+  return response.map((release) => ({
+    id: release.id,
+    artist: release.basic_information.artists.map((artist) => artist.name).join(', '),
+    title: release.basic_information.title,
+    coverImage: release.basic_information.cover_image,
+    format: release.basic_information.formats.map((format) => format.name).join(', '),
+    addedOn: release.date_added,
+  }));
+};
+
+export const getAllFromWantlist = async (
+  client: DiscogsClient,
+  user: string,
+  params: PaginationParameters,
+): Promise<Release[]> => {
+  const releases = await client.user().wantlist().getReleases(user, params);
+  const response = releases.data.wants;
+
+  return response.map((release) => ({
+    id: release.id,
+    artist: release.basic_information.artists.map((artist) => artist.name).join(', '),
+    title: release.basic_information.title,
+    coverImage: release.basic_information.cover_image,
+    format: release.basic_information.formats.map((format) => format.name).join(', '),
+    addedOn: release.date_added,
+  }));
 };
