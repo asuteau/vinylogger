@@ -20,10 +20,10 @@ const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
       <span className="font-bold line-clamp-1 text-slate-950 mt-2">{release.title}</span>
       <span className="text-sm line-clamp-1 text-slate-950">{release.artist}</span>
       <span className="text-xs text-slate-600 line-clamp-1">{release.format}</span>
-      <span className="hidden md:block text-xs text-slate-500 line-clamp-1">Added {timeFromNow(release.addedOn)}</span>
+      <span className="hidden md:block text-xs text-slate-500 line-clamp-1">Added {release.addedOn}</span>
       <span className="md:hidden text-xs text-slate-500 line-clamp-1">
         <CalendarDots className="w-4 h-4 mr-1 text-slate-500 inline-block" />
-        {timeFromNow(release.addedOn)}
+        {release.addedOn}
       </span>
     </div>
   );

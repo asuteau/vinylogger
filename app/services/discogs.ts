@@ -1,5 +1,6 @@
 import {DiscogsClient, PaginationParameters, SortParameters} from '@lionralfs/discogs-client';
 import Release from '~/entities/release';
+import {timeFromNow} from '~/utils/dates';
 
 const DISCOGS_API_ENDPOINT = 'https://api.discogs.com';
 const DISCOGS_USER_AGENT = 'Vinylogger/1.0';
@@ -177,7 +178,7 @@ export const getAllFromCollection = async (
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
     format: release.basic_information.formats.map((format) => format.name).join(', '),
-    addedOn: release.date_added,
+    addedOn: timeFromNow(release.date_added),
   }));
 };
 
@@ -195,6 +196,6 @@ export const getAllFromWantlist = async (
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
     format: release.basic_information.formats.map((format) => format.name).join(', '),
-    addedOn: release.date_added,
+    addedOn: timeFromNow(release.date_added),
   }));
 };
