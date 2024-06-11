@@ -31,7 +31,7 @@ const CollectionRoute = () => {
   return (
     <>
       {user ? (
-        <section id="collection" className="space-y-8 md:space-y-16">
+        <section id="collection" className="space-y-16">
           <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
             <Await resolve={releases}>{(releases) => <CollectionItems lastPurchases={releases} />}</Await>
           </Suspense>
