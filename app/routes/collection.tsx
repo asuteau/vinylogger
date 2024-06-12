@@ -1,4 +1,4 @@
-import {Await, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, NavLink, Outlet, useLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getUser, getClient} from '~/utils/session.server';
@@ -31,11 +31,23 @@ const CollectionRoute = () => {
   return (
     <>
       {user ? (
-        <section id="collection" className="space-y-16">
-          <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
-            <Await resolve={releases}>{(releases) => <CollectionItems lastPurchases={releases} />}</Await>
-          </Suspense>
-        </section>
+        <div className="relative">
+          <section id="collection" className="space-y-16 w-full md:w-1/2 pr-8">
+            <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+              <Await resolve={releases}>{(releases) => <CollectionItems lastPurchases={releases} />}</Await>
+            </Suspense>
+          </section>
+
+          <section
+            id="release-details"
+            className="hidden md:flex items-center justify-center bg-gray-100 border-l border-gray-300 fixed top-0 right-0 h-full mt-20"
+            style={{
+              width: 'calc(50% - 200px)',
+            }}
+          >
+            <Outlet />
+          </section>
+        </div>
       ) : (
         <ul>
           <li>

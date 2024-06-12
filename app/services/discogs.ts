@@ -1,6 +1,7 @@
-import {DiscogsClient, PaginationParameters, SortParameters} from '@lionralfs/discogs-client';
+import {DiscogsClient, GetReleaseResponse, PaginationParameters, SortParameters} from '@lionralfs/discogs-client';
 import Release from '~/entities/release';
 import {timeFromNow} from '~/utils/dates';
+import {cleanId} from '~/utils/strings';
 
 const DISCOGS_API_ENDPOINT = 'https://api.discogs.com';
 const DISCOGS_USER_AGENT = 'Vinylogger/1.0';
@@ -174,7 +175,7 @@ export const getAllFromCollection = async (
 
   return response.map((release) => ({
     id: release.id,
-    artist: release.basic_information.artists.map((artist) => artist.name).join(', '),
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name)).join(', '),
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
     format: release.basic_information.formats.map((format) => format.name).join(', '),
@@ -192,10 +193,15 @@ export const getAllFromWantlist = async (
 
   return response.map((release) => ({
     id: release.id,
-    artist: release.basic_information.artists.map((artist) => artist.name).join(', '),
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name)).join(', '),
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
     format: release.basic_information.formats.map((format) => format.name).join(', '),
     addedOn: timeFromNow(release.date_added),
   }));
+};
+
+export const getReleaseById = async (client: DiscogsClient, releaseId: string): Promise<GetReleaseResponse> => {
+  const release = await client.database().getRelease(releaseId);
+  return release.data;
 };
