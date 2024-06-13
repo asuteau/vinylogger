@@ -1,4 +1,4 @@
-import {Await, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
@@ -22,13 +22,26 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
 // Renders the UI
 const CollectionRoute = () => {
   const {release} = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
 
   return (
     <>
       {release ? (
-        <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
-          <Await resolve={release}>{(release) => <ReleaseDetails release={release} />}</Await>
-        </Suspense>
+        <>
+          {navigation.state === 'loading' && (
+            <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
+          )}
+
+          {navigation.state === 'idle' && (
+            <Suspense
+              fallback={
+                <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
+              }
+            >
+              <Await resolve={release}>{(release) => <ReleaseDetails release={release} />}</Await>
+            </Suspense>
+          )}
+        </>
       ) : (
         <ul>
           <li>

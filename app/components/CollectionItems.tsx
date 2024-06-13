@@ -1,4 +1,4 @@
-import {NavLink, useLocation, useMatches} from '@remix-run/react';
+import {NavLink, useLocation} from '@remix-run/react';
 import Release from '~/entities/release';
 import {groupBy} from '~/utils/array';
 
