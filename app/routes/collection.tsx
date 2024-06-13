@@ -5,17 +5,7 @@ import {getUser, getClient} from '~/utils/session.server';
 import CollectionItems from '~/components/CollectionItems';
 import {getAllFromCollection} from '~/services/discogs';
 import useMediaQuery from '~/hooks/use-media-query';
-import {Button} from '~/components/ui/button';
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from '~/components/ui/drawer';
+import {Drawer, DrawerContent} from '~/components/ui/drawer';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection'}];
@@ -56,9 +46,6 @@ const CollectionRoute = () => {
 
           {isMobile ? (
             <Drawer open={open} onOpenChange={setOpen}>
-              {/* <DrawerTrigger asChild>
-                <Button variant="outline">Edit Profile</Button>
-              </DrawerTrigger> */}
               <DrawerContent>
                 <Outlet />
               </DrawerContent>

@@ -2,12 +2,14 @@ import {GetReleaseResponse} from '@lionralfs/discogs-client';
 import {Card, CardContent} from './ui/card';
 import {Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselApi} from './ui/carousel';
 import {useState, useEffect} from 'react';
+import useMediaQuery from '~/hooks/use-media-query';
 
 type ReleaseDetailsProps = {
   release: GetReleaseResponse;
 };
 
 const ReleaseDetails = ({release}: ReleaseDetailsProps) => {
+  const isMobile = useMediaQuery();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -36,8 +38,6 @@ const ReleaseDetails = ({release}: ReleaseDetailsProps) => {
     setCurrent(api.selectedScrollSnap() + 1);
   }, [release.images]);
 
-  console.log(release);
-
   return (
     <div className="flex flex-col gap-4 justify-start items-center">
       <Carousel setApi={setApi} className="w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square">
@@ -54,8 +54,12 @@ const ReleaseDetails = ({release}: ReleaseDetailsProps) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        {!isMobile && (
+          <>
+            <CarouselPrevious />
+            <CarouselNext />
+          </>
+        )}
       </Carousel>
 
       <div className="py-2 text-center text-sm text-muted-foreground">
