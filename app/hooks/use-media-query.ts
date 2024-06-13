@@ -13,6 +13,12 @@ const useMediaQuery = (): boolean => {
     const matchQueryList = window.matchMedia(DEFAULT_MEDIA_QUERY);
     matchQueryList.addEventListener('change', handleChange);
 
+    // Check on mount (callback is not called until a change occurs)
+    // See https://github.com/chakra-ui/chakra-ui/issues/3124
+    if (matchQueryList.matches) {
+      setMatches(true);
+    }
+
     return () => window.removeEventListener('change', handleChange);
   }, []);
 
