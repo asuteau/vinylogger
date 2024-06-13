@@ -40,14 +40,14 @@ const ReleaseDetails = ({release}: ReleaseDetailsProps) => {
 
   return (
     <div className="flex flex-col gap-4 justify-start items-center">
-      <Carousel setApi={setApi} className="w-full max-w-xs md:max-w-md xl:max-w-lg">
+      <Carousel setApi={setApi} className="w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square">
         <CarouselContent>
           {release.images.map((image) => (
             <CarouselItem key={image.uri}>
               <div className="p-1">
                 <Card>
                   <CardContent className="flex aspect-square items-center justify-center p-6">
-                    <img src={image.uri} className="max-h-[450px]" />
+                    <img src={image.uri} className="object-contain max-h-xs md:max-h-sm 2xl:max-h-lg aspect-square" />
                   </CardContent>
                 </Card>
               </div>
@@ -59,7 +59,7 @@ const ReleaseDetails = ({release}: ReleaseDetailsProps) => {
       </Carousel>
 
       <div className="py-2 text-center text-sm text-muted-foreground">
-        Image {current}/{count}
+        {current}/{count}
       </div>
     </div>
   );

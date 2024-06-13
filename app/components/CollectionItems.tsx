@@ -4,9 +4,15 @@ import {groupBy} from '~/utils/array';
 
 type CollectionItemsProps = {
   lastPurchases: Release[];
+  onClick?: () => void;
 };
 
-const CollectionItem = ({release}: {release: Release}) => {
+type CollectionItemProps = {
+  release: Release;
+  onClick?: () => void;
+};
+
+const CollectionItem = ({release, onClick}: CollectionItemProps) => {
   const location = useLocation();
 
   return (
@@ -14,6 +20,7 @@ const CollectionItem = ({release}: {release: Release}) => {
       to={`/${location.pathname.split('/')[1]}/${release.id}`}
       prefetch="none"
       className={({isActive}) => (isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md')}
+      onClick={onClick}
     >
       <li className="flex justify-start items-center gap-6">
         <img src={release.coverImage} className="rounded-md h-32 md:h-48 aspect-square shadow-lg" />
@@ -27,7 +34,7 @@ const CollectionItem = ({release}: {release: Release}) => {
   );
 };
 
-const CollectionItems = ({lastPurchases}: CollectionItemsProps) => {
+const CollectionItems = ({lastPurchases, onClick}: CollectionItemsProps) => {
   const groupedByDate = groupBy(lastPurchases, (release) => release.addedOn);
 
   return (
@@ -37,7 +44,7 @@ const CollectionItems = ({lastPurchases}: CollectionItemsProps) => {
           <h2>{addedOn}</h2>
           <ol className="flex flex-col gap-6">
             {releases.map((release) => (
-              <CollectionItem key={release.id} release={release} />
+              <CollectionItem key={release.id} release={release} onClick={onClick} />
             ))}
           </ol>
         </div>
