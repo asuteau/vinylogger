@@ -2,6 +2,7 @@ import {HouseLine} from '@phosphor-icons/react/dist/icons/HouseLine';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {User} from '@phosphor-icons/react/dist/icons/User';
+import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
 import {NavLink} from '@remix-run/react';
 import {ReactNode} from 'react';
 import Logo from './Logo';
@@ -31,6 +32,11 @@ const Navbar = () => {
       label: 'Home',
       icon: <HouseLine weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/dashboard',
+    },
+    {
+      label: 'Search',
+      icon: <MagnifyingGlass weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
+      to: '/search',
     },
     {
       label: 'Collection',

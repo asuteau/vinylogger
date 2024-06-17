@@ -1,4 +1,10 @@
-import {DiscogsClient, GetReleaseResponse, PaginationParameters, SortParameters} from '@lionralfs/discogs-client';
+import {
+  DiscogsClient,
+  GetReleaseResponse,
+  PaginationParameters,
+  SearchResult,
+  SortParameters,
+} from '@lionralfs/discogs-client';
 import Release from '~/entities/release';
 import {timeFromNow} from '~/utils/dates';
 import {cleanId} from '~/utils/strings';
@@ -204,4 +210,15 @@ export const getAllFromWantlist = async (
 export const getReleaseById = async (client: DiscogsClient, releaseId: string): Promise<GetReleaseResponse> => {
   const release = await client.database().getRelease(releaseId);
   return release.data;
+};
+
+export const getSearchResults = async (
+  client: DiscogsClient,
+  searchTerm: string,
+  params: PaginationParameters,
+): Promise<SearchResult[]> => {
+  const releases = await client.database().search({query: searchTerm, type: 'artist', ...params});
+  const response = releases.data.results;
+
+  return response;
 };

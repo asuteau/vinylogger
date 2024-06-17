@@ -43,7 +43,7 @@ const App = () => {
         <div className="layout bg-slate-50">
           <Navbar />
           <Header profile={profile?.data} />
-          <section className="layout-main p-8 space-y-4">
+          <section className="layout-main m-7 p-1 space-y-4">
             <Outlet />
           </section>
         </div>
