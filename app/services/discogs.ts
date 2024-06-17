@@ -217,7 +217,7 @@ export const getSearchResults = async (
   searchTerm: string,
   params: PaginationParameters,
 ): Promise<SearchResult[]> => {
-  const releases = await client.database().search({query: searchTerm, type: 'artist', ...params});
+  const releases = await client.database().search({query: searchTerm, type: 'master', ...params});
   const response = releases.data.results;
 
   return response;

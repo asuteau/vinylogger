@@ -5,6 +5,8 @@ import {Input} from '~/components/ui/input';
 import useDebounce from '~/hooks/use-debounce';
 import {getClient, getUser} from '~/utils/session.server';
 import {getSearchResults} from '~/services/discogs';
+import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
+import {Star} from '@phosphor-icons/react/dist/icons/Star';
 
 // Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
@@ -51,15 +53,29 @@ const SearchRoute = () => {
               searchResults ? (
                 searchResults
                   .filter((result) => result.thumb)
-                  .map((result) => (
-                    <div key={result.id} className="flex justify-start items-center gap-4">
-                      <img src={result.thumb} alt={result.title} className="w-16 h-16" />
-                      <div>
-                        <h3>{result.title}</h3>
-                        <p>{result.year}</p>
+                  .filter((result) => {
+                    const title = result.title.toLowerCase();
+                    return searchTerm
+                      .toLowerCase()
+                      .split(' ')
+                      .every((word) => title.includes(word));
+                  })
+                  .sort((a, b) => (parseInt(a.year as string) > parseInt(b.year as string) ? -1 : 1))
+                  .map((result) => {
+                    console.log(result);
+
+                    return (
+                      <div key={result.id} className="flex justify-start items-center gap-4">
+                        <img src={result.thumb} alt={result.title} className="w-24 aspect-square shadow-lg" />
+                        <div className="flex flex-col">
+                          <h3>{result.title}</h3>
+                          <p className="flex items-center">{result.year}</p>
+                          {result.user_data.in_collection && <Tag weight="bold" className="h-5 w-5" />}
+                          {result.user_data.in_wantlist && <Star weight="bold" className="h-5 w-5" />}
+                        </div>
                       </div>
-                    </div>
-                  ))
+                    );
+                  })
               ) : (
                 <h3>No results</h3>
               )
