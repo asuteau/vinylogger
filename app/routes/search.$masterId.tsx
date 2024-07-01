@@ -2,7 +2,8 @@ import {Await, NavLink, useLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
-import {getMasterReleaseVersions, getReleaseById} from '~/services/discogs';
+import {getMasterReleaseVersions} from '~/services/discogs';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Releases'}];
@@ -47,14 +48,28 @@ const SearchByMasterIdRoute = () => {
                   .map((version) => {
                     return (
                       <div key={version.id} className="flex justify-start items-center gap-4">
-                        <img src={version.thumb} alt={version.title} className="w-24 aspect-square shadow-lg" />
+                        {version.thumb ? (
+                          <div
+                            className="bg-cover bg-center w-24 aspect-square shadow-lg"
+                            style={{
+                              backgroundImage: `url(${version.thumb})`,
+                            }}
+                          >
+                            {/* <img src={version.thumb} alt={version.title} className="" /> */}
+                          </div>
+                        ) : (
+                          <div className="w-24 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
+                            <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
+                          </div>
+                        )}
                         <div className="flex flex-col">
                           {version.major_formats && (
-                            <h3 className="text-gray-950 line-clamp-1">
-                              {version.major_formats[0]} {version.format && <>({version.format})</>}
-                            </h3>
+                            <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
                           )}
-                          <p className="text-gray-600 flex items-center">{version.released}</p>
+                          {version.format && <p className="text-gray-600">{version.format}</p>}
+                          <p className="text-gray-600">
+                            <span>{version.released}</span> • <span>{version.country}</span>
+                          </p>
                         </div>
                       </div>
                     );

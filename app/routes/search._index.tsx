@@ -78,7 +78,6 @@ const SearchRoute = () => {
             {(searchResults) =>
               searchResults ? (
                 searchResults
-                  .filter((result) => result.thumb)
                   .filter((result) => {
                     const title = result.title.toLowerCase();
                     return searchTerm
