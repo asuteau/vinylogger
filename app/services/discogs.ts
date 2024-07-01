@@ -1,5 +1,6 @@
 import {
   DiscogsClient,
+  GetMasterVersionsResponse,
   GetReleaseResponse,
   PaginationParameters,
   SearchResult,
@@ -219,6 +220,17 @@ export const getSearchResults = async (
 ): Promise<SearchResult[]> => {
   const releases = await client.database().search({query: searchTerm, type: 'master', ...params});
   const response = releases.data.results;
+
+  return response;
+};
+
+export const getMasterReleaseVersions = async (
+  client: DiscogsClient,
+  masterId: string,
+  params: PaginationParameters,
+): Promise<GetMasterVersionsResponse> => {
+  const releases = await client.database().getMasterVersions(masterId, {format: 'Vinyl', ...params});
+  const response = releases.data;
 
   return response;
 };
