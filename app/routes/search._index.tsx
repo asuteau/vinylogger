@@ -50,7 +50,7 @@ const SearchRoute = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full justify-center items-start gap-8">
+    <div className="relative flex flex-col w-full justify-center items-start gap-4">
       <Form
         id="search-form"
         className="w-full"
@@ -89,7 +89,7 @@ const SearchRoute = () => {
                   .map((result) => {
                     return (
                       <NavLink
-                        to={`/search/${result.id}`}
+                        to={`/search/masters/${result.id}`}
                         prefetch="none"
                         className={({isActive}) =>
                           isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
