@@ -4,6 +4,8 @@ import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
 import {getMasterReleaseVersions} from '~/services/discogs';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
+import {Star} from '@phosphor-icons/react/dist/icons/Star';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Masters'}];
@@ -15,15 +17,6 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   if (!masterId) return json({releases: null, masterId: null});
   const client = await getClient(request);
   const releases = getMasterReleaseVersions(client, masterId, {per_page: 20});
-
-  // releases.then((releases) => {
-  //   releases.versions.forEach((release) => {
-  //     const result = getReleaseById(client, release.id.toString());
-  //     result.then((r) => {
-  //       console.log('>>>>>>>>>>', r.formats.map((format) => format.text).join(', '));
-  //     });
-  //   });
-  // });
 
   return defer({releases, masterId});
 };
@@ -72,11 +65,13 @@ const SearchByMasterIdRoute = () => {
                               <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
                             )}
                             {version.format && (
-                              <p className="text-gray-600">{version.format.replaceAll(', ', ' • ')}</p>
+                              <p className="text-gray-600 line-clamp-1">{version.format.replaceAll(', ', ' • ')}</p>
                             )}
-                            <p className="text-gray-600">
+                            <p className="text-gray-600 line-clamp-1">
                               <span>{version.released}</span> • <span>{version.country}</span>
                             </p>
+                            {version.stats.user.in_collection > 0 && <Tag weight="bold" className="h-5 w-5" />}
+                            {version.stats.user.in_wantlist > 0 && <Star weight="bold" className="h-5 w-5" />}
                           </div>
                         </div>
                       </NavLink>
