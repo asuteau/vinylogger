@@ -1,9 +1,10 @@
-import {Await, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, Form, NavLink, useLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
 import {getReleaseById} from '~/services/discogs';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+import {Button} from '~/components/ui/button';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -49,12 +50,27 @@ const SearchByVersionIdRoute = () => {
                       <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
                     </div>
                   )}
+
                   <div className="flex flex-col">
                     {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
                     {release.formats && <p className="text-gray-600">{release.formats[0].text}</p>}
                     <p className="text-gray-600">
                       <span>{release.year}</span> • <span>{release.country}</span>
                     </p>
+
+                    <div className="flex gap-4">
+                      <Form action="have" method="post">
+                        <Button variant="secondary" type="submit">
+                          Add to collection
+                        </Button>
+                      </Form>
+
+                      <Form action="want" method="post">
+                        <Button variant="secondary" type="submit">
+                          Add to wantlist
+                        </Button>
+                      </Form>
+                    </div>
                   </div>
                 </div>
               )}

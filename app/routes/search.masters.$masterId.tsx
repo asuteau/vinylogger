@@ -71,7 +71,9 @@ const SearchByMasterIdRoute = () => {
                             {version.major_formats && (
                               <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
                             )}
-                            {version.format && <p className="text-gray-600">{version.format}</p>}
+                            {version.format && (
+                              <p className="text-gray-600">{version.format.replaceAll(', ', ' • ')}</p>
+                            )}
                             <p className="text-gray-600">
                               <span>{version.released}</span> • <span>{version.country}</span>
                             </p>
