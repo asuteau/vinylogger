@@ -1,10 +1,11 @@
-import {Await, Form, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
 import {getReleaseById} from '~/services/discogs';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Button} from '~/components/ui/button';
+import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -25,58 +26,65 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
 // Renders the UI
 const SearchByVersionIdRoute = () => {
   const {release, versionId} = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
+      <Button variant="outline" size="icon" onClick={handleBack}>
+        <CaretLeft className="h-4 w-4" />
+      </Button>
+
       {release ? (
-        <>
-          <Suspense
-            fallback={
-              <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
-            }
-          >
-            <Await resolve={release}>
-              {(release) => (
-                <div key={release.id} className="flex justify-start items-center gap-4">
-                  {release.images ? (
-                    <div
-                      className="bg-cover bg-center w-48 aspect-square shadow-lg"
-                      style={{
-                        backgroundImage: `url(${release.images[0].uri})`,
-                      }}
-                    />
-                  ) : (
-                    <div className="w-48 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
-                      <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
-                    </div>
-                  )}
+        <Suspense
+          fallback={
+            <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
+          }
+        >
+          <Await resolve={release}>
+            {(release) => (
+              <div key={release.id} className="flex justify-start items-center gap-4">
+                {release.images ? (
+                  <div
+                    className="bg-cover bg-center w-48 aspect-square shadow-lg"
+                    style={{
+                      backgroundImage: `url(${release.images[0].uri})`,
+                    }}
+                  />
+                ) : (
+                  <div className="w-48 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
+                    <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
+                  </div>
+                )}
 
-                  <div className="flex flex-col">
-                    {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
-                    {release.formats && <p className="text-gray-600">{release.formats[0].text}</p>}
-                    <p className="text-gray-600">
-                      <span>{release.year}</span> • <span>{release.country}</span>
-                    </p>
+                <div className="flex flex-col">
+                  {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
+                  {release.formats && <p className="text-gray-600">{release.formats[0].text}</p>}
+                  <p className="text-gray-600">
+                    <span>{release.year}</span> • <span>{release.country}</span>
+                  </p>
 
-                    <div className="flex gap-4">
-                      <Form action="have" method="post">
-                        <Button variant="secondary" type="submit">
-                          Add to collection
-                        </Button>
-                      </Form>
+                  <div className="flex gap-4">
+                    <Form action="have" method="post">
+                      <Button variant="secondary" type="submit">
+                        Add to collection
+                      </Button>
+                    </Form>
 
-                      <Form action="want" method="post">
-                        <Button variant="secondary" type="submit">
-                          Add to wantlist
-                        </Button>
-                      </Form>
-                    </div>
+                    <Form action="want" method="post">
+                      <Button variant="secondary" type="submit">
+                        Add to wantlist
+                      </Button>
+                    </Form>
                   </div>
                 </div>
-              )}
-            </Await>
-          </Suspense>
-        </>
+              </div>
+            )}
+          </Await>
+        </Suspense>
       ) : (
         <ul>
           <li>
@@ -86,7 +94,7 @@ const SearchByVersionIdRoute = () => {
           </li>
         </ul>
       )}
-    </>
+    </div>
   );
 };
 
