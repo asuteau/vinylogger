@@ -7,6 +7,7 @@ import {getClient, getUser} from '~/utils/session.server';
 import {getSearchResults} from '~/services/discogs';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import {Badge} from '~/components/ui/badge';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];
@@ -97,11 +98,19 @@ const SearchRoute = () => {
                       >
                         <div key={result.id} className="flex justify-start items-center gap-4">
                           <img src={result.thumb} alt={result.title} className="w-24 aspect-square shadow-lg" />
-                          <div className="flex flex-col">
+                          <div className="flex flex-col items-start">
                             <h3 className="line-clamp-1">{result.title}</h3>
-                            <p className="flex items-center">{result.year}</p>
-                            {result.user_data.in_collection && <Tag weight="bold" className="h-5 w-5" />}
-                            {result.user_data.in_wantlist && <Star weight="bold" className="h-5 w-5" />}
+                            <span className="flex items-center">{result.year}</span>
+                            {result.user_data.in_collection && (
+                              <Badge variant="secondary">
+                                <Tag className="h-4 w-4" />
+                              </Badge>
+                            )}
+                            {result.user_data.in_wantlist && (
+                              <Badge variant="secondary">
+                                <Star className="h-4 w-4" />
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </NavLink>

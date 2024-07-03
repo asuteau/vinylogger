@@ -8,6 +8,7 @@ import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 import {Button} from '~/components/ui/button';
+import {Badge} from '~/components/ui/badge';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Masters'}];
@@ -19,7 +20,7 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   if (!masterId) return json({releases: null, masterId: null});
   const client = await getClient(request);
   const releases = getMasterReleaseVersions(client, masterId, {per_page: 20});
-  releases.then((r) => console.log('>>>>>>>>>>', r.versions));
+  // releases.then((r) => console.log('>>>>>>>>>>', r.versions));
 
   return defer({releases, masterId});
 };
@@ -68,7 +69,7 @@ const SearchByMasterIdRoute = () => {
                                 <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
                               </div>
                             )}
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-start">
                               {version.major_formats && (
                                 <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
                               )}
@@ -80,8 +81,16 @@ const SearchByMasterIdRoute = () => {
                               <span className="text-gray-600 line-clamp-1">
                                 <span>{version.released}</span> • <span>{version.country}</span>
                               </span>
-                              {version.stats.user.in_collection > 0 && <Tag weight="bold" className="h-5 w-5" />}
-                              {version.stats.user.in_wantlist > 0 && <Star weight="bold" className="h-5 w-5" />}
+                              {version.stats.user.in_collection > 0 && (
+                                <Badge variant="secondary">
+                                  <Tag className="h-4 w-4" />
+                                </Badge>
+                              )}
+                              {version.stats.user.in_wantlist > 0 && (
+                                <Badge variant="secondary">
+                                  <Star className="h-4 w-4" />
+                                </Badge>
+                              )}
                             </div>
                           </div>
                         </NavLink>
