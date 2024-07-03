@@ -34,7 +34,7 @@ const SearchByMasterIdRoute = () => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center items-start gap-4">
+    <div className="flex flex-col w-full justify-center items-start gap-8">
       <Button variant="outline" size="icon" onClick={handleBack}>
         <CaretLeft className="h-4 w-4" />
       </Button>
@@ -62,12 +62,7 @@ const SearchByMasterIdRoute = () => {
                         >
                           <div key={version.id} className="flex justify-start items-center gap-4">
                             {version.thumb ? (
-                              <div
-                                className="bg-cover bg-center w-24 aspect-square shadow-lg"
-                                style={{
-                                  backgroundImage: `url(${version.thumb})`,
-                                }}
-                              />
+                              <img className="bg-cover bg-center w-24 aspect-square shadow-lg" src={version.thumb} />
                             ) : (
                               <div className="w-24 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
                                 <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
@@ -78,11 +73,13 @@ const SearchByMasterIdRoute = () => {
                                 <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
                               )}
                               {version.format && (
-                                <p className="text-gray-600 line-clamp-1">{version.format.replaceAll(', ', ' • ')}</p>
+                                <span className="text-gray-600 line-clamp-1">
+                                  {version.format.replaceAll(', ', ' • ')}
+                                </span>
                               )}
-                              <p className="text-gray-600 line-clamp-1">
+                              <span className="text-gray-600 line-clamp-1">
                                 <span>{version.released}</span> • <span>{version.country}</span>
-                              </p>
+                              </span>
                               {version.stats.user.in_collection > 0 && <Tag weight="bold" className="h-5 w-5" />}
                               {version.stats.user.in_wantlist > 0 && <Star weight="bold" className="h-5 w-5" />}
                             </div>

@@ -6,6 +6,8 @@ import {getReleaseById} from '~/services/discogs';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Button} from '~/components/ui/button';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
+import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
+import {Star} from '@phosphor-icons/react/dist/icons/Star';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -33,7 +35,7 @@ const SearchByVersionIdRoute = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <Button variant="outline" size="icon" onClick={handleBack}>
         <CaretLeft className="h-4 w-4" />
       </Button>
@@ -46,36 +48,46 @@ const SearchByVersionIdRoute = () => {
         >
           <Await resolve={release}>
             {(release) => (
-              <div key={release.id} className="flex justify-start items-center gap-4">
+              <div key={release.id} className="flex flex-col md:flex-row justify-start items-center gap-4">
                 {release.images ? (
                   <div
-                    className="bg-cover bg-center w-48 aspect-square shadow-lg"
+                    className="bg-cover bg-center w-64 aspect-square shadow-lg"
                     style={{
                       backgroundImage: `url(${release.images[0].uri})`,
                     }}
                   />
                 ) : (
-                  <div className="w-48 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
+                  <div className="w-64 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
                     <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
                   </div>
                 )}
 
-                <div className="flex flex-col">
-                  {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
-                  {release.formats && <p className="text-gray-600">{release.formats[0].text}</p>}
-                  <p className="text-gray-600">
-                    <span>{release.year}</span> • <span>{release.country}</span>
-                  </p>
+                <div className="flex flex-col items-center md:items-start gap-4">
+                  <div className="flex flex-col items-center md:items-start">
+                    {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
+                    {release.formats && <span className="text-gray-600 line-clamp-1">{release.formats[0].text}</span>}
+                    <span className="text-gray-600 line-clamp-1">
+                      <span>{release.year}</span> • <span>{release.country}</span>
+                    </span>
+                  </div>
 
                   <div className="flex gap-4">
                     <Form action="have" method="post">
-                      <Button variant="secondary" type="submit">
+                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
+                        <Tag className="h-4 w-4" />
+                      </Button>
+
+                      <Button className="hidden md:block" variant="secondary" type="submit">
                         Add to collection
                       </Button>
                     </Form>
 
                     <Form action="want" method="post">
-                      <Button variant="secondary" type="submit">
+                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
+                        <Star className="h-4 w-4" />
+                      </Button>
+
+                      <Button className="hidden md:block" variant="secondary" type="submit">
                         Add to wantlist
                       </Button>
                     </Form>
