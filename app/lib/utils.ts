@@ -20,6 +20,7 @@ export const extractColors = (text: string): string[] => {
     'gray',
     'silver',
     'gold',
+    'grey',
   ];
   const colorRegex = new RegExp(colorNames.join('|'), 'gi');
   return text.match(colorRegex) || [];

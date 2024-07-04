@@ -69,12 +69,12 @@ const SearchByVersionIdRoute = () => {
                     {release.formats &&
                       release.formats[0].text &&
                       (() => {
-                        const colors = extractColors(release.formats[0].text);
+                        const colors = [...new Set(extractColors(release.formats[0].text))];
                         return (
                           <div className="flex gap-1">
                             <span className="text-gray-600 line-clamp-1">{release.formats[0].text}</span>
-                            {colors.map((color, index) => (
-                              <VinylRecord size={24} weight="duotone" color={color.toLowerCase()} />
+                            {colors.map((color) => (
+                              <VinylRecord key={color} size={24} weight="duotone" color={color.toLowerCase()} />
                             ))}
                           </div>
                         );

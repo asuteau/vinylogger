@@ -55,13 +55,14 @@ const SearchByMasterIdRoute = () => {
                     .map((version) => {
                       return (
                         <NavLink
+                          key={version.id}
                           to={`/search/versions/${version.id}`}
                           prefetch="none"
                           className={({isActive}) =>
                             isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
                           }
                         >
-                          <div key={version.id} className="flex justify-start items-center gap-4">
+                          <div className="flex justify-start items-center gap-4">
                             {version.thumb ? (
                               <img className="bg-cover bg-center w-24 aspect-square shadow-lg" src={version.thumb} />
                             ) : (
@@ -69,6 +70,7 @@ const SearchByMasterIdRoute = () => {
                                 <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
                               </div>
                             )}
+
                             <div className="flex flex-col items-start">
                               {version.major_formats && (
                                 <h3 className="text-gray-950 line-clamp-1">{version.major_formats[0]}</h3>
