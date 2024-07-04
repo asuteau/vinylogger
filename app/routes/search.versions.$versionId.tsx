@@ -1,4 +1,4 @@
-import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
+import {Await, Form, NavLink, useLoaderData, useMatches, useNavigate} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {getClient} from '~/utils/session.server';
@@ -30,6 +30,8 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
 const SearchByVersionIdRoute = () => {
   const {release, versionId} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  // const matches = useMatches();
+  // console.log(matches);
 
   const handleBack = () => {
     navigate(-1);
@@ -37,7 +39,7 @@ const SearchByVersionIdRoute = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <Button variant="outline" size="icon" onClick={handleBack}>
+      <Button variant="default" size="icon" onClick={handleBack}>
         <CaretLeft className="h-4 w-4" />
       </Button>
 
@@ -92,7 +94,8 @@ const SearchByVersionIdRoute = () => {
                         <Tag className="h-4 w-4" />
                       </Button>
 
-                      <Button className="hidden md:block" variant="secondary" type="submit">
+                      <Button className="hidden md:flex gap-2" variant="outline" type="submit">
+                        <Tag className="h-4 w-4" />
                         Add to collection
                       </Button>
                     </Form>
@@ -102,7 +105,8 @@ const SearchByVersionIdRoute = () => {
                         <Star className="h-4 w-4" />
                       </Button>
 
-                      <Button className="hidden md:block" variant="secondary" type="submit">
+                      <Button className="hidden md:flex gap-2" variant="outline" type="submit">
+                        <Star className="h-4 w-4" />
                         Add to wantlist
                       </Button>
                     </Form>

@@ -90,13 +90,14 @@ const SearchRoute = () => {
                   .map((result) => {
                     return (
                       <NavLink
+                        key={result.id}
                         to={`/search/masters/${result.id}`}
                         prefetch="none"
                         className={({isActive}) =>
                           isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
                         }
                       >
-                        <div key={result.id} className="flex justify-start items-center gap-4">
+                        <div className="flex justify-start items-center gap-4">
                           <img src={result.thumb} alt={result.title} className="w-24 aspect-square shadow-lg" />
                           <div className="flex flex-col items-start">
                             <h3 className="line-clamp-1">{result.title}</h3>

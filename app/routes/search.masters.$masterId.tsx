@@ -36,7 +36,7 @@ const SearchByMasterIdRoute = () => {
 
   return (
     <div className="flex flex-col w-full justify-center items-start gap-8">
-      <Button variant="outline" size="icon" onClick={handleBack}>
+      <Button variant="default" size="icon" onClick={handleBack}>
         <CaretLeft className="h-4 w-4" />
       </Button>
 
@@ -67,7 +67,7 @@ const SearchByMasterIdRoute = () => {
                               <img className="bg-cover bg-center w-24 aspect-square shadow-lg" src={version.thumb} />
                             ) : (
                               <div className="w-24 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
-                                <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
+                                <VinylRecord size={32} weight="duotone" className="fill-slate-900 opacity-50" />
                               </div>
                             )}
 
