@@ -8,6 +8,7 @@ import {Button} from '~/components/ui/button';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import {extractColors} from '~/lib/utils';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -65,7 +66,19 @@ const SearchByVersionIdRoute = () => {
                 <div className="flex flex-col items-center md:items-start gap-4">
                   <div className="flex flex-col items-center md:items-start">
                     {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
-                    {release.formats && <span className="text-gray-600 line-clamp-1">{release.formats[0].text}</span>}
+                    {release.formats &&
+                      release.formats[0].text &&
+                      (() => {
+                        const colors = extractColors(release.formats[0].text);
+                        return (
+                          <div className="flex gap-1">
+                            <span className="text-gray-600 line-clamp-1">{release.formats[0].text}</span>
+                            {colors.map((color, index) => (
+                              <VinylRecord size={24} weight="duotone" color={color.toLowerCase()} />
+                            ))}
+                          </div>
+                        );
+                      })()}
                     <span className="text-gray-600 line-clamp-1">
                       <span>{release.year}</span> • <span>{release.country}</span>
                     </span>

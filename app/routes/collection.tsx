@@ -18,7 +18,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   const client = await getClient(request);
   const releases = getAllFromCollection(client, user.username, {
-    per_page: 20,
+    per_page: 10,
     sort: 'added',
     sort_order: 'desc',
   });

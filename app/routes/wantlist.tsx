@@ -18,7 +18,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   const client = await getClient(request);
   const wants = getAllFromWantlist(client, user.username, {
-    per_page: 20,
+    per_page: 10,
   });
 
   return defer({user, wants});
