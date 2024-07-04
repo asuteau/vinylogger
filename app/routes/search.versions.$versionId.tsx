@@ -64,18 +64,20 @@ const SearchByVersionIdRoute = () => {
                 )}
 
                 <div className="flex flex-col items-center md:items-start gap-4">
-                  <div className="flex flex-col items-center md:items-start">
+                  <div className="flex flex-col items-center md:items-start gap-2">
                     {release.formats && <h3 className="text-gray-950 line-clamp-1">{release.formats[0].name}</h3>}
                     {release.formats &&
                       release.formats[0].text &&
                       (() => {
                         const colors = [...new Set(extractColors(release.formats[0].text))];
                         return (
-                          <div className="flex gap-1">
+                          <div className="flex flex-col md:flex-row gap-0 md:gap-1">
                             <span className="text-gray-600 line-clamp-1">{release.formats[0].text}</span>
-                            {colors.map((color) => (
-                              <VinylRecord key={color} size={24} weight="duotone" color={color.toLowerCase()} />
-                            ))}
+                            <div className="flex justify-center md:justify-start">
+                              {colors.map((color) => (
+                                <VinylRecord key={color} size={24} weight="duotone" color={color.toLowerCase()} />
+                              ))}
+                            </div>
                           </div>
                         );
                       })()}
