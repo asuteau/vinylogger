@@ -44,7 +44,7 @@ const CollectionRoute = () => {
             >
               <Await resolve={Promise.all([release, collectionData?.releases])}>
                 {([release, releases]) => (
-                  <div className="flex flex-col items-center gap-4">
+                  <div className="flex flex-col items-center gap-4 p-4">
                     <ReleaseDetails release={release} />
 
                     <Form method="post">
@@ -55,11 +55,7 @@ const CollectionRoute = () => {
                         type="number"
                         hidden
                       />
-                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
-                        <Tag className="h-4 w-4" />
-                      </Button>
-
-                      <Button className="hidden md:flex gap-2" variant="default" type="submit">
+                      <Button className="flex gap-2" variant="default" type="submit">
                         <Tag className="h-4 w-4" />
                         Remove from collection
                       </Button>
