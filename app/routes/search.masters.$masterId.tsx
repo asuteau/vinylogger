@@ -61,6 +61,7 @@ const SearchByMasterIdRoute = () => {
                           className={({isActive}) =>
                             isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
                           }
+                          preventScrollReset
                         >
                           <div className="flex justify-start items-center gap-4">
                             {version.thumb ? (

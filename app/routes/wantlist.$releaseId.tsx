@@ -1,9 +1,11 @@
-import {Await, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
-import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
+import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
+import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
 import {Suspense} from 'react';
-import {getClient} from '~/utils/session.server';
+import {getClient, getUser} from '~/utils/session.server';
 import {getReleaseById} from '~/services/discogs';
 import ReleaseDetails from '~/components/ReleaseDetails';
+import {Button} from '~/components/ui/button';
+import {Star} from '@phosphor-icons/react/dist/icons/Star';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Wantlist - Release'}];
@@ -38,7 +40,24 @@ const CollectionRoute = () => {
                 <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
               }
             >
-              <Await resolve={release}>{(release) => <ReleaseDetails release={release} />}</Await>
+              <Await resolve={release}>
+                {(release) => (
+                  <div className="flex flex-col items-center gap-4">
+                    <ReleaseDetails release={release} />
+
+                    <Form method="post">
+                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
+                        <Star className="h-4 w-4" />
+                      </Button>
+
+                      <Button className="hidden md:flex gap-2" variant="default" type="submit">
+                        <Star className="h-4 w-4" />
+                        Remove from wantlist
+                      </Button>
+                    </Form>
+                  </div>
+                )}
+              </Await>
             </Suspense>
           )}
         </>
@@ -56,6 +75,13 @@ const CollectionRoute = () => {
 };
 
 // Updates persistent data
-export const action = async () => {};
+export const action = async ({params, request}: ActionFunctionArgs) => {
+  const user = await getUser(request);
+  const releaseId = params.releaseId;
+  if (!releaseId || !user) return redirect('/');
+  const client = await getClient(request);
+  await client.user().wantlist().removeRelease(user.username, releaseId);
+  return redirect('/wantlist');
+};
 
 export default CollectionRoute;

@@ -96,6 +96,7 @@ const SearchRoute = () => {
                         className={({isActive}) =>
                           isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
                         }
+                        preventScrollReset
                       >
                         <div className="flex justify-start items-center gap-4">
                           <img src={result.thumb} alt={result.title} className="w-24 aspect-square shadow-lg" />

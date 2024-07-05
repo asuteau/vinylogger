@@ -1,4 +1,4 @@
-import {Await, NavLink, Outlet, useLoaderData} from '@remix-run/react';
+import {Await, NavLink, Outlet, useLoaderData, useRouteLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense, useState} from 'react';
 import {getUser, getClient} from '~/utils/session.server';
@@ -24,6 +24,10 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   });
 
   return defer({user, releases});
+};
+
+export const useCollectionLoaderData = () => {
+  return useRouteLoaderData<typeof loader>('routes/collection');
 };
 
 // Renders the UI

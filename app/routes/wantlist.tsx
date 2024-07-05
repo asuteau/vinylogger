@@ -1,4 +1,4 @@
-import {useLoaderData, Await, NavLink, Outlet} from '@remix-run/react';
+import {useLoaderData, Await, NavLink, Outlet, useRouteLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense, useState} from 'react';
 import CollectionItems from '~/components/CollectionItems';

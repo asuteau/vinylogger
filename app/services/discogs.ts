@@ -162,7 +162,6 @@ export const getUserProfile = async (
     });
 
     const data = await response.json();
-    // console.log('response', response)
 
     return {collectionItemsCount: data.num_collection};
   } catch (error) {
@@ -182,6 +181,7 @@ export const getAllFromCollection = async (
 
   return response.map((release) => ({
     id: release.id,
+    instanceId: release.instance_id,
     artist: release.basic_information.artists.map((artist) => cleanId(artist.name)).join(', '),
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
