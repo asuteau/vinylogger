@@ -182,10 +182,10 @@ export const getAllFromCollection = async (
   return response.map((release) => ({
     id: release.id,
     instanceId: release.instance_id,
-    artist: release.basic_information.artists.map((artist) => cleanId(artist.name)).join(', '),
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
-    format: release.basic_information.formats.map((format) => format.name).join(', '),
+    format: release.basic_information.formats.map((format) => format.name)[0],
     addedOn: timeFromNow(release.date_added),
   }));
 };
@@ -200,10 +200,10 @@ export const getAllFromWantlist = async (
 
   return response.map((release) => ({
     id: release.id,
-    artist: release.basic_information.artists.map((artist) => cleanId(artist.name)).join(', '),
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
     title: release.basic_information.title,
     coverImage: release.basic_information.cover_image,
-    format: release.basic_information.formats.map((format) => format.name).join(', '),
+    format: release.basic_information.formats.map((format) => format.name)[0],
     addedOn: timeFromNow(release.date_added),
   }));
 };
