@@ -9,6 +9,7 @@ import {
 } from './ui/dropdown-menu';
 import {Button} from './ui/button';
 import UserSignOut from './UserSignOut';
+import useMediaQuery from '~/hooks/use-media-query';
 
 type UserProfileProps = {
   className: string;
@@ -16,23 +17,27 @@ type UserProfileProps = {
 };
 
 const UserProfile = ({className, profile}: UserProfileProps) => {
+  const isMobile = useMediaQuery();
+
   return (
     <div className={`flex items-center ${className}`}>
-      <img src={profile.avatar_url} className="w-10 h-10 rounded-full" />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="link" className="text-lg">
-            {profile.username}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <UserSignOut />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <img src={profile.avatar_url} className="w-8 md:w-10 aspect-square rounded-full" />
+      {!isMobile && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="link" className="text-lg">
+              {profile.username}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <UserSignOut />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 };
