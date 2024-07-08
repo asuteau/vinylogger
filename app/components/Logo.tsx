@@ -9,15 +9,16 @@ type LogoProps = {
 const Logo = ({className}: LogoProps) => {
   const isMobile = useMediaQuery();
   const [theme] = useTheme();
+  const isLight = theme === 'light';
 
   return (
     <NavLink id="logo" to="/dashboard" className={`flex gap-2 md:gap-4 items-center font-logo ${className} logo`}>
       <VinylRecord
         size={isMobile ? 32 : 48}
         weight="duotone"
-        className={theme === 'light' ? 'fill-slate-900' : 'fill-slate-100'}
+        className={isLight && isMobile ? 'fill-slate-900' : 'fill-slate-100'}
       />
-      <h1 className={theme === 'light' ? 'text-slate-900' : 'text-slate-100'}>Vinylogger</h1>
+      <h1 className={isLight && isMobile ? 'text-slate-900' : 'text-slate-100'}>Vinylogger</h1>
     </NavLink>
   );
 };
