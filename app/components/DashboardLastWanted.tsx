@@ -1,7 +1,6 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {NavLink} from '@remix-run/react';
 import {Button} from './ui/button';
-import {timeFromNow} from '~/utils/dates';
 import Release from '~/entities/release';
 
 type DashboardLastWantedProps = {
@@ -10,23 +9,6 @@ type DashboardLastWantedProps = {
 
 const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
   return (
-    // <div className="flex-none flex flex-col justify-start w-32 md:w-auto">
-    //   <div className="overflow-hidden shadow-lg">
-    //     <img
-    //       src={release.coverImage}
-    //       className="w-full h-32 md:h-auto aspect-square hover:brightness-90 hover:scale-110 transition-all duration-300 ease-out"
-    //     />
-    //   </div>
-    //   <span className="font-bold line-clamp-1 text-slate-950 mt-2">{release.title}</span>
-    //   <span className="text-sm line-clamp-1 text-slate-950">{release.artist}</span>
-    //   <span className="text-xs text-slate-600 line-clamp-1">{release.format}</span>
-    //   <span className="hidden md:block text-xs text-slate-500 line-clamp-1">Added {release.addedOn}</span>
-    //   <span className="md:hidden text-xs text-slate-500 line-clamp-1">
-    //     <CalendarDots className="w-4 h-4 mr-1 text-slate-500 inline-block" />
-    //     {release.addedOn}
-    //   </span>
-    // </div>
-
     <div className="flex-none flex flex-col gap-1 justify-start w-32 md:w-auto">
       <div className="overflow-hidden shadow-lg">
         <img
@@ -34,15 +16,15 @@ const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
           className="w-full h-32 md:h-auto aspect-square hover:brightness-90 hover:scale-110 transition-all duration-300 ease-out"
         />
       </div>
-      <span className="text-xs md:text-base font-bold line-clamp-2 text-slate-950 mt-2">{release.title}</span>
-      <span className="text-xs md:text-base  text-slate-600 line-clamp-2">
+      <span className="text-xs md:text-base font-bold line-clamp-2 mt-2">{release.title}</span>
+      <span className="text-xs md:text-base  text-slate-600 dark:text-slate-400 line-clamp-2">
         {release.format} • {release.artist}
       </span>
-      <span className="hidden md:block text-xs md:text-base text-slate-500 line-clamp-2">
+      <span className="hidden md:block text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
         Purchased {release.addedOn}
       </span>
-      <div className="flex items-center md:hidden text-xs md:text-base text-slate-500 line-clamp-2">
-        <CalendarDots className="w-4 h-4 mr-1 text-slate-500 inline-block" />
+      <div className="flex items-center md:hidden text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
+        <CalendarDots className="w-4 h-4 mr-1 text-slate-600 dark:text-slate-400 inline-block" />
         {release.addedOn}
       </div>
     </div>
@@ -53,7 +35,7 @@ const DashboardLastWanted = ({lastWanted}: DashboardLastWantedProps) => {
   return (
     <section className="last-wanted w-full">
       <div className="flex items-end mb-6">
-        <h2 className="font-bold text-slate-800">Recently added to wantlist</h2>
+        <h2 className="font-bold">Recently added to wantlist</h2>
         <Button variant="link" className="hidden md:block ml-auto" asChild>
           <NavLink to="/wantlist" prefetch="intent" className="ml-auto">
             Show wantlist

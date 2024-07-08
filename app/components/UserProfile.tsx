@@ -12,7 +12,7 @@ import UserSignOut from './UserSignOut';
 import useMediaQuery from '~/hooks/use-media-query';
 
 type UserProfileProps = {
-  className: string;
+  className?: string;
   profile: GetProfileResponse;
 };
 

@@ -99,10 +99,12 @@ const SearchRoute = () => {
                         preventScrollReset
                       >
                         <div className="flex justify-start items-center gap-4">
-                          <img src={result.thumb} alt={result.title} className="w-24 aspect-square shadow-lg" />
-                          <div className="flex flex-col items-start">
-                            <h3 className="line-clamp-1">{result.title}</h3>
-                            <span className="flex items-center">{result.year}</span>
+                          <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
+                          <div className="flex flex-col gap-1 items-start">
+                            <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
+                            <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                              {result.year}
+                            </span>
                             {result.user_data.in_collection && (
                               <Badge variant="secondary">
                                 <Tag className="h-4 w-4" />

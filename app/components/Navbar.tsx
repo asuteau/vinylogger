@@ -58,9 +58,9 @@ const Navbar = () => {
   return (
     <section
       id="navbar"
-      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none md:border-r md:border-slate-300 bg-slate-950"
+      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none border-t md:border-t-0 md:border-r border-slate-300 dark:border-slate-600 bg-slate-950"
     >
-      <Logo color="light" className="hidden md:flex mx-8 my-6" />
+      <Logo className="hidden md:flex mx-8 my-6" />
       {menuItems.map((item) => (
         <NavbarItem key={item.label} {...item} />
       ))}
