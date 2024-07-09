@@ -42,7 +42,7 @@ const App = () => {
       </head>
       <body>
         <div className="layout">
-          <Navbar />
+          <Navbar totalInCollection={profile?.data.num_collection} totalInWantlist={profile?.data.num_wantlist} />
           <Header profile={profile?.data} />
           <section className="layout-main m-7 p-1 space-y-4">
             <Outlet />

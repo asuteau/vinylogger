@@ -6,28 +6,45 @@ import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass'
 import {NavLink} from '@remix-run/react';
 import {ReactNode} from 'react';
 import Logo from './Logo';
+import {Badge} from './ui/badge';
+import useMediaQuery from '~/hooks/use-media-query';
 
-type MenuItem = {
+type NavbarProps = {
+  totalInCollection?: number;
+  totalInWantlist?: number;
+};
+
+type NavbarMenuItem = {
   label: string;
   icon: ReactNode;
   to: string;
+  total?: number;
 };
 
-const NavbarItem = ({label, icon, to}: MenuItem) => {
+const NavbarItem = ({label, icon, to, total}: NavbarMenuItem) => {
+  const isMobile = useMediaQuery();
+
   return (
     <NavLink
       to={to}
       prefetch="intent"
       className="flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-800 hover:md:border-l-slate-100 h-full md:h-auto w-full font-bold text-slate-400"
     >
-      {icon}
+      {isMobile && total ? (
+        <Badge variant="secondary" className="h-5">
+          {total}
+        </Badge>
+      ) : (
+        icon
+      )}
       <span>{label}</span>
+      {!isMobile && total && <span className="ml-auto">{total}</span>}
     </NavLink>
   );
 };
 
-const Navbar = () => {
-  const menuItems: MenuItem[] = [
+const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
+  const menuItems: NavbarMenuItem[] = [
     {
       label: 'Home',
       icon: <HouseLine weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
@@ -42,11 +59,13 @@ const Navbar = () => {
       label: 'Collection',
       icon: <Tag weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/collection',
+      total: totalInCollection,
     },
     {
       label: 'Wantlist',
       icon: <Star weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
       to: '/wantlist',
+      total: totalInWantlist,
     },
     {
       label: 'Profile',
