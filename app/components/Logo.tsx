@@ -18,7 +18,9 @@ const Logo = ({className}: LogoProps) => {
         weight="duotone"
         className={isLight && isMobile ? 'fill-slate-900' : 'fill-slate-100'}
       />
-      <h1 className={isLight && isMobile ? 'text-slate-900' : 'text-slate-100'}>Vinylogger</h1>
+      <h1 className={`font-['BricolageGrotesque'] ${isLight && isMobile ? 'text-slate-900' : 'text-slate-100'}`}>
+        Vinylogger
+      </h1>
     </NavLink>
   );
 };

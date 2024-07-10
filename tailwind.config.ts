@@ -15,8 +15,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['DMSans', 'Raleway', ...fontFamily.sans],
-        logo: ['Raleway', ...fontFamily.sans],
+        sans: ['DMSans', 'BricolageGrotesque', ...fontFamily.sans],
+        logo: ['BricolageGrotesque', ...fontFamily.sans],
       },
       keyframes: {
         'accordion-down': {
