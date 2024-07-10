@@ -51,7 +51,7 @@ const WantlistRoute = () => {
           ) : (
             <section
               id="release-details"
-              className="hidden md:flex items-center justify-center bg-gray-100 border-l border-gray-300 fixed top-0 right-0 h-full mt-20"
+              className="hidden md:flex items-center justify-center border-l border-slate-300 dark:border-slate-600 fixed top-0 right-0 h-full mt-20"
               style={{
                 width: 'calc(50% - 200px)',
               }}

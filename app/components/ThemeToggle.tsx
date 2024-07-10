@@ -1,6 +1,7 @@
 import {useTheme} from '~/contexts/theme-context';
 import {Button} from './ui/button';
-import {Moon, Sun} from 'lucide-react';
+import {Moon} from '@phosphor-icons/react/dist/icons/Moon';
+import {Sun} from '@phosphor-icons/react/dist/icons/Sun';
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useTheme();
@@ -11,7 +12,7 @@ const ThemeToggle = () => {
 
   return (
     <Button variant="ghost" size="icon" onClick={toggleTheme}>
-      {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+      {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
     </Button>
   );
 };
