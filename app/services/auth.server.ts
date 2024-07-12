@@ -23,20 +23,13 @@ authenticator.use(
       callbackURL: 'http://localhost:3000/login/callback',
     },
     // Define what to do when the user is authenticated
-    async ({accessToken, accessTokenSecret}) => {
+    async ({accessToken, accessTokenSecret, profile}) => {
       // profile contains userId and screenName
-      debug('User authenticated', accessToken, accessTokenSecret);
+      debug('User authenticated', accessToken, accessTokenSecret, profile);
 
       // Return a user object to store in sessionStorage.
       // You can also throw Error to reject the login
-      return new Promise((resolve) =>
-        resolve({
-          id: 1,
-          consumerName: 'John Doe',
-          resourceUrl: 'https://www.discogs.com/user/jdoe',
-          username: 'jdoe',
-        }),
-      );
+      return profile;
     },
   ),
   // each strategy has a name and can be changed to use another one

@@ -1,15 +1,15 @@
 import {AppLoadContext, json, redirect, Session, SessionData, SessionStorage} from '@remix-run/node';
 import createDebug from 'debug';
 import {AuthenticateOptions, Strategy, StrategyVerifyCallback} from 'remix-auth';
-import {v4 as uuidv4} from 'uuid';
 import * as crypto from 'crypto';
-import {commitSession, getSession} from './session.server';
+import {commitSession} from './session.server';
 
 let debug = createDebug('discogs:strategy');
 
 const requestTokenURL = 'https://api.discogs.com/oauth/request_token';
 const authorizationURL = 'https://www.discogs.com/oauth/authorize';
 const tokenURL = 'https://api.discogs.com/oauth/access_token';
+const identityURL = 'https://api.discogs.com/oauth/identity';
 
 export interface DiscogsStrategyOptions {
   consumerKey: string;
@@ -34,7 +34,7 @@ export type User = {
 export interface DiscogsStrategyVerifyParams {
   accessToken: string;
   accessTokenSecret: string;
-  // profile: Profile;
+  profile: Profile;
   context?: AppLoadContext;
 }
 
@@ -112,12 +112,16 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     // Get the access token
     let {accessToken, accessTokenSecret} = await this.getAccessToken(oauthToken, oauthVerifier, requestTokenSecret);
 
+    // Get the user identity
+    let profile = await this.checkUserIdentity(accessToken, accessTokenSecret);
+    debug('Check user identity', profile);
+
     // Verify the user and return it, or redirect
     try {
       user = await this.verify({
         accessToken,
         accessTokenSecret,
-        // profile,
+        profile,
         context: options.context,
       });
     } catch (error) {
@@ -126,7 +130,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
       return await this.failure(message, request, sessionStorage, options);
     }
 
-    debug('User authenticated');
+    debug('User authenticated', user);
     return await this.success(user, request, sessionStorage, options);
   }
 
@@ -217,8 +221,6 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
   ): Promise<{
     accessToken: string;
     accessTokenSecret: string;
-    userId: number;
-    userName: string;
   }> {
     const timestamp = Date.now();
     const nonce = crypto.randomBytes(64).toString('hex');
@@ -249,8 +251,46 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     return {
       accessToken,
       accessTokenSecret,
-      userId: 1,
-      userName: 'John Doe',
+    };
+  }
+
+  /**
+   * Step 4: Check user identity
+   */
+  private async checkUserIdentity(
+    accessToken: string,
+    accessTokenSecret: string,
+  ): Promise<{
+    id: number;
+    username: string;
+    resourceUrl: string;
+    consumerName: string;
+  }> {
+    const timestamp = Date.now();
+    const nonce = crypto.randomBytes(64).toString('hex');
+
+    debug('Fetch access token', identityURL, accessToken, accessTokenSecret);
+    let response = await fetch(identityURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `OAuth oauth_consumer_key="${this.consumerKey}", oauth_nonce="${nonce}", oauth_token="${accessToken}", oauth_signature="${this.consumerSecret}&${accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}"`,
+        'User-Agent': DiscogsUserAgent,
+      },
+    });
+
+    if (!response.ok) {
+      let responseText = await response.text();
+      debug('error! ' + responseText);
+      throw new Response(responseText, {status: 401});
+    }
+
+    const responseBody = await response.json();
+    return {
+      id: responseBody.id,
+      username: responseBody.username,
+      resourceUrl: responseBody['resource_url'],
+      consumerName: responseBody['consumer_name'],
     };
   }
 }
