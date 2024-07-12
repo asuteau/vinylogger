@@ -1,6 +1,8 @@
 type User = {
-  authenticated: boolean;
-  name: string | null;
+  id: number;
+  username: string;
+  resourceUrl: string;
+  consumerName: string;
 };
 
 export default User;

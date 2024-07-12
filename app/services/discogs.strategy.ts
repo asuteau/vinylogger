@@ -1,0 +1,256 @@
+import {AppLoadContext, json, redirect, Session, SessionData, SessionStorage} from '@remix-run/node';
+import createDebug from 'debug';
+import {AuthenticateOptions, Strategy, StrategyVerifyCallback} from 'remix-auth';
+import {v4 as uuidv4} from 'uuid';
+import * as crypto from 'crypto';
+import {commitSession, getSession} from './session.server';
+
+let debug = createDebug('discogs:strategy');
+
+const requestTokenURL = 'https://api.discogs.com/oauth/request_token';
+const authorizationURL = 'https://www.discogs.com/oauth/authorize';
+const tokenURL = 'https://api.discogs.com/oauth/access_token';
+
+export interface DiscogsStrategyOptions {
+  consumerKey: string;
+  consumerSecret: string;
+  callbackURL: string;
+}
+
+export interface Profile {
+  id: number;
+  username: string;
+  resourceUrl: string;
+  consumerName: string;
+}
+
+export type User = {
+  id: number;
+  username: string;
+  consumerName: string;
+  resourceUrl: string;
+};
+
+export interface DiscogsStrategyVerifyParams {
+  accessToken: string;
+  accessTokenSecret: string;
+  // profile: Profile;
+  context?: AppLoadContext;
+}
+
+export const DiscogsStrategyDefaultName = 'discogs';
+export const DiscogsUserAgent = 'Vinylogger/1.0';
+
+export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyParams> {
+  name = DiscogsStrategyDefaultName;
+
+  protected consumerKey: string;
+  protected consumerSecret: string;
+  protected callbackURL: string;
+
+  constructor(options: DiscogsStrategyOptions, verify: StrategyVerifyCallback<User, DiscogsStrategyVerifyParams>) {
+    super(verify);
+    this.consumerKey = options.consumerKey;
+    this.consumerSecret = options.consumerSecret;
+    this.callbackURL = options.callbackURL;
+  }
+
+  async authenticate(request: Request, sessionStorage: SessionStorage, options: AuthenticateOptions): Promise<User> {
+    debug('Request URL', request.url.toString());
+    let url = new URL(request.url);
+    let session = await sessionStorage.getSession(request.headers.get('Cookie'));
+
+    let user: User | null = session.get(options.sessionKey) ?? null;
+
+    session.flash('redirect', url.toString());
+
+    debug('Cookie session', session.get('redirect'));
+
+    // User is already authenticated
+    if (user) {
+      debug('User is authenticated');
+      return this.success(user, request, sessionStorage, options);
+    }
+
+    let callbackURL = this.getCallbackURL(url);
+    debug('Callback URL', callbackURL.toString());
+
+    // Before user navigates to login page: Redirect to login page
+    if (url.pathname !== callbackURL.pathname) {
+      // Unlike OAuth2, we first hit the request token endpoint
+      const {requestToken, callbackConfirmed} = await this.getRequestToken(callbackURL, session);
+
+      if (!callbackConfirmed) {
+        throw json(
+          {message: 'Callback not confirmed'},
+          {
+            status: 401,
+          },
+        );
+      }
+
+      // Then let user authorize the app
+      throw redirect(this.getAuthURL(requestToken).toString(), {
+        headers: {
+          'Set-Cookie': await sessionStorage.commitSession(session),
+        },
+      });
+    }
+
+    // Validations of the callback URL params
+    const oauthToken = url.searchParams.get('oauth_token');
+    if (!oauthToken) throw json({message: 'Missing oauth token from auth response.'}, {status: 400});
+    const oauthVerifier = url.searchParams.get('oauth_verifier');
+    if (!oauthVerifier) throw json({message: 'Missing oauth verifier from auth response.'}, {status: 400});
+
+    // Validation of the requestTokenSecret from the session
+    let requestTokenSecret = session.get('requestTokenSecret');
+    if (!requestTokenSecret) {
+      throw json({message: 'Missing request token secret from session.'}, {status: 400});
+    }
+
+    // Get the access token
+    let {accessToken, accessTokenSecret} = await this.getAccessToken(oauthToken, oauthVerifier, requestTokenSecret);
+
+    // Verify the user and return it, or redirect
+    try {
+      user = await this.verify({
+        accessToken,
+        accessTokenSecret,
+        // profile,
+        context: options.context,
+      });
+    } catch (error) {
+      debug('Failed to verify user', error);
+      let message = (error as Error).message;
+      return await this.failure(message, request, sessionStorage, options);
+    }
+
+    debug('User authenticated');
+    return await this.success(user, request, sessionStorage, options);
+  }
+
+  private getCallbackURL(url: URL) {
+    if (this.callbackURL.startsWith('http:') || this.callbackURL.startsWith('https:')) {
+      return new URL(this.callbackURL);
+    }
+    if (this.callbackURL.startsWith('/')) {
+      return new URL(this.callbackURL, url);
+    }
+    return new URL(`${url.protocol}//${this.callbackURL}`);
+  }
+
+  /**
+   * Step 1: Create a request for a consumer application to obtain a request token
+   */
+  private async getRequestToken(
+    callbackUrl: URL,
+    session: Session<SessionData, SessionData>,
+  ): Promise<{
+    requestToken: string;
+    requestTokenSecret: string;
+    callbackConfirmed: boolean;
+    authorizeUrl: string;
+  }> {
+    const url = new URL(requestTokenURL);
+    const timestamp = Date.now();
+    const nonce = crypto.randomBytes(64).toString('hex');
+
+    const urlString = url.toString();
+    debug('Fetching request token', urlString);
+    let response = await fetch(urlString, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `OAuth oauth_consumer_key="${this.consumerKey}", oauth_nonce="${nonce}", oauth_signature="${this.consumerSecret}&", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_callback="${encodeURIComponent(
+          callbackUrl.toString(),
+        )}"`,
+        'User-Agent': DiscogsUserAgent,
+      },
+    });
+
+    if (!response.ok) {
+      let responseText = await response.text();
+      throw new Response(responseText, {status: 401});
+    }
+
+    const responseText = await response.text();
+    const searchParams = new URLSearchParams(responseText);
+    const requestToken = searchParams.get('oauth_token') as string;
+    const requestTokenSecret = searchParams.get('oauth_token_secret') as string;
+    const callbackConfirmed = searchParams.get('oauth_callback_confirmed') === 'true';
+
+    debug('Got request token', requestToken, requestTokenSecret, callbackConfirmed);
+
+    // commit the session
+    session.flash('requestTokenSecret', requestTokenSecret);
+    await commitSession(session);
+
+    return {
+      requestToken,
+      requestTokenSecret,
+      callbackConfirmed,
+      authorizeUrl: `https://discogs.com/oauth/authorize?oauth_token=${requestToken}`,
+    };
+  }
+
+  /**
+   * Step 2: Have the user authenticate, and send the consumer application a request token.
+   */
+  private getAuthURL(requestToken: string) {
+    let params = new URLSearchParams();
+    params.set('oauth_token', requestToken);
+
+    let url = new URL(authorizationURL);
+    url.search = params.toString();
+
+    return url;
+  }
+
+  /**
+   * Step 3: Convert the request token into a usable access token
+   */
+  private async getAccessToken(
+    oauthToken: string,
+    oauthVerifier: string,
+    requestTokenSecret: string,
+  ): Promise<{
+    accessToken: string;
+    accessTokenSecret: string;
+    userId: number;
+    userName: string;
+  }> {
+    const timestamp = Date.now();
+    const nonce = crypto.randomBytes(64).toString('hex');
+
+    debug('Fetch access token', tokenURL, oauthToken, oauthVerifier);
+    let response = await fetch(tokenURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `OAuth oauth_consumer_key="${this.consumerKey}", oauth_nonce="${nonce}", oauth_token="${oauthToken}", oauth_signature="${this.consumerSecret}&${requestTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_verifier="${oauthVerifier}"`,
+        'User-Agent': DiscogsUserAgent,
+      },
+    });
+
+    if (!response.ok) {
+      let responseText = await response.text();
+      debug('error! ' + responseText);
+      throw new Response(responseText, {status: 401});
+    }
+
+    const responseBody = await response.text();
+    debug('Access token response', responseBody);
+
+    const searchParams = new URLSearchParams(responseBody);
+    const accessToken = searchParams.get('oauth_token') as string;
+    const accessTokenSecret = searchParams.get('oauth_token_secret') as string;
+
+    return {
+      accessToken,
+      accessTokenSecret,
+      userId: 1,
+      userName: 'John Doe',
+    };
+  }
+}

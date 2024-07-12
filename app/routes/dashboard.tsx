@@ -1,18 +1,26 @@
 import type {MetaFunction} from '@vercel/remix';
 import {defer, json} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
-import {Await, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, Form, NavLink, useLoaderData} from '@remix-run/react';
 import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
 import {getAllFromCollection, getAllFromWantlist} from '~/services/discogs';
+import {Button} from '~/components/ui/button';
+import {authenticator} from '~/services/auth.server';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
 };
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
+  // get the user data or redirect to /login if it failed
+  let authenticatedUser = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
+  console.log('authenticatedUser', authenticatedUser);
+
   const user = await getUser(request);
   if (!user) return json({user: null, lastPurchases: null, latestFromWantlist: null});
 
@@ -55,9 +63,9 @@ const DashboardRoute = () => {
       ) : (
         <ul>
           <li>
-            <NavLink to="/auth" className="underline">
-              Login with Discogs
-            </NavLink>
+            <Form action="/login" method="post">
+              <Button variant="link">Login with Discogs</Button>
+            </Form>
           </li>
         </ul>
       )}
