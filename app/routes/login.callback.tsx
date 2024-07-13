@@ -4,7 +4,7 @@ import {authenticator} from '~/services/auth.server';
 // Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
   await authenticator.authenticate('discogs', request, {
-    successRedirect: '/dashboard',
+    successRedirect: '/',
     failureRedirect: '/login',
   });
 };

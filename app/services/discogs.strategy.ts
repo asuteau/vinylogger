@@ -4,7 +4,10 @@ import {AuthenticateOptions, Strategy, StrategyVerifyCallback} from 'remix-auth'
 import * as crypto from 'crypto';
 import {commitSession} from './session.server';
 
-let debug = createDebug('discogs:strategy');
+const debug = createDebug('discogs:strategy');
+
+export const DiscogsStrategyDefaultName = 'discogs';
+export const DiscogsUserAgent = 'Vinylogger/1.0';
 
 const requestTokenURL = 'https://api.discogs.com/oauth/request_token';
 const authorizationURL = 'https://www.discogs.com/oauth/authorize';
@@ -37,6 +40,10 @@ export type User = {
   avatar: string;
   itemsInCollection: number;
   itemsInWantlist: number;
+  accessToken: string;
+  accessTokenSecret: string;
+  consumerKey: string;
+  consumerSecret: string;
 };
 
 export interface DiscogsStrategyVerifyParams {
@@ -45,9 +52,6 @@ export interface DiscogsStrategyVerifyParams {
   profile: Profile;
   context?: AppLoadContext;
 }
-
-export const DiscogsStrategyDefaultName = 'discogs';
-export const DiscogsUserAgent = 'Vinylogger/1.0';
 
 export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyParams> {
   name = DiscogsStrategyDefaultName;
@@ -65,8 +69,8 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
 
   async authenticate(request: Request, sessionStorage: SessionStorage, options: AuthenticateOptions): Promise<User> {
     debug('Request URL', request.url.toString());
-    let url = new URL(request.url);
-    let session = await sessionStorage.getSession(request.headers.get('Cookie'));
+    const url = new URL(request.url);
+    const session = await sessionStorage.getSession(request.headers.get('Cookie'));
 
     let user: User | null = session.get(options.sessionKey) ?? null;
 
@@ -80,7 +84,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
       return this.success(user, request, sessionStorage, options);
     }
 
-    let callbackURL = this.getCallbackURL(url);
+    const callbackURL = this.getCallbackURL(url);
     debug('Callback URL', callbackURL.toString());
 
     // Before user navigates to login page: Redirect to login page
@@ -97,7 +101,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
         );
       }
 
-      // Then let user authorize the app
+      // Then const user authorize the app
       throw redirect(this.getAuthURL(requestToken).toString(), {
         headers: {
           'Set-Cookie': await sessionStorage.commitSession(session),
@@ -112,23 +116,23 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     if (!oauthVerifier) throw json({message: 'Missing oauth verifier from auth response.'}, {status: 400});
 
     // Validation of the requestTokenSecret from the session
-    let requestTokenSecret = session.get('requestTokenSecret');
+    const requestTokenSecret = session.get('requestTokenSecret');
     if (!requestTokenSecret) {
       throw json({message: 'Missing request token secret from session.'}, {status: 400});
     }
 
     // Get the access token
-    let {accessToken, accessTokenSecret} = await this.getAccessToken(oauthToken, oauthVerifier, requestTokenSecret);
+    const {accessToken, accessTokenSecret} = await this.getAccessToken(oauthToken, oauthVerifier, requestTokenSecret);
 
     // Get the user identity
-    let userIdentity = await this.checkUserIdentity(accessToken, accessTokenSecret);
+    const userIdentity = await this.checkUserIdentity(accessToken, accessTokenSecret);
     debug('Check user identity', userIdentity);
 
     // Get the user profile
-    let userProfile = await this.getUserProfile(accessToken, accessTokenSecret, userIdentity.username);
+    const userProfile = await this.getUserProfile(accessToken, accessTokenSecret, userIdentity.username);
     debug('Fetch user profile', userProfile);
 
-    let profile = {...userIdentity, ...userProfile};
+    const profile = {...userIdentity, ...userProfile};
 
     // Verify the user and return it, or redirect
     try {
@@ -140,7 +144,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
       });
     } catch (error) {
       debug('Failed to verify user', error);
-      let message = (error as Error).message;
+      const message = (error as Error).message;
       return await this.failure(message, request, sessionStorage, options);
     }
 
@@ -176,7 +180,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
 
     const urlString = url.toString();
     debug('Fetching request token', urlString);
-    let response = await fetch(urlString, {
+    const response = await fetch(urlString, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -188,7 +192,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     });
 
     if (!response.ok) {
-      let responseText = await response.text();
+      const responseText = await response.text();
       throw new Response(responseText, {status: 401});
     }
 
@@ -216,10 +220,10 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
    * Step 2: Have the user authenticate, and send the consumer application a request token.
    */
   private getAuthURL(requestToken: string) {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.set('oauth_token', requestToken);
 
-    let url = new URL(authorizationURL);
+    const url = new URL(authorizationURL);
     url.search = params.toString();
 
     return url;
@@ -325,7 +329,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     const nonce = crypto.randomBytes(64).toString('hex');
 
     debug('Fetch user profile', identityURL, accessToken, accessTokenSecret);
-    let response = await fetch(url.toString(), {
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -335,7 +339,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     });
 
     if (!response.ok) {
-      let responseText = await response.text();
+      const responseText = await response.text();
       debug('error! ' + responseText);
       throw new Response(responseText, {status: 401});
     }

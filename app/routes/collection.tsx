@@ -31,7 +31,7 @@ export const useCollectionLoaderData = () => {
 };
 
 // Renders the UI
-const CollectionRoute = () => {
+const Collection = () => {
   const {user, releases} = useLoaderData<typeof loader>();
   const [open, setOpen] = useState(false);
   const isMobile = useMediaQuery();
@@ -69,7 +69,7 @@ const CollectionRoute = () => {
       ) : (
         <ul>
           <li>
-            <NavLink to="/dashboard" className="underline">
+            <NavLink to="/" className="underline">
               Back to dashboard
             </NavLink>
           </li>
@@ -82,4 +82,4 @@ const CollectionRoute = () => {
 // Updates persistent data
 export const action = async () => {};
 
-export default CollectionRoute;
+export default Collection;

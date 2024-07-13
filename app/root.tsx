@@ -1,5 +1,15 @@
 import {cssBundleHref} from '@remix-run/css-bundle';
-import {Form, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
+import {
+  Form,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+  useRouteError,
+} from '@remix-run/react';
 import {Analytics} from '@vercel/analytics/react';
 
 import tailwind from '~/styles/tailwind.css';
@@ -7,7 +17,6 @@ import fonts from './styles/fonts.css';
 import type {LinksFunction, LoaderFunctionArgs} from '@vercel/remix';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
-import {getClient, getUser, isAuthenticated} from './utils/session.server';
 import {json} from '@vercel/remix';
 import {ThemeProvider, useTheme} from './contexts/theme-context';
 import clsx from 'clsx';
@@ -22,21 +31,30 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request);
-  console.log('authenticatedUser', user);
-
-  // const user = await getUser(request);
-  // if (!user) return json({profile: null, isAuthenticated: false});
-  // const client = await getClient(request);
-  // const profile = await client.user().getProfile(user.username);
-  // return json({profile, isAuthenticated});
   return json({user});
 };
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <html>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {/* add the UI you want your users to see */}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 const App = () => {
   const {user} = useLoaderData<typeof loader>();
   const [theme] = useTheme();
-
-  console.log('profile', user);
 
   return (
     <html lang="en" className={clsx(theme)}>

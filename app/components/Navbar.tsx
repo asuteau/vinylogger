@@ -48,7 +48,7 @@ const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
     {
       label: 'Home',
       icon: <HouseLine weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
-      to: '/dashboard',
+      to: '/',
     },
     {
       label: 'Search',

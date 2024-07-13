@@ -29,7 +29,7 @@ authenticator.use(
 
       // Return a user object to store in sessionStorage.
       // You can also throw Error to reject the login
-      return profile;
+      return {accessToken, accessTokenSecret, consumerKey, consumerSecret, ...profile};
     },
   ),
   // each strategy has a name and can be changed to use another one

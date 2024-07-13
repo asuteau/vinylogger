@@ -109,7 +109,7 @@ const SearchByMasterIdRoute = () => {
       ) : (
         <ul>
           <li>
-            <NavLink to="/dashboard" className="underline">
+            <NavLink to="/" className="underline">
               Back to dashboard
             </NavLink>
           </li>
