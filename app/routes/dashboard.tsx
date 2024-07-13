@@ -1,7 +1,7 @@
 import type {MetaFunction} from '@vercel/remix';
 import {defer, json} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
-import {Await, Form, NavLink, useLoaderData} from '@remix-run/react';
+import {Await, Form, useLoaderData} from '@remix-run/react';
 import {getClient, getUser} from '~/utils/session.server';
 import {Suspense} from 'react';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
@@ -16,8 +16,10 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   // get the user data or redirect to /login if it failed
-  let authenticatedUser = await authenticator.isAuthenticated(request);
-  console.log('authenticatedUser', authenticatedUser);
+  // let authenticatedUser = await authenticator.isAuthenticated(request, {
+  //   failureRedirect: '/login',
+  // });
+  // console.log('authenticatedUser', authenticatedUser);
 
   const user = await getUser(request);
   if (!user) return json({user: null, lastPurchases: null, latestFromWantlist: null});

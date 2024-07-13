@@ -10,6 +10,7 @@ const requestTokenURL = 'https://api.discogs.com/oauth/request_token';
 const authorizationURL = 'https://www.discogs.com/oauth/authorize';
 const tokenURL = 'https://api.discogs.com/oauth/access_token';
 const identityURL = 'https://api.discogs.com/oauth/identity';
+const profileURL = 'https://api.discogs.com/users/{username}';
 
 export interface DiscogsStrategyOptions {
   consumerKey: string;
@@ -22,13 +23,20 @@ export interface Profile {
   username: string;
   resourceUrl: string;
   consumerName: string;
+  avatar: string;
+  itemsInCollection: number;
+  itemsInWantlist: number;
 }
 
+// TODO: Remove that duplicate type
 export type User = {
   id: number;
   username: string;
   consumerName: string;
   resourceUrl: string;
+  avatar: string;
+  itemsInCollection: number;
+  itemsInWantlist: number;
 };
 
 export interface DiscogsStrategyVerifyParams {
@@ -113,8 +121,14 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     let {accessToken, accessTokenSecret} = await this.getAccessToken(oauthToken, oauthVerifier, requestTokenSecret);
 
     // Get the user identity
-    let profile = await this.checkUserIdentity(accessToken, accessTokenSecret);
-    debug('Check user identity', profile);
+    let userIdentity = await this.checkUserIdentity(accessToken, accessTokenSecret);
+    debug('Check user identity', userIdentity);
+
+    // Get the user profile
+    let userProfile = await this.getUserProfile(accessToken, accessTokenSecret, userIdentity.username);
+    debug('Fetch user profile', userProfile);
+
+    let profile = {...userIdentity, ...userProfile};
 
     // Verify the user and return it, or redirect
     try {
@@ -226,7 +240,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     const nonce = crypto.randomBytes(64).toString('hex');
 
     debug('Fetch access token', tokenURL, oauthToken, oauthVerifier);
-    let response = await fetch(tokenURL, {
+    const response = await fetch(tokenURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -236,7 +250,7 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     });
 
     if (!response.ok) {
-      let responseText = await response.text();
+      const responseText = await response.text();
       debug('error! ' + responseText);
       throw new Response(responseText, {status: 401});
     }
@@ -270,7 +284,48 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
     const nonce = crypto.randomBytes(64).toString('hex');
 
     debug('Fetch access token', identityURL, accessToken, accessTokenSecret);
-    let response = await fetch(identityURL, {
+    const response = await fetch(identityURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `OAuth oauth_consumer_key="${this.consumerKey}", oauth_nonce="${nonce}", oauth_token="${accessToken}", oauth_signature="${this.consumerSecret}&${accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}"`,
+        'User-Agent': DiscogsUserAgent,
+      },
+    });
+
+    if (!response.ok) {
+      const responseText = await response.text();
+      debug('error! ' + responseText);
+      throw new Response(responseText, {status: 401});
+    }
+
+    const responseBody = await response.json();
+    return {
+      id: responseBody.id,
+      username: responseBody.username,
+      resourceUrl: responseBody['resource_url'],
+      consumerName: responseBody['consumer_name'],
+    };
+  }
+
+  /**
+   * Step 5: Fetch user profile to retrieve mandatory information to persist in the session
+   */
+  private async getUserProfile(
+    accessToken: string,
+    accessTokenSecret: string,
+    username: string,
+  ): Promise<{
+    avatar: string;
+    itemsInCollection: number;
+    itemsInWantlist: number;
+  }> {
+    const timestamp = Date.now();
+    const url = new URL(profileURL.replace('{username}', username));
+    const nonce = crypto.randomBytes(64).toString('hex');
+
+    debug('Fetch user profile', identityURL, accessToken, accessTokenSecret);
+    let response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -287,10 +342,9 @@ export class DiscogsStrategy<User> extends Strategy<User, DiscogsStrategyVerifyP
 
     const responseBody = await response.json();
     return {
-      id: responseBody.id,
-      username: responseBody.username,
-      resourceUrl: responseBody['resource_url'],
-      consumerName: responseBody['consumer_name'],
+      avatar: responseBody['avatar_url'],
+      itemsInCollection: responseBody['num_collection'],
+      itemsInWantlist: responseBody['num_wantlist'],
     };
   }
 }

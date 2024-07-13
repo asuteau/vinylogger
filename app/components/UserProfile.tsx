@@ -13,20 +13,21 @@ import useMediaQuery from '~/hooks/use-media-query';
 
 type UserProfileProps = {
   className?: string;
-  profile: GetProfileResponse;
+  avatar: string;
+  username: string;
 };
 
-const UserProfile = ({className, profile}: UserProfileProps) => {
+const UserProfile = ({className, avatar, username}: UserProfileProps) => {
   const isMobile = useMediaQuery();
 
   return (
     <div className={`flex items-center ${className}`}>
-      <img src={profile.avatar_url} className="w-8 md:w-10 aspect-square rounded-full" />
+      <img src={avatar} className="w-8 md:w-10 aspect-square rounded-full" />
       {!isMobile && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="link" className="text-lg">
-              {profile.username}
+              {username}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
