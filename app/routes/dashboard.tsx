@@ -41,7 +41,6 @@ const Dashboard = () => {
           </Await>
         </Suspense>
       </section>
-      )
     </>
   );
 };
