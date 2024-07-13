@@ -20,20 +20,20 @@ const ProfileRoute = () => {
   return (
     <div className="flex flex-col md:hidden gap-4 text-xs h-full">
       <div className="flex flex-col">
-        <span className="text-slate-950 font-bold">Id</span>
-        <span className="text-slate-600">{user.id}</span>
+        <span className="text-slate-950 dark:text-slate-50 font-bold">Id</span>
+        <span className="text-slate-600 dark:text-slate-400">{user.id}</span>
       </div>
       <div className="flex flex-col">
-        <span className="text-slate-950 font-bold">Username</span>
-        <span className="text-slate-600">{user.username}</span>
+        <span className="text-slate-950 dark:text-slate-50 font-bold">Username</span>
+        <span className="text-slate-600 dark:text-slate-400">{user.username}</span>
       </div>
       <div className="flex flex-col">
-        <span className="text-slate-950 font-bold">Consumer name</span>
-        <span className="text-slate-600">{user.consumerName}</span>
+        <span className="text-slate-950 dark:text-slate-50 font-bold">Consumer name</span>
+        <span className="text-slate-600 dark:text-slate-400">{user.consumerName}</span>
       </div>
       <div className="flex flex-col">
-        <span className="text-slate-950 font-bold">Resource URL</span>
-        <span className="text-slate-600">{user.resourceUrl}</span>
+        <span className="text-slate-950 dark:text-slate-50 font-bold">Resource URL</span>
+        <span className="text-slate-600 dark:text-slate-400">{user.resourceUrl}</span>
       </div>
 
       <div className="mt-auto self-center">
