@@ -1,30 +1,26 @@
-import {useLoaderData, Await, NavLink, Outlet, useRouteLoaderData} from '@remix-run/react';
-import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
+import {useLoaderData, Await, NavLink, Outlet} from '@remix-run/react';
+import {LoaderFunctionArgs, MetaFunction, defer} from '@vercel/remix';
 import {Suspense, useState} from 'react';
 import CollectionItems from '~/components/CollectionItems';
 import {Drawer, DrawerContent} from '~/components/ui/drawer';
 import useMediaQuery from '~/hooks/use-media-query';
-import {getAllFromWantlist} from '~/services/discogs';
-import {getUser, getClient} from '~/utils/session.server';
+import {authenticator} from '~/services/auth.server';
+import {getReleasesFromWantlist} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User wantlist'}];
 };
 
-// Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  const user = await getUser(request);
-  if (!user) return json({user: null, wants: null});
-
-  const client = await getClient(request);
-  const wants = getAllFromWantlist(client, user.username, {
-    per_page: 10,
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
   });
+
+  const wants = getReleasesFromWantlist(user);
 
   return defer({user, wants});
 };
 
-// Renders the UI
 const WantlistRoute = () => {
   const {user, wants} = useLoaderData<typeof loader>();
   const [open, setOpen] = useState(false);
@@ -72,8 +68,5 @@ const WantlistRoute = () => {
     </>
   );
 };
-
-// Updates persistent data
-export const action = async () => {};
 
 export default WantlistRoute;

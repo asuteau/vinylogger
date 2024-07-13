@@ -1,27 +1,22 @@
 import {Await, NavLink, Outlet, useLoaderData, useRouteLoaderData} from '@remix-run/react';
-import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
+import {LoaderFunctionArgs, MetaFunction, defer} from '@vercel/remix';
 import {Suspense, useState} from 'react';
-import {getUser, getClient} from '~/utils/session.server';
 import CollectionItems from '~/components/CollectionItems';
-import {getAllFromCollection} from '~/services/discogs';
 import useMediaQuery from '~/hooks/use-media-query';
 import {Drawer, DrawerContent} from '~/components/ui/drawer';
+import {authenticator} from '~/services/auth.server';
+import {getReleasesFromCollection} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection'}];
 };
 
-// Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  const user = await getUser(request);
-  if (!user) return json({user: null, releases: null});
-
-  const client = await getClient(request);
-  const releases = getAllFromCollection(client, user.username, {
-    per_page: 10,
-    sort: 'added',
-    sort_order: 'desc',
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
   });
+
+  const releases = getReleasesFromCollection(user);
 
   return defer({user, releases});
 };
@@ -30,7 +25,6 @@ export const useCollectionLoaderData = () => {
   return useRouteLoaderData<typeof loader>('routes/collection');
 };
 
-// Renders the UI
 const Collection = () => {
   const {user, releases} = useLoaderData<typeof loader>();
   const [open, setOpen] = useState(false);
@@ -78,8 +72,5 @@ const Collection = () => {
     </>
   );
 };
-
-// Updates persistent data
-export const action = async () => {};
 
 export default Collection;
