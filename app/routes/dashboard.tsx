@@ -6,7 +6,7 @@ import {Suspense} from 'react';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
 import {authenticator} from '~/services/auth.server';
-import {getReleasesFromCollection} from '~/services/discogs.api';
+import {getReleasesFromCollection, getReleasesFromWantlist} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
@@ -16,7 +16,6 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: '/',
   });
-  console.log('User', user);
 
   const latestFromCollection = getReleasesFromCollection(user);
   // const latestFromWantlist = getReleasesFromWantlist(user);

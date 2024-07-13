@@ -74,11 +74,7 @@ const App = () => {
             </section>
           </div>
         ) : (
-          <div className="bg-red-100">
-            <Form action="/login" method="post">
-              <Button variant="link">Login with Discogs</Button>
-            </Form>
-          </div>
+          <Outlet />
         )}
 
         <ScrollRestoration />
