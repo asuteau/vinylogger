@@ -22,8 +22,11 @@ export const getReleasesFromCollection = async (
     addedOn: string;
   }[]
 > => {
-  const timestamp = Date.now();
-  const nonce = crypto.randomBytes(64).toString('hex');
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
 
   const url = new URL(collectionURL.replace('{username}', user.username).replace('{folder_id}', '0'));
   let params = new URLSearchParams();
@@ -38,14 +41,14 @@ export const getReleasesFromCollection = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}"`,
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
       'User-Agent': DiscogsUserAgent,
     },
   });
 
   if (!response.ok) {
     const responseText = await response.text();
-    debug('error! ' + responseText);
+    debug('error!', responseText, response);
     throw new Response(responseText, {status: 401});
   }
 
@@ -73,10 +76,18 @@ export const getReleasesFromWantlist = async (
     addedOn: string;
   }[]
 > => {
-  const timestamp = Date.now();
-  const nonce = crypto.randomBytes(64).toString('hex');
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
 
   const url = new URL(wantlistURL.replace('{username}', user.username));
+  let params = new URLSearchParams();
+  params.set('sort', 'added');
+  params.set('sort_order', 'desc');
+  params.set('per_page', '10');
+  url.search = params.toString();
   const urlString = url.toString();
 
   debug('Get releases from wantlist', urlString);
@@ -84,7 +95,7 @@ export const getReleasesFromWantlist = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}"`,
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
       'User-Agent': DiscogsUserAgent,
     },
   });
@@ -96,7 +107,7 @@ export const getReleasesFromWantlist = async (
   }
 
   const responseBody = await response.json();
-  return responseBody.releases.map((release: any) => ({
+  return responseBody.wants.map((release: any) => ({
     id: release.id,
     artist: release.basic_information.artists.map((artist: any) => cleanId(artist.name))[0],
     title: release.basic_information.title,

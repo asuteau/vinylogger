@@ -1,6 +1,5 @@
 import {cssBundleHref} from '@remix-run/css-bundle';
 import {
-  Form,
   Links,
   LiveReload,
   Meta,
@@ -21,7 +20,6 @@ import {json} from '@vercel/remix';
 import {ThemeProvider, useTheme} from './contexts/theme-context';
 import clsx from 'clsx';
 import {authenticator} from './services/auth.server';
-import {Button} from './components/ui/button';
 
 export const links: LinksFunction = () => [
   {rel: 'stylesheet', href: fonts},

@@ -18,9 +18,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   });
 
   const latestFromCollection = getReleasesFromCollection(user);
-  // const latestFromWantlist = getReleasesFromWantlist(user);
-
-  const latestFromWantlist = new Promise((resolve) => resolve([]));
+  const latestFromWantlist = getReleasesFromWantlist(user);
 
   return defer({latestFromCollection, latestFromWantlist});
 };
