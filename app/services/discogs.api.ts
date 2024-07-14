@@ -243,6 +243,7 @@ export const getMasterReleaseVersions = async (
   params.set('per_page', '20');
   params.set('sort', 'released');
   params.set('sort_order', 'desc');
+  params.set('format', 'Vinyl');
   url.search = params.toString();
   const urlString = url.toString();
 
