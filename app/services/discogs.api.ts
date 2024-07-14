@@ -8,6 +8,7 @@ let debug = createDebug('discogs:api');
 
 const collectionURL = 'https://api.discogs.com/users/{username}/collection/folders/{folder_id}/releases';
 const wantlistURL = 'https://api.discogs.com/users/{username}/wants';
+const releaseURL = 'https://api.discogs.com/releases/{release_id}';
 
 export const getReleasesFromCollection = async (
   user: User,
@@ -115,4 +116,47 @@ export const getReleasesFromWantlist = async (
     format: release.basic_information.formats.map((format: any) => format.name)[0],
     addedOn: timeFromNow(release.date_added),
   }));
+};
+
+export const getReleaseById = async (
+  user: User,
+  releaseId: string,
+): Promise<{
+  id: number;
+  title: string;
+  images: {uri: string}[];
+}> => {
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const url = new URL(releaseURL.replace('{release_id}', releaseId));
+  const urlString = url.toString();
+
+  debug('Get releases from database', urlString);
+  const response = await fetch(urlString, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
+      'User-Agent': DiscogsUserAgent,
+    },
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    debug('error! ' + responseText);
+    throw new Response(responseText, {status: 401});
+  }
+
+  const responseBody = await response.json();
+  return {
+    id: responseBody.id,
+    title: responseBody.title,
+    images: responseBody.images.map((image: any) => ({
+      uri: image.uri,
+    })),
+  };
 };

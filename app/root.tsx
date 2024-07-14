@@ -32,23 +32,23 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   return json({user});
 };
 
-export function ErrorBoundary() {
-  const error = useRouteError();
-  console.error(error);
-  return (
-    <html>
-      <head>
-        <title>Oh no!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {/* add the UI you want your users to see */}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
+// export function ErrorBoundary() {
+//   const error = useRouteError();
+//   console.error(error);
+//   return (
+//     <html>
+//       <head>
+//         <title>Oh no!</title>
+//         <Meta />
+//         <Links />
+//       </head>
+//       <body>
+//         {/* add the UI you want your users to see */}
+//         <Scripts />
+//       </body>
+//     </html>
+//   );
+// }
 
 const App = () => {
   const {user} = useLoaderData<typeof loader>();
