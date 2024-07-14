@@ -126,7 +126,10 @@ export const getReleaseById = async (
 ): Promise<{
   id: number;
   title: string;
+  year: number;
+  country: string;
   images: {uri: string}[];
+  formats: {name: string; quantity: string; text: string}[];
 }> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
@@ -157,8 +160,15 @@ export const getReleaseById = async (
   return {
     id: responseBody.id,
     title: responseBody.title,
+    year: responseBody.year,
+    country: responseBody.country,
     images: responseBody.images.map((image: any) => ({
       uri: image.uri,
+    })),
+    formats: responseBody.formats.map((format: any) => ({
+      name: format.name,
+      quantity: format.qty,
+      text: format.text,
     })),
   };
 };

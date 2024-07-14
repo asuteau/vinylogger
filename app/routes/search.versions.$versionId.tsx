@@ -1,14 +1,14 @@
-import {Await, Form, NavLink, useLoaderData, useMatches, useNavigate} from '@remix-run/react';
+import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
-import {getClient} from '~/utils/session.server';
-import {getReleaseById} from '~/services/discogs';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Button} from '~/components/ui/button';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {extractColors} from '~/lib/utils';
+import {authenticator} from '~/services/auth.server';
+import {getReleaseById} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -16,13 +16,14 @@ export const meta: MetaFunction = () => {
 
 // Provides data to the component
 export const loader = async ({params, request}: LoaderFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
+
   const versionId = params.versionId;
   if (!versionId) return json({release: null, versionId: null});
-  const client = await getClient(request);
-  const release = getReleaseById(client, versionId);
 
-  // release.then((r) => console.log('>>>>>>>>>>', r));
-
+  const release = getReleaseById(user, versionId);
   return defer({release, versionId});
 };
 
@@ -30,8 +31,6 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
 const SearchByVersionIdRoute = () => {
   const {release, versionId} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-  // const matches = useMatches();
-  // console.log(matches);
 
   const handleBack = () => {
     navigate(-1);

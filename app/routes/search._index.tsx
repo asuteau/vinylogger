@@ -3,8 +3,6 @@ import {Await, Form, NavLink, useLoaderData, useNavigation, useSubmit} from '@re
 import {Suspense, useEffect, useState} from 'react';
 import {Input} from '~/components/ui/input';
 import useDebounce from '~/hooks/use-debounce';
-import {getClient, getUser} from '~/utils/session.server';
-import {getSearchResults} from '~/services/discogs';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Badge} from '~/components/ui/badge';
