@@ -17,7 +17,6 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   });
 
   const releases = getReleasesFromCollection(user);
-
   return defer({user, releases});
 };
 

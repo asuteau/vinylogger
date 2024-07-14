@@ -17,7 +17,6 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   });
 
   const wants = getReleasesFromWantlist(user);
-
   return defer({user, wants});
 };
 

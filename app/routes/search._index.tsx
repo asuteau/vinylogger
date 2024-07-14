@@ -8,6 +8,8 @@ import {getSearchResults} from '~/services/discogs';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Badge} from '~/components/ui/badge';
+import {authenticator} from '~/services/auth.server';
+import {search} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];
@@ -15,13 +17,15 @@ export const meta: MetaFunction = () => {
 
 // Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  const user = await getUser(request);
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
+
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get('search');
-  if (!user || !searchTerm) return json({searchResults: null, lastSearch: null});
+  if (!searchTerm) return json({searchResults: null, lastSearch: null});
 
-  const client = await getClient(request);
-  const searchResults = getSearchResults(client, searchTerm, {per_page: 20});
+  const searchResults = search(user, searchTerm);
   return defer({searchResults, lastSearch: searchTerm});
 };
 
@@ -105,12 +109,12 @@ const SearchRoute = () => {
                             <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
                               {result.year}
                             </span>
-                            {result.user_data.in_collection && (
+                            {result.isInCollection && (
                               <Badge variant="secondary">
                                 <Tag className="h-4 w-4" />
                               </Badge>
                             )}
-                            {result.user_data.in_wantlist && (
+                            {result.isInWantlist && (
                               <Badge variant="secondary">
                                 <Star className="h-4 w-4" />
                               </Badge>
