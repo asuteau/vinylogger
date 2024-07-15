@@ -15,12 +15,18 @@ if (!consumerKey || !consumerSecret) {
   throw new Error('DISCOGS_API_CONSUMER_KEY and DISCOGS_API_CONSUMER_SECRET must be provided');
 }
 
+const isInProduction = process.env.NODE_ENV === 'production';
+const appProductionUrl = process.env.APP_PRODUCTION_URL;
+if (isInProduction && !appProductionUrl) {
+  throw new Error('APP_PRODUCTION_URL must be provided in production');
+}
+
 authenticator.use(
   new DiscogsStrategy(
     {
       consumerKey,
       consumerSecret,
-      callbackURL: 'http://localhost:3000/login/callback',
+      callbackURL: `${isInProduction ? appProductionUrl : 'http://localhost:3000'}/login/callback`,
     },
     // Define what to do when the user is authenticated
     async ({accessToken, accessTokenSecret, profile}) => {
