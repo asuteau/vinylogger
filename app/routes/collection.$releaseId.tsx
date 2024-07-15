@@ -1,13 +1,12 @@
 import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
 import {Suspense} from 'react';
-import {getClient, getUser} from '~/utils/session.server';
 import ReleaseDetails from '~/components/ReleaseDetails';
 import {Button} from '~/components/ui/button';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {useCollectionLoaderData} from './collection';
 import {authenticator} from '~/services/auth.server';
-import {getReleaseById} from '~/services/discogs.api';
+import {getReleaseById, removeReleaseFromCollection} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection - Release'}];
@@ -85,13 +84,16 @@ const CollectionRoute = () => {
 
 // Updates persistent data
 export const action = async ({params, request}: ActionFunctionArgs) => {
-  const user = await getUser(request);
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
+
   const releaseId = params.releaseId;
   const formData = await request.formData();
-  const instanceId = formData.get('instanceId') as unknown as number;
-  if (!releaseId || !instanceId || !user) return redirect('/');
-  const client = await getClient(request);
-  await client.user().collection().removeRelease(user.username, 1, releaseId, instanceId);
+  const instanceId = formData.get('instanceId') as unknown as string;
+  if (!releaseId || !instanceId) return redirect('/');
+
+  await removeReleaseFromCollection(user, releaseId, instanceId);
   return redirect('/collection');
 };
 

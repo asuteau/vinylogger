@@ -11,6 +11,12 @@ const wantlistURL = 'https://api.discogs.com/users/{username}/wants';
 const releaseURL = 'https://api.discogs.com/releases/{release_id}';
 const searchURL = 'https://api.discogs.com/database/search';
 const masterReleaseVersionsURL = 'https://api.discogs.com/masters/{master_id}/versions';
+const removeReleaseFromCollectionURL =
+  'https://api.discogs.com/users/{username}/collection/folders/{folder_id}/releases/{release_id}/instances/{instance_id}';
+const addReleaseToCollectionURL =
+  'https://api.discogs.com/users/{username}/collection/folders/{folder_id}/releases/{release_id}';
+const removeReleaseFromWantlistURL = 'https://api.discogs.com/users/{username}/wants/{release_id}';
+const addReleaseToWantlistURL = 'https://api.discogs.com/users/{username}/wants/{release_id}';
 
 export const getReleasesFromCollection = async (
   user: User,
@@ -284,4 +290,147 @@ export const getMasterReleaseVersions = async (
     isInCollection: version.stats.user.in_collection > 0,
     isInWantlist: version.stats.user.in_wantlist > 0,
   }));
+};
+
+export const removeReleaseFromCollection = async (user: User, releaseId: string, instanceId: string): Promise<null> => {
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const url = new URL(
+    removeReleaseFromCollectionURL
+      .replace('{username}', user.username)
+      .replace('{folder_id}', '1')
+      .replace('{release_id}', releaseId)
+      .replace('{instance_id}', instanceId),
+  );
+  const urlString = url.toString();
+
+  debug('Remove release from collection', urlString);
+  const response = await fetch(urlString, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
+      'User-Agent': DiscogsUserAgent,
+    },
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    debug('error! ' + responseText);
+    throw new Response(responseText, {status: 401});
+  }
+
+  return null;
+};
+
+export const addReleaseToCollection = async (
+  user: User,
+  releaseId: string,
+): Promise<{instanceId: string; resourceUrl: string}> => {
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const url = new URL(
+    addReleaseToCollectionURL
+      .replace('{username}', user.username)
+      .replace('{folder_id}', '1')
+      .replace('{release_id}', releaseId),
+  );
+  const urlString = url.toString();
+
+  debug('Add release to collection', urlString);
+  const response = await fetch(urlString, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
+      'User-Agent': DiscogsUserAgent,
+    },
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    debug('error! ' + responseText);
+    throw new Response(responseText, {status: 401});
+  }
+
+  const responseBody = await response.json();
+  return {
+    instanceId: responseBody.instance_id,
+    resourceUrl: responseBody.resource_url,
+  };
+};
+
+export const removeReleaseFromWantlist = async (user: User, releaseId: string): Promise<null> => {
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const url = new URL(
+    removeReleaseFromWantlistURL.replace('{username}', user.username).replace('{release_id}', releaseId),
+  );
+  const urlString = url.toString();
+
+  debug('Remove release from wantlist', urlString);
+  const response = await fetch(urlString, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
+      'User-Agent': DiscogsUserAgent,
+    },
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    debug('error! ' + responseText);
+    throw new Response(responseText, {status: 401});
+  }
+
+  return null;
+};
+
+export const addReleaseToWantlist = async (
+  user: User,
+  releaseId: string,
+): Promise<{id: string; resourceUrl: string}> => {
+  // generate 32 bytes which is a string of 64 characters in hex encoding
+  // because any request that includes a nonce string of length > 64 characters is rejected
+  const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
+  // timestamp is expected in seconds
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const url = new URL(addReleaseToWantlistURL.replace('{username}', user.username).replace('{release_id}', releaseId));
+  const urlString = url.toString();
+
+  debug('Add release to wantlist', urlString);
+  const response = await fetch(urlString, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `OAuth oauth_consumer_key="${user.consumerKey}", oauth_nonce="${nonce}", oauth_token="${user.accessToken}", oauth_signature="${user.consumerSecret}&${user.accessTokenSecret}", oauth_signature_method="PLAINTEXT", oauth_timestamp="${timestamp}", oauth_version="1.0"`,
+      'User-Agent': DiscogsUserAgent,
+    },
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    debug('error! ' + responseText);
+    throw new Response(responseText, {status: 401});
+  }
+
+  const responseBody = await response.json();
+  return {
+    id: responseBody.id,
+    resourceUrl: responseBody.resource_url,
+  };
 };
