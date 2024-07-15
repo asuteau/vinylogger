@@ -5,7 +5,11 @@ import {useState, useEffect} from 'react';
 import useMediaQuery from '~/hooks/use-media-query';
 
 type ReleaseDetailsProps = {
-  release: GetReleaseResponse;
+  release: {
+    id: number;
+    title: string;
+    images: {uri: string}[];
+  };
 };
 
 const ReleaseDetails = ({release}: ReleaseDetailsProps) => {

@@ -12,7 +12,7 @@ const Logo = ({className}: LogoProps) => {
   const isLight = theme === 'light';
 
   return (
-    <NavLink id="logo" to="/dashboard" className={`flex gap-2 md:gap-4 items-center font-logo ${className} logo`}>
+    <NavLink id="logo" to="/" className={`flex gap-2 md:gap-4 items-center font-logo ${className} logo`}>
       <VinylRecord
         size={isMobile ? 32 : 48}
         weight="duotone"

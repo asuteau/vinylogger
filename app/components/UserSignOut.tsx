@@ -7,7 +7,7 @@ type UserSignOutProps = {
 const UserSignOut = ({className = ''}: UserSignOutProps) => {
   return (
     <Form method="post" className={className}>
-      <NavLink to="/logout">Sign out</NavLink>
+      <NavLink to="/logout">Log out</NavLink>
     </Form>
   );
 };

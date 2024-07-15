@@ -5,10 +5,11 @@ import ThemeToggle from './ThemeToggle';
 import useMediaQuery from '~/hooks/use-media-query';
 
 type HeaderProps = {
-  profile: GetProfileResponse | null;
+  avatar: string;
+  username: string;
 };
 
-const Header = ({profile}: HeaderProps) => {
+const Header = (props: HeaderProps) => {
   const isMobile = useMediaQuery();
 
   return (
@@ -16,7 +17,7 @@ const Header = ({profile}: HeaderProps) => {
       {isMobile && <Logo />}
       <div className="flex gap-2 ml-auto">
         <ThemeToggle />
-        {profile && <UserProfile profile={profile} />}
+        <UserProfile {...props} />
       </div>
     </section>
   );

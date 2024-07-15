@@ -20,11 +20,8 @@ const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
       <span className="text-xs md:text-base  text-slate-600 dark:text-slate-400 line-clamp-2">
         {release.format} • {release.artist}
       </span>
-      <span className="hidden md:block text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
-        Purchased {release.addedOn}
-      </span>
-      <div className="flex items-center md:hidden text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
-        <CalendarDots className="w-4 h-4 mr-1 text-slate-600 dark:text-slate-400 inline-block" />
+      <div className="flex items-center text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
+        <CalendarDots className="md:hidden w-4 h-4 mr-1 text-slate-600 dark:text-slate-400 inline-block" />
         {release.addedOn}
       </div>
     </div>

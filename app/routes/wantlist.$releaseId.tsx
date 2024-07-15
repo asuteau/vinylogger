@@ -1,11 +1,11 @@
 import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
 import {Suspense} from 'react';
-import {getClient, getUser} from '~/utils/session.server';
-import {getReleaseById} from '~/services/discogs';
 import ReleaseDetails from '~/components/ReleaseDetails';
 import {Button} from '~/components/ui/button';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import {authenticator} from '~/services/auth.server';
+import {getReleaseById, removeReleaseFromWantlist} from '~/services/discogs.api';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Wantlist - Release'}];
@@ -13,11 +13,14 @@ export const meta: MetaFunction = () => {
 
 // Provides data to the component
 export const loader = async ({params, request}: LoaderFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
+
   const releaseId = params.releaseId;
   if (!releaseId) return json({release: null});
-  const client = await getClient(request);
-  const release = getReleaseById(client, releaseId);
 
+  const release = getReleaseById(user, releaseId);
   return defer({release});
 };
 
@@ -60,7 +63,7 @@ const CollectionRoute = () => {
       ) : (
         <ul>
           <li>
-            <NavLink to="/dashboard" className="underline">
+            <NavLink to="/" className="underline">
               Back to dashboard
             </NavLink>
           </li>
@@ -72,11 +75,14 @@ const CollectionRoute = () => {
 
 // Updates persistent data
 export const action = async ({params, request}: ActionFunctionArgs) => {
-  const user = await getUser(request);
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
+
   const releaseId = params.releaseId;
-  if (!releaseId || !user) return redirect('/');
-  const client = await getClient(request);
-  await client.user().wantlist().removeRelease(user.username, releaseId);
+  if (!releaseId) return redirect('/');
+
+  await removeReleaseFromWantlist(user, releaseId);
   return redirect('/wantlist');
 };
 

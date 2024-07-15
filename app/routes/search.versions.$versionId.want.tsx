@@ -1,12 +1,15 @@
 import {ActionFunctionArgs, redirect} from '@vercel/remix';
-import {getClient, getUser} from '~/utils/session.server';
+import {authenticator} from '~/services/auth.server';
+import {addReleaseToWantlist} from '~/services/discogs.api';
 
 export const action = async ({params, request}: ActionFunctionArgs) => {
-  const user = await getUser(request);
-  const versionId = params.versionId;
-  if (!versionId || !user) return redirect('/');
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/',
+  });
 
-  const client = await getClient(request);
-  await client.user().wantlist().addRelease(user.username, versionId, {});
+  const versionId = params.versionId;
+  if (!versionId) return redirect('/');
+
+  await addReleaseToWantlist(user, versionId);
   return redirect('/');
 };
