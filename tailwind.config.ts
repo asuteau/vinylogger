@@ -32,6 +32,10 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+
+      backgroundImage: {
+        landing: 'url("/img/skylar-sahakian-FO9apFs3Eys-unsplash.jpg")',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
