@@ -24,7 +24,7 @@ const Index = () => {
   const {error} = useLoaderData<typeof loader>();
 
   return (
-    <div className="h-screen bg-gradient-to-b from-slate-50 to-slate-200">
+    <div className="h-[100dvh] bg-gradient-to-b from-slate-50 to-slate-200">
       <header className="bg-background/75 backdrop-blur border-b border-gray-200 dark:border-gray-800 -mb-px sticky top-0 z-50">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex items-center justify-between gap-3 h-[64px]">
           <div className="flex gap-2 items-center">
@@ -48,7 +48,7 @@ const Index = () => {
             <span className="text-slate-900">effortlessly</span>
           </h1>
 
-          <div className="bg-landing bg-cover bg-center rounded-lg -rotate-3 shadow-lg" />
+          <div className="bg-landing bg-cover bg-center rounded-lg -rotate-6 shadow-lg" />
         </div>
       </section>
     </div>
