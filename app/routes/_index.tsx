@@ -38,9 +38,9 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="h-[calc(100%-64px)] p-8 md:p-16 flex flex-col justify-center text-center md:text-left max-w-7xl mx-auto">
-        <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2">
-          <h1 className="text-slate-400 text-3xl md:text-6xl p-8">
+      <section className="h-[calc(100%-64px)] p-8 md:p-0 flex flex-col justify-center text-center md:text-left max-w-7xl mx-auto">
+        <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 gap-4">
+          <h1 className="text-slate-400 text-3xl md:text-6xl py-8 md:py-16">
             Track your vinyl
             <br />
             <span className="text-slate-500">collection</span>
