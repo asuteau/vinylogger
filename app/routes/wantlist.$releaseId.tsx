@@ -5,7 +5,8 @@ import ReleaseDetails from '~/components/ReleaseDetails';
 import {Button} from '~/components/ui/button';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {authenticator} from '~/services/auth.server';
-import {getReleaseById, removeReleaseFromWantlist} from '~/services/discogs.api';
+import {getReleaseById} from '~/services/discogs.api.database';
+import {removeReleaseFromWantlist} from '~/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Wantlist - Release'}];

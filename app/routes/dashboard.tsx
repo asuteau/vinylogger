@@ -6,7 +6,7 @@ import {Suspense} from 'react';
 import DashboardLastPurchases from '~/components/DashboardLastPurchases';
 import DashboardLastWanted from '~/components/DashboardLastWanted';
 import {authenticator} from '~/services/auth.server';
-import {getReleasesFromCollection, getReleasesFromWantlist} from '~/services/discogs.api';
+import {getReleasesFromCollection, getReleasesFromWantlist} from '~/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];

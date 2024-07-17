@@ -8,7 +8,7 @@ import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {extractColors} from '~/lib/utils';
 import {authenticator} from '~/services/auth.server';
-import {getReleaseById} from '~/services/discogs.api';
+import {getReleaseById} from '~/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];

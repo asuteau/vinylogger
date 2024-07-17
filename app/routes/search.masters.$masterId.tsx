@@ -8,7 +8,7 @@ import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 import {Button} from '~/components/ui/button';
 import {Badge} from '~/components/ui/badge';
 import {authenticator} from '~/services/auth.server';
-import {getMasterReleaseVersions} from '~/services/discogs.api';
+import {getMasterReleaseVersions} from '~/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Masters'}];
@@ -23,6 +23,7 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const masterId = params.masterId;
   if (!masterId) return json({versions: null, masterId: null});
 
+  console.log('masterId', masterId);
   const versions = getMasterReleaseVersions(user, masterId);
   return defer({versions, masterId});
 };

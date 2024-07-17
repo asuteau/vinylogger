@@ -5,7 +5,7 @@ import CollectionItems from '~/components/CollectionItems';
 import {Drawer, DrawerContent} from '~/components/ui/drawer';
 import useMediaQuery from '~/hooks/use-media-query';
 import {authenticator} from '~/services/auth.server';
-import {getReleasesFromWantlist} from '~/services/discogs.api';
+import {getReleasesFromWantlist} from '~/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User wantlist'}];

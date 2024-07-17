@@ -6,7 +6,8 @@ import {Button} from '~/components/ui/button';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {useCollectionLoaderData} from './collection';
 import {authenticator} from '~/services/auth.server';
-import {getReleaseById, removeReleaseFromCollection} from '~/services/discogs.api';
+import {getReleaseById} from '~/services/discogs.api.database';
+import {removeReleaseFromCollection} from '~/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection - Release'}];
