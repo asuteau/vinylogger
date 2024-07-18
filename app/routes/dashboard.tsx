@@ -1,5 +1,5 @@
 import type {MetaFunction} from '@vercel/remix';
-import {json} from '@vercel/remix';
+import {defer} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Await, useLoaderData} from '@remix-run/react';
 import {Suspense} from 'react';
@@ -17,10 +17,10 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     failureRedirect: '/',
   });
 
-  const {releases} = await getReleasesFromCollection(user, 1, 10);
-  const {wants} = await getReleasesFromWantlist(user, 1, 10);
+  const latestFromCollection = getReleasesFromCollection(user, 1, 10);
+  const latestFromWantlist = getReleasesFromWantlist(user, 1, 10);
 
-  return json({latestFromCollection: releases, latestFromWantlist: wants});
+  return defer({latestFromCollection, latestFromWantlist});
 };
 
 const Dashboard = () => {
@@ -31,13 +31,13 @@ const Dashboard = () => {
       <section id="dashboard" className="space-y-8 md:space-y-16">
         <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
           <Await resolve={latestFromCollection}>
-            {(latestFromCollection) => <DashboardLastPurchases lastPurchases={latestFromCollection} />}
+            {(latestFromCollection) => <DashboardLastPurchases lastPurchases={latestFromCollection.releases} />}
           </Await>
         </Suspense>
 
         <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
           <Await resolve={latestFromWantlist}>
-            {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist} />}
+            {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.wants} />}
           </Await>
         </Suspense>
       </section>
