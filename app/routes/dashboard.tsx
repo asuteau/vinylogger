@@ -1,5 +1,5 @@
 import type {MetaFunction} from '@vercel/remix';
-import {defer} from '@vercel/remix';
+import {defer, json} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Await, useLoaderData} from '@remix-run/react';
 import {Suspense} from 'react';
@@ -17,10 +17,11 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     failureRedirect: '/',
   });
 
-  const latestFromCollection = getReleasesFromCollection(user);
+  // const latestFromCollection = getReleasesFromCollection(user);
+  const {pagination, releases} = await getReleasesFromCollection(user);
   const latestFromWantlist = getReleasesFromWantlist(user);
 
-  return defer({latestFromCollection, latestFromWantlist});
+  return json({latestFromCollection: releases, latestFromWantlist});
 };
 
 const Dashboard = () => {
@@ -35,11 +36,11 @@ const Dashboard = () => {
           </Await>
         </Suspense>
 
-        <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+        {/* <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
           <Await resolve={latestFromWantlist}>
             {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist} />}
           </Await>
-        </Suspense>
+        </Suspense> */}
       </section>
     </>
   );

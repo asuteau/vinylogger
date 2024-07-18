@@ -1,14 +1,14 @@
 import {NavLink, useLocation} from '@remix-run/react';
-import Release from '~/entities/release';
+import {CollectionRelease} from '~/services/discogs.api.user';
 import {groupBy} from '~/utils/array';
 
 type CollectionItemsProps = {
-  lastPurchases: Release[];
+  lastPurchases: CollectionRelease[];
   onClick?: () => void;
 };
 
 type CollectionItemProps = {
-  release: Release;
+  release: CollectionRelease;
   onClick?: () => void;
 };
 
@@ -18,7 +18,6 @@ const CollectionItem = ({release, onClick}: CollectionItemProps) => {
   return (
     <NavLink
       to={`/${location.pathname.split('/')[1]}/${release.id}`}
-      prefetch="none"
       className={({isActive}) => (isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md')}
       onClick={onClick}
     >

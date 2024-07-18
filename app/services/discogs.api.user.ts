@@ -15,7 +15,65 @@ const collectionReleaseAddURL =
 const wantlistURL = 'https://api.discogs.com/users/{username}/wants';
 const wantlistReleaseURL = 'https://api.discogs.com/users/{username}/wants/{release_id}';
 
-const releaseSchema = z
+const paginationSchema = z
+  .object({
+    page: z.number(),
+    pages: z.number(),
+    per_page: z.number(),
+    items: z.number(),
+    urls: z.object({
+      first: z.optional(z.string()),
+      last: z.optional(z.string()),
+      prev: z.optional(z.string()),
+      next: z.optional(z.string()),
+    }),
+  })
+  .transform((pagination) => ({
+    page: pagination.page,
+    pages: pagination.pages,
+    perPage: pagination.per_page,
+    items: pagination.items,
+    urls: pagination.urls,
+  }));
+
+const collectionReleaseSchema = z
+  .object({
+    id: z.number(),
+    instance_id: z.number(),
+    date_added: z.string().datetime({offset: true}),
+    basic_information: z.object({
+      title: z.string(),
+      cover_image: z.string(),
+      artists: z.array(
+        z.object({
+          id: z.number(),
+          name: z.string(),
+        }),
+      ),
+      formats: z.array(
+        z.object({
+          name: z.string(),
+          text: z.optional(z.string()),
+        }),
+      ),
+    }),
+  })
+  .transform((release) => ({
+    id: release.id,
+    instanceId: release.instance_id,
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
+    title: release.basic_information.title,
+    coverImage: release.basic_information.cover_image,
+    format: release.basic_information.formats.map((format) => format.name)[0],
+    addedOn: timeFromNow(release.date_added),
+  }));
+
+const collectionReleasesResponseSchema = z.object({
+  pagination: paginationSchema,
+  releases: z.array(collectionReleaseSchema),
+});
+
+const collectionReleaseAddedSchema = z
   .object({
     instance_id: z.number(),
     resource_url: z.string(),
@@ -25,42 +83,9 @@ const releaseSchema = z
     resourceUrl: release.resource_url,
   }));
 
-const releasesSchema = z.array(
-  z
-    .object({
-      id: z.number(),
-      instance_id: z.number(),
-      date_added: z.string().datetime({offset: true}),
-      basic_information: z.object({
-        title: z.string(),
-        cover_image: z.string(),
-        artists: z.array(
-          z.object({
-            id: z.number(),
-            name: z.string(),
-          }),
-        ),
-        formats: z.array(
-          z.object({
-            name: z.string(),
-            text: z.optional(z.string()),
-          }),
-        ),
-      }),
-    })
-    .transform((release) => ({
-      id: release.id,
-      instanceId: release.instance_id,
-      artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
-      title: release.basic_information.title,
-      coverImage: release.basic_information.cover_image,
-      format: release.basic_information.formats.map((format) => format.name)[0],
-      addedOn: timeFromNow(release.date_added),
-    })),
-);
-
-export type Release = z.infer<typeof releaseSchema>;
-export type Releases = z.infer<typeof releasesSchema>;
+export type CollectionRelease = z.infer<typeof collectionReleaseSchema>;
+export type CollectionReleaseAdded = z.infer<typeof collectionReleaseAddedSchema>;
+export type CollectionReleasesResponse = z.infer<typeof collectionReleasesResponseSchema>;
 
 const wantSchema = z
   .object({
@@ -107,7 +132,11 @@ const wantsSchema = z.array(
 export type Want = z.infer<typeof wantSchema>;
 export type Wants = z.infer<typeof wantsSchema>;
 
-export const getReleasesFromCollection = async (user: User): Promise<Releases> => {
+export const getReleasesFromCollection = async (
+  user: User,
+  page = 1,
+  perPage = 50,
+): Promise<CollectionReleasesResponse> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
   const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
@@ -118,7 +147,8 @@ export const getReleasesFromCollection = async (user: User): Promise<Releases> =
   let params = new URLSearchParams();
   params.set('sort', 'added');
   params.set('sort_order', 'desc');
-  params.set('per_page', '10');
+  params.set('page', page.toString());
+  params.set('per_page', perPage.toString());
   url.search = params.toString();
   const urlString = url.toString();
 
@@ -138,8 +168,15 @@ export const getReleasesFromCollection = async (user: User): Promise<Releases> =
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   const responseBody = await response.json();
-  const validatedData = releasesSchema.parse(responseBody.releases);
+  const validatedData = collectionReleasesResponseSchema.parse(responseBody);
   return validatedData;
 };
 
@@ -175,10 +212,17 @@ export const removeReleaseFromCollection = async (user: User, releaseId: string,
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   return null;
 };
 
-export const addReleaseToCollection = async (user: User, releaseId: string): Promise<Release> => {
+export const addReleaseToCollection = async (user: User, releaseId: string): Promise<CollectionReleaseAdded> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
   const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
@@ -209,8 +253,15 @@ export const addReleaseToCollection = async (user: User, releaseId: string): Pro
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   const responseBody = await response.json();
-  const validatedData = releaseSchema.parse(responseBody);
+  const validatedData = collectionReleaseAddedSchema.parse(responseBody);
   return validatedData;
 };
 
@@ -245,6 +296,13 @@ export const getReleasesFromWantlist = async (user: User): Promise<Wants> => {
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   const responseBody = await response.json();
   const validatedData = wantsSchema.parse(responseBody.wants);
   return validatedData;
@@ -276,6 +334,13 @@ export const removeReleaseFromWantlist = async (user: User, releaseId: string): 
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   return null;
 };
 
@@ -304,6 +369,13 @@ export const addReleaseToWantlist = async (user: User, releaseId: string): Promi
     debug('error! ' + responseText);
     throw new Response(responseText, {status: 401});
   }
+
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
 
   const responseBody = await response.json();
   const validatedData = wantSchema.parse(responseBody);

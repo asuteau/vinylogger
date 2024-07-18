@@ -125,6 +125,13 @@ export const getReleaseById = async (user: User, releaseId: string): Promise<Rel
     throw new Response(responseText, {status: 401});
   }
 
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
+
   const responseBody = await response.json();
   const validatedData = releaseSchema.parse(responseBody);
   return validatedData;
@@ -160,6 +167,13 @@ export const search = async (user: User, query: string): Promise<SearchResults> 
     debug('error! ' + responseText);
     throw new Response(responseText, {status: 401});
   }
+
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
 
   const responseBody = await response.json();
   const validatedData = searchResultsSchema.parse(responseBody.results);
@@ -197,6 +211,13 @@ export const getMasterReleaseVersions = async (user: User, masterId: string): Pr
     debug('error! ' + responseText);
     throw new Response(responseText, {status: 401});
   }
+
+  debug(
+    'rate limit',
+    response.headers.get('x-discogs-ratelimit'),
+    response.headers.get('x-discogs-ratelimit-remaining'),
+    response.headers.get('x-discogs-ratelimit-used'),
+  );
 
   const responseBody = await response.json();
   const validatedData = masterReleasesSchema.parse(responseBody.versions);
