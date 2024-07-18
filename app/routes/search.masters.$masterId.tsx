@@ -23,7 +23,6 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const masterId = params.masterId;
   if (!masterId) return json({versions: null, masterId: null});
 
-  console.log('masterId', masterId);
   const versions = getMasterReleaseVersions(user, masterId);
   return defer({versions, masterId});
 };

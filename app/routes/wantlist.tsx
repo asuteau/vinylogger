@@ -47,7 +47,6 @@ const WantlistRoute = () => {
 
   useEffect(() => {
     if (fetcher.data) {
-      console.log(fetcher.data);
       const newItems = fetcher.data.items.wants;
       setItems((prevItems) => [...prevItems, ...newItems]);
     }
