@@ -8,7 +8,6 @@ import {authenticator} from '~/services/auth.server';
 import {getReleasesFromCollection, CollectionRelease, CollectionReleasesResponse} from '~/services/discogs.api.user';
 import {useInView} from 'react-intersection-observer';
 import {User} from '~/services/discogs.strategy';
-import {set} from 'zod';
 
 type Data = {
   user: User;

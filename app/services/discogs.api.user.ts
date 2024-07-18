@@ -87,7 +87,7 @@ export type CollectionRelease = z.infer<typeof collectionReleaseSchema>;
 export type CollectionReleaseAdded = z.infer<typeof collectionReleaseAddedSchema>;
 export type CollectionReleasesResponse = z.infer<typeof collectionReleasesResponseSchema>;
 
-const wantSchema = z
+const wantAddedSchema = z
   .object({
     id: z.number(),
     resource_url: z.string(),
@@ -97,45 +97,49 @@ const wantSchema = z
     resourceUrl: release.resource_url,
   }));
 
-const wantsSchema = z.array(
-  z
-    .object({
-      id: z.number(),
-      date_added: z.string().datetime({offset: true}),
-      basic_information: z.object({
-        title: z.string(),
-        cover_image: z.string(),
-        artists: z.array(
-          z.object({
-            id: z.number(),
-            name: z.string(),
-          }),
-        ),
-        formats: z.array(
-          z.object({
-            name: z.string(),
-            text: z.optional(z.string()),
-          }),
-        ),
-      }),
-    })
-    .transform((release) => ({
-      id: release.id,
-      artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
-      title: release.basic_information.title,
-      coverImage: release.basic_information.cover_image,
-      format: release.basic_information.formats.map((format) => format.name)[0],
-      addedOn: timeFromNow(release.date_added),
-    })),
-);
+const wantSchema = z
+  .object({
+    id: z.number(),
+    date_added: z.string().datetime({offset: true}),
+    basic_information: z.object({
+      title: z.string(),
+      cover_image: z.string(),
+      artists: z.array(
+        z.object({
+          id: z.number(),
+          name: z.string(),
+        }),
+      ),
+      formats: z.array(
+        z.object({
+          name: z.string(),
+          text: z.optional(z.string()),
+        }),
+      ),
+    }),
+  })
+  .transform((release) => ({
+    id: release.id,
+    artist: release.basic_information.artists.map((artist) => cleanId(artist.name))[0],
+    title: release.basic_information.title,
+    coverImage: release.basic_information.cover_image,
+    format: release.basic_information.formats.map((format) => format.name)[0],
+    addedOn: timeFromNow(release.date_added),
+  }));
+
+const wantsResponseSchema = z.object({
+  pagination: paginationSchema,
+  wants: z.array(wantSchema),
+});
 
 export type Want = z.infer<typeof wantSchema>;
-export type Wants = z.infer<typeof wantsSchema>;
+export type WantAdded = z.infer<typeof wantAddedSchema>;
+export type WantsResponse = z.infer<typeof wantsResponseSchema>;
 
 export const getReleasesFromCollection = async (
   user: User,
   page = 1,
-  perPage = 50,
+  perPage = 20,
 ): Promise<CollectionReleasesResponse> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
@@ -265,7 +269,7 @@ export const addReleaseToCollection = async (user: User, releaseId: string): Pro
   return validatedData;
 };
 
-export const getReleasesFromWantlist = async (user: User): Promise<Wants> => {
+export const getReleasesFromWantlist = async (user: User, page = 1, perPage = 20): Promise<WantsResponse> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
   const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
@@ -276,7 +280,8 @@ export const getReleasesFromWantlist = async (user: User): Promise<Wants> => {
   let params = new URLSearchParams();
   params.set('sort', 'added');
   params.set('sort_order', 'desc');
-  params.set('per_page', '10');
+  params.set('page', page.toString());
+  params.set('per_page', perPage.toString());
   url.search = params.toString();
   const urlString = url.toString();
 
@@ -304,7 +309,7 @@ export const getReleasesFromWantlist = async (user: User): Promise<Wants> => {
   );
 
   const responseBody = await response.json();
-  const validatedData = wantsSchema.parse(responseBody.wants);
+  const validatedData = wantsResponseSchema.parse(responseBody);
   return validatedData;
 };
 
@@ -344,7 +349,7 @@ export const removeReleaseFromWantlist = async (user: User, releaseId: string): 
   return null;
 };
 
-export const addReleaseToWantlist = async (user: User, releaseId: string): Promise<Want> => {
+export const addReleaseToWantlist = async (user: User, releaseId: string): Promise<WantAdded> => {
   // generate 32 bytes which is a string of 64 characters in hex encoding
   // because any request that includes a nonce string of length > 64 characters is rejected
   const nonce = crypto.randomBytes(32).toString('hex', 0, 64);
@@ -378,6 +383,6 @@ export const addReleaseToWantlist = async (user: User, releaseId: string): Promi
   );
 
   const responseBody = await response.json();
-  const validatedData = wantSchema.parse(responseBody);
+  const validatedData = wantAddedSchema.parse(responseBody);
   return validatedData;
 };
