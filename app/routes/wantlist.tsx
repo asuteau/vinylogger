@@ -4,6 +4,7 @@ import {Suspense, useEffect, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import CollectionItems from '~/components/CollectionItems';
 import {Drawer, DrawerContent} from '~/components/ui/drawer';
+import {Sheet, SheetContent} from '~/components/ui/sheet';
 import useMediaQuery from '~/hooks/use-media-query';
 import {authenticator} from '~/services/auth.server';
 import {getReleasesFromWantlist, Want, WantsResponse} from '~/services/discogs.api.user';
@@ -69,7 +70,7 @@ const WantlistRoute = () => {
   return (
     <>
       <div className="relative">
-        <section id="wantlist" className="space-y-16 w-full md:w-1/2 pr-8">
+        <section id="wantlist" className="space-y-16 w-full pr-8">
           <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
         </section>
 
@@ -83,15 +84,11 @@ const WantlistRoute = () => {
             </DrawerContent>
           </Drawer>
         ) : (
-          <section
-            id="release-details"
-            className="hidden md:flex items-center justify-center border-l border-slate-300 dark:border-slate-600 fixed top-0 right-0 h-full mt-20"
-            style={{
-              width: 'calc(50% - 200px)',
-            }}
-          >
-            <Outlet />
-          </section>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetContent>
+              <Outlet />
+            </SheetContent>
+          </Sheet>
         )}
       </div>
     </>

@@ -8,6 +8,7 @@ import {authenticator} from '~/services/auth.server';
 import {getReleasesFromCollection, CollectionRelease, CollectionReleasesResponse} from '~/services/discogs.api.user';
 import {useInView} from 'react-intersection-observer';
 import {User} from '~/services/discogs.strategy';
+import {Sheet, SheetContent} from '~/components/ui/sheet';
 
 type Data = {
   user: User;
@@ -87,15 +88,11 @@ const Collection = () => {
             </DrawerContent>
           </Drawer>
         ) : (
-          <section
-            id="release-details"
-            className="hidden md:flex items-center justify-center border-l border-slate-300 dark:border-slate-600 fixed top-0 right-0 h-full mt-20"
-            style={{
-              width: 'calc(50% - 200px)',
-            }}
-          >
-            <Outlet />
-          </section>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetContent>
+              <Outlet />
+            </SheetContent>
+          </Sheet>
         )}
       </div>
     </>
