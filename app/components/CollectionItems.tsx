@@ -18,7 +18,11 @@ const CollectionItem = ({release, onClick}: CollectionItemProps) => {
   return (
     <NavLink
       to={`/${location.pathname.split('/')[1]}/${release.id}`}
-      className={({isActive}) => (isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md')}
+      className={({isActive}) =>
+        isActive
+          ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
+          : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
+      }
       onClick={onClick}
     >
       <li className="flex justify-start items-center gap-6">

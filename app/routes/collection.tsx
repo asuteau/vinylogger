@@ -74,7 +74,7 @@ const Collection = () => {
   return (
     <>
       <div className="relative">
-        <section id="collection" className="space-y-16 w-full md:w-1/2 pr-8">
+        <section id="collection" className="space-y-16 w-full">
           <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
         </section>
 

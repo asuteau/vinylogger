@@ -53,7 +53,7 @@ const SearchRoute = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full justify-center items-start gap-4">
+    <div className="relative flex flex-col w-full gap-4">
       <Form
         id="search-form"
         className="w-full"
@@ -96,7 +96,9 @@ const SearchRoute = () => {
                         to={`/search/masters/${result.id}`}
                         prefetch="none"
                         className={({isActive}) =>
-                          isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
+                          isActive
+                            ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
                         }
                         preventScrollReset
                       >

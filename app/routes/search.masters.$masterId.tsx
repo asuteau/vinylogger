@@ -37,7 +37,7 @@ const SearchByMasterIdRoute = () => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center items-start gap-8">
+    <div className="flex flex-col w-full gap-8">
       <Button variant="default" size="icon" onClick={handleBack}>
         <CaretLeft className="h-4 w-4" />
       </Button>
@@ -59,7 +59,9 @@ const SearchByMasterIdRoute = () => {
                         to={`/search/versions/${version.id}`}
                         prefetch="none"
                         className={({isActive}) =>
-                          isActive ? 'bg-gray-200/50 rounded-md' : 'hover:bg-gray-100 rounded-md'
+                          isActive
+                            ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
                         }
                         preventScrollReset
                       >
@@ -74,10 +76,14 @@ const SearchByMasterIdRoute = () => {
 
                           <div className="flex flex-col items-start">
                             {version.majorFormat && (
-                              <h3 className="text-gray-950 line-clamp-1">{version.majorFormat}</h3>
+                              <span className="text-sm md:text-lg font-bold line-clamp-2">{version.majorFormat}</span>
                             )}
-                            {version.format && <span className="text-gray-600 line-clamp-1">{version.format}</span>}
-                            <span className="text-gray-600 line-clamp-1">
+                            {version.format && (
+                              <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                                {version.format}
+                              </span>
+                            )}
+                            <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
                               <span>{version.released}</span> • <span>{version.country}</span>
                             </span>
                             {version.isInCollection && (
