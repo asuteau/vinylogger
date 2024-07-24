@@ -1,14 +1,14 @@
 import {Outlet, useFetcher, useLoaderData, useRouteLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
 import {useEffect, useState} from 'react';
-import CollectionItems from '~/components/CollectionItems';
-import useMediaQuery from '~/hooks/use-media-query';
-import {Drawer, DrawerContent} from '~/components/ui/drawer';
-import {authenticator} from '~/services/auth.server';
-import {getReleasesFromCollection, CollectionRelease, CollectionReleasesResponse} from '~/services/discogs.api.user';
+import CollectionItems from '@/components/CollectionItems';
+import useMediaQuery from '@/hooks/use-media-query';
+import {Drawer, DrawerContent} from '@/components/ui/drawer';
+import {authenticator} from '@/services/auth.server';
+import {getReleasesFromCollection, CollectionRelease, CollectionReleasesResponse} from '@/services/discogs.api.user';
 import {useInView} from 'react-intersection-observer';
-import {User} from '~/services/discogs.strategy';
-import {Sheet, SheetContent} from '~/components/ui/sheet';
+import {User} from '@/services/discogs.strategy';
+import {Sheet, SheetContent} from '@/components/ui/sheet';
 
 type Data = {
   user: User;

@@ -1,7 +1,14 @@
 import * as React from 'react';
-import useMediaQuery from '~/hooks/use-media-query';
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from './ui/dialog';
-import {Button} from './ui/button';
+import useMediaQuery from '@/hooks/use-media-query';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {Button} from '@/components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -11,7 +18,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from './ui/drawer';
+} from '@/components/ui/drawer';
 
 type ResponsiveDialogProps = {
   children: React.ReactNode;

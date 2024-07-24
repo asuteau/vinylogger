@@ -1,5 +1,5 @@
 import {ActionFunctionArgs} from '@remix-run/node';
-import {authenticator} from '~/services/auth.server';
+import {authenticator} from '@/services/auth.server';
 
 // Renders the UI
 const LoginRoute = () => <h1>Login page</h1>;

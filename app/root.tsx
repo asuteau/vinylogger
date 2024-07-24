@@ -11,15 +11,15 @@ import {
 } from '@remix-run/react';
 import {Analytics} from '@vercel/analytics/react';
 
-import tailwind from '~/styles/tailwind.css';
-import fonts from './styles/fonts.css';
+import tailwind from '@/styles/tailwind.css';
+import fonts from '@/styles/fonts.css';
 import type {LinksFunction, LoaderFunctionArgs} from '@vercel/remix';
-import Navbar from './components/Navbar';
-import Header from './components/Header';
+import Navbar from '@/components/Navbar';
+import Header from '@/components/Header';
 import {json} from '@vercel/remix';
-import {ThemeProvider, useTheme} from './contexts/theme-context';
+import {ThemeProvider, useTheme} from '@/contexts/theme-context';
 import clsx from 'clsx';
-import {authenticator} from './services/auth.server';
+import {authenticator} from '@/services/auth.server';
 
 export const links: LinksFunction = () => [
   {rel: 'stylesheet', href: fonts},

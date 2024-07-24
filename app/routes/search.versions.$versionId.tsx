@@ -2,13 +2,13 @@ import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
-import {Button} from '~/components/ui/button';
+import {Button} from '@/components/ui/button';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
-import {extractColors} from '~/lib/utils';
-import {authenticator} from '~/services/auth.server';
-import {getReleaseById} from '~/services/discogs.api.database';
+import {extractColors} from '@/lib/utils';
+import {authenticator} from '@/services/auth.server';
+import {getReleaseById} from '@/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];

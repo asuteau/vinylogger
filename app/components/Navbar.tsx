@@ -5,9 +5,9 @@ import {User} from '@phosphor-icons/react/dist/icons/User';
 import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
 import {NavLink} from '@remix-run/react';
 import {ReactNode} from 'react';
-import Logo from './Logo';
-import {Badge} from './ui/badge';
-import useMediaQuery from '~/hooks/use-media-query';
+import Logo from '@/components/Logo';
+import {Badge} from '@/components/ui/badge';
+import useMediaQuery from '@/hooks/use-media-query';
 
 type NavbarProps = {
   totalInCollection?: number;

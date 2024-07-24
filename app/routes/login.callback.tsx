@@ -1,5 +1,5 @@
 import {LoaderFunctionArgs} from '@remix-run/node';
-import {authenticator} from '~/services/auth.server';
+import {authenticator} from '@/services/auth.server';
 
 // Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {

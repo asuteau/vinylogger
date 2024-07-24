@@ -1,13 +1,13 @@
 import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
 import {Suspense} from 'react';
-import ReleaseDetails from '~/components/ReleaseDetails';
-import {Button} from '~/components/ui/button';
+import ReleaseDetails from '@/components/ReleaseDetails';
+import {Button} from '@/components/ui/button';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
-import {useCollectionLoaderData} from './collection';
-import {authenticator} from '~/services/auth.server';
-import {getReleaseById} from '~/services/discogs.api.database';
-import {removeReleaseFromCollection} from '~/services/discogs.api.user';
+import {authenticator} from '@/services/auth.server';
+import {getReleaseById} from '@/services/discogs.api.database';
+import {removeReleaseFromCollection} from '@/services/discogs.api.user';
+import {useCollectionLoaderData} from '@/routes/collection';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection - Release'}];
@@ -46,8 +46,8 @@ const CollectionRoute = () => {
                 <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
               }
             >
-              <Await resolve={Promise.all([release, collectionData?.releases])}>
-                {([release, releases]) => (
+              <Await resolve={Promise.all([release, collectionData?.items])}>
+                {([release, items]) => (
                   <div className="flex flex-col items-center gap-4 p-4">
                     <ReleaseDetails release={release} />
 
@@ -55,7 +55,7 @@ const CollectionRoute = () => {
                       <input
                         name="instanceId"
                         readOnly
-                        value={releases?.find((r) => r.id === release.id)?.instanceId}
+                        value={items?.releases.find((r) => r.id === release.id)?.instanceId}
                         type="number"
                         hidden
                       />

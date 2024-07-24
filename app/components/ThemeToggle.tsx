@@ -1,5 +1,5 @@
-import {useTheme} from '~/contexts/theme-context';
-import {Button} from './ui/button';
+import {useTheme} from '@/contexts/theme-context';
+import {Button} from '@/components/ui/button';
 import {Moon} from '@phosphor-icons/react/dist/icons/Moon';
 import {Sun} from '@phosphor-icons/react/dist/icons/Sun';
 

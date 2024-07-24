@@ -1,13 +1,13 @@
 import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Await, Form, NavLink, useLoaderData, useNavigation, useSubmit} from '@remix-run/react';
 import {Suspense, useEffect, useState} from 'react';
-import {Input} from '~/components/ui/input';
-import useDebounce from '~/hooks/use-debounce';
+import {Input} from '@/components/ui/input';
+import useDebounce from '@/hooks/use-debounce';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
-import {Badge} from '~/components/ui/badge';
-import {authenticator} from '~/services/auth.server';
-import {search} from '~/services/discogs.api.database';
+import {Badge} from '@/components/ui/badge';
+import {authenticator} from '@/services/auth.server';
+import {search} from '@/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];

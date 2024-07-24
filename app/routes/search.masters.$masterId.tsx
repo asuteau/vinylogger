@@ -5,10 +5,10 @@ import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
-import {Button} from '~/components/ui/button';
-import {Badge} from '~/components/ui/badge';
-import {authenticator} from '~/services/auth.server';
-import {getMasterReleaseVersions} from '~/services/discogs.api.database';
+import {Button} from '@/components/ui/button';
+import {Badge} from '@/components/ui/badge';
+import {authenticator} from '@/services/auth.server';
+import {getMasterReleaseVersions} from '@/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Masters'}];

@@ -1,8 +1,7 @@
-import UserProfile from './UserProfile';
-import {GetProfileResponse} from '@lionralfs/discogs-client';
-import Logo from './Logo';
-import ThemeToggle from './ThemeToggle';
-import useMediaQuery from '~/hooks/use-media-query';
+import useMediaQuery from '@/hooks/use-media-query';
+import Logo from '@/components/Logo';
+import ThemeToggle from '@/components/ThemeToggle';
+import UserProfile from '@/components/UserProfile';
 
 type HeaderProps = {
   avatar: string;

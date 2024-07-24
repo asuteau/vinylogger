@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import createDebug from 'debug';
-import {DiscogsUserAgent, User} from './discogs.strategy';
+import {DiscogsUserAgent, User} from '@/services/discogs.strategy';
 import {z} from 'zod';
 
 let debug = createDebug('discogs:api');

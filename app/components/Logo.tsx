@@ -1,7 +1,8 @@
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {NavLink} from '@remix-run/react';
-import {useTheme} from '~/contexts/theme-context';
-import useMediaQuery from '~/hooks/use-media-query';
+import {useTheme} from '@/contexts/theme-context';
+import useMediaQuery from '@/hooks/use-media-query';
+
 type LogoProps = {
   className?: string;
 };

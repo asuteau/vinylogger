@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
 import createDebug from 'debug';
-import {DiscogsUserAgent, User} from './discogs.strategy';
-import {timeFromNow} from '~/utils/dates';
-import {cleanId} from '~/utils/strings';
+import {DiscogsUserAgent, User} from '@/services/discogs.strategy';
+import {timeFromNow} from '@/utils/dates';
+import {cleanId} from '@/utils/strings';
 import {z} from 'zod';
 
 let debug = createDebug('discogs:api');

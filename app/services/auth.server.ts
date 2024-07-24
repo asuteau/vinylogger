@@ -1,6 +1,6 @@
 import {Authenticator} from 'remix-auth';
-import {sessionStorage} from '~/services/session.server';
-import {DiscogsStrategy, User} from './discogs.strategy';
+import {sessionStorage} from '@/services/session.server';
+import {DiscogsStrategy, User} from '@/services/discogs.strategy';
 import createDebug from 'debug';
 
 let debug = createDebug('discogs:auth');

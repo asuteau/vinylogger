@@ -1,4 +1,3 @@
-import {GetProfileResponse} from '@lionralfs/discogs-client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,10 +5,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import {Button} from './ui/button';
-import UserSignOut from './UserSignOut';
-import useMediaQuery from '~/hooks/use-media-query';
+} from '@/components/ui/dropdown-menu';
+import {Button} from '@/components/ui/button';
+import UserSignOut from '@/components/UserSignOut';
+import useMediaQuery from '@/hooks/use-media-query';
 
 type UserProfileProps = {
   className?: string;

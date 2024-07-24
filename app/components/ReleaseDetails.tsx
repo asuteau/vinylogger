@@ -1,8 +1,14 @@
-import {GetReleaseResponse} from '@lionralfs/discogs-client';
-import {Card, CardContent} from './ui/card';
-import {Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselApi} from './ui/carousel';
+import {Card, CardContent} from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselApi,
+} from '@/components/ui/carousel';
 import {useState, useEffect} from 'react';
-import useMediaQuery from '~/hooks/use-media-query';
+import useMediaQuery from '@/hooks/use-media-query';
 
 type ReleaseDetailsProps = {
   release: {

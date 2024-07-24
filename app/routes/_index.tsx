@@ -1,10 +1,9 @@
 import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Form, json, useLoaderData} from '@remix-run/react';
 import type {LoaderFunctionArgs, MetaFunction} from '@vercel/remix';
-import Logo from '~/components/Logo';
-import {Button} from '~/components/ui/button';
-import {authenticator} from '~/services/auth.server';
-import {sessionStorage} from '~/services/session.server';
+import {Button} from '@/components/ui/button';
+import {authenticator} from '@/services/auth.server';
+import {sessionStorage} from '@/services/session.server';
 
 type LoaderError = {message: string} | null;
 

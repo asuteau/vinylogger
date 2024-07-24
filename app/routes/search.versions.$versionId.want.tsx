@@ -1,6 +1,6 @@
 import {ActionFunctionArgs, redirect} from '@vercel/remix';
-import {authenticator} from '~/services/auth.server';
-import {addReleaseToWantlist} from '~/services/discogs.api.user';
+import {authenticator} from '@/services/auth.server';
+import {addReleaseToWantlist} from '@/services/discogs.api.user';
 
 export const action = async ({params, request}: ActionFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {

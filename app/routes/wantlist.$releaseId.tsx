@@ -1,12 +1,12 @@
 import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
 import {Suspense} from 'react';
-import ReleaseDetails from '~/components/ReleaseDetails';
-import {Button} from '~/components/ui/button';
+import ReleaseDetails from '@/components/ReleaseDetails';
+import {Button} from '@/components/ui/button';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
-import {authenticator} from '~/services/auth.server';
-import {getReleaseById} from '~/services/discogs.api.database';
-import {removeReleaseFromWantlist} from '~/services/discogs.api.user';
+import {authenticator} from '@/services/auth.server';
+import {getReleaseById} from '@/services/discogs.api.database';
+import {removeReleaseFromWantlist} from '@/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Wantlist - Release'}];

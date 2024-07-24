@@ -1,8 +1,8 @@
 import {json, LoaderFunctionArgs} from '@remix-run/node';
 import {useLoaderData} from '@remix-run/react';
-import UserSignOut from '~/components/UserSignOut';
-import {Button} from '~/components/ui/button';
-import {authenticator} from '~/services/auth.server';
+import UserSignOut from '@/components/UserSignOut';
+import {Button} from '@/components/ui/button';
+import {authenticator} from '@/services/auth.server';
 
 // Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {

@@ -3,10 +3,10 @@ import {defer} from '@vercel/remix';
 import type {LoaderFunctionArgs} from '@vercel/remix';
 import {Await, useLoaderData} from '@remix-run/react';
 import {Suspense} from 'react';
-import DashboardLastPurchases from '~/components/DashboardLastPurchases';
-import DashboardLastWanted from '~/components/DashboardLastWanted';
-import {authenticator} from '~/services/auth.server';
-import {getReleasesFromCollection, getReleasesFromWantlist} from '~/services/discogs.api.user';
+import DashboardLastPurchases from '@/components/DashboardLastPurchases';
+import DashboardLastWanted from '@/components/DashboardLastWanted';
+import {authenticator} from '@/services/auth.server';
+import {getReleasesFromCollection, getReleasesFromWantlist} from '@/services/discogs.api.user';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];

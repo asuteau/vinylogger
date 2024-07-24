@@ -1,14 +1,14 @@
 import {NavLink, useLocation} from '@remix-run/react';
-import {CollectionRelease} from '~/services/discogs.api.user';
-import {groupBy} from '~/utils/array';
+import {CollectionRelease, Want} from '@/services/discogs.api.user';
+import {groupBy} from '@/utils/array';
 
 type CollectionItemsProps = {
-  lastPurchases: CollectionRelease[];
+  lastPurchases: (CollectionRelease | Want)[];
   onClick?: () => void;
 };
 
 type CollectionItemProps = {
-  release: CollectionRelease;
+  release: CollectionRelease | Want;
   onClick?: () => void;
 };
 

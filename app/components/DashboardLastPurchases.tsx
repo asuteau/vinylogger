@@ -1,13 +1,13 @@
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {NavLink} from '@remix-run/react';
-import {Button} from './ui/button';
-import Release from '~/entities/release';
+import {Button} from '@/components/ui/button';
+import {CollectionRelease} from '@/services/discogs.api.user';
 
 type DashboardLastPurchasesProps = {
-  lastPurchases: Release[];
+  lastPurchases: CollectionRelease[];
 };
 
-const DashboardLastPurchasesItem = ({release}: {release: Release}) => {
+const DashboardLastPurchasesItem = ({release}: {release: CollectionRelease}) => {
   return (
     <div className="flex-none flex flex-col gap-1 justify-start w-32 md:w-auto">
       <div className="overflow-hidden shadow-lg">
