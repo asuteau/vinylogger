@@ -1,76 +1,75 @@
-import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
-import {Await, Form, NavLink, useLoaderData, useNavigation, useSubmit} from '@remix-run/react';
+import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
+import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
 import {Suspense, useEffect, useState} from 'react';
 import {Input} from '@/components/ui/input';
-import useDebounce from '@/hooks/use-debounce';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Badge} from '@/components/ui/badge';
 import {authenticator} from '@/services/auth.server';
 import {search} from '@/services/discogs.api.database';
+import {useDebounceSubmit} from 'remix-utils/use-debounce-submit';
+import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
+import {HourglassHigh} from '@phosphor-icons/react/dist/icons/HourglassHigh';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];
 };
 
-// Provides data to the component
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: '/',
   });
 
   const url = new URL(request.url);
-  const searchTerm = url.searchParams.get('search');
-  if (!searchTerm) return json({searchResults: null, lastSearch: null});
+  const searchTerm = url.searchParams.get('q');
+  if (!searchTerm) return json({searchResults: null, q: null});
 
-  const searchResults = search(user, searchTerm);
-  return defer({searchResults, lastSearch: searchTerm});
+  const searchResults = await search(user, searchTerm);
+  return json({searchResults, q: searchTerm});
 };
 
-// Renders the UI
 const SearchRoute = () => {
-  const {searchResults, lastSearch} = useLoaderData<typeof loader>();
+  const {searchResults, q} = useLoaderData<typeof loader>();
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const submit = useSubmit();
+  let submit = useDebounceSubmit();
   const navigation = useNavigation();
 
-  const searching = navigation.location && new URLSearchParams(navigation.location.search).has('search');
-
-  // useEffect(() => {
-  //   const searchField = document.getElementById('search');
-  //   if (searchField instanceof HTMLInputElement) {
-  //     searchField.value = lastSearch || '';
-  //   }
-  // }, [lastSearch]);
+  const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
-    submit({search: debouncedSearchTerm});
-  }, [debouncedSearchTerm]);
+    const searchField = document.getElementById('q');
+    if (searchField instanceof HTMLInputElement) {
+      searchField.value = q || '';
+    }
+  }, [q]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const isFirstSearch = q === null;
+    submit(e.currentTarget, {replace: !isFirstSearch, debounceTimeout: 500});
+  };
+
   return (
     <div className="relative flex flex-col w-full gap-4">
-      <Form
-        id="search-form"
-        className="w-full"
-        onChange={(event) => {
-          const isFirstSearch = lastSearch === null;
-          submit(event.currentTarget, {replace: !isFirstSearch});
-        }}
-        role="search"
-      >
-        <Input
-          className="sticky top-0 backdrop-blur-xl"
-          placeholder="What do you want to add to your collection?"
-          defaultValue={lastSearch || ''}
-          id="search"
-          name="search"
-          onChange={handleChange}
-        />
+      <Form id="search-form" className="w-full" onChange={handleSubmit} role="search">
+        <div className="relative md:max-w-[50%]">
+          <MagnifyingGlass className="z-10 absolute top-1/2 left-3 transform -translate-y-1/2 fill-slate-500 dark:fill-slate-400" />
+          <Input
+            className="sticky top-0 backdrop-blur-xl pl-10"
+            placeholder="What do you want to add to your collection?"
+            defaultValue={q || ''}
+            id="q"
+            name="q"
+            onChange={handleChange}
+          />
+          <HourglassHigh
+            weight="fill"
+            className={`${!searching && 'hidden'} absolute top-1/2 right-3 transform -translate-y-1/2 fill-slate-500 dark:fill-slate-400`}
+          />
+        </div>
       </Form>
 
       {navigation.state === 'loading' && <h3>Loading...</h3>}
@@ -134,8 +133,5 @@ const SearchRoute = () => {
     </div>
   );
 };
-
-// Updates persistent data
-export const action = async ({request}: ActionFunctionArgs) => {};
 
 export default SearchRoute;
