@@ -67,7 +67,7 @@ const App = () => {
           <div className="layout">
             <Navbar totalInCollection={user.itemsInCollection} totalInWantlist={user.itemsInWantlist} />
             <Header avatar={user.avatar} username={user.username} />
-            <section className="layout-main m-7 p-1 space-y-4">
+            <section id="main" className="layout-main">
               <Outlet />
             </section>
           </div>

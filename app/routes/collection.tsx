@@ -72,30 +72,28 @@ const Collection = () => {
   const hasNextPage = fetcher.data ? fetcher.data.items.pagination.pages > fetcher.data.items.pagination.page : true;
 
   return (
-    <>
-      <div className="relative">
-        <section id="collection" className="space-y-16 w-full">
-          <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
-        </section>
-
-        {fetcher.state === 'loading' && <div className="bg-red-100">Loading...</div>}
-        {hasNextPage && <div id="collection-infinite-scroll" ref={ref} />}
-
-        {isMobile ? (
-          <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerContent>
-              <Outlet />
-            </DrawerContent>
-          </Drawer>
-        ) : (
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetContent>
-              <Outlet />
-            </SheetContent>
-          </Sheet>
-        )}
+    <section id="collection" className="m-8">
+      <div className="space-y-16 w-full">
+        <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
       </div>
-    </>
+
+      {fetcher.state === 'loading' && <div className="bg-red-100">Loading...</div>}
+      {hasNextPage && <div id="collection-infinite-scroll" ref={ref} />}
+
+      {isMobile ? (
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent>
+            <Outlet />
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetContent>
+            <Outlet />
+          </SheetContent>
+        </Sheet>
+      )}
+    </section>
   );
 };
 

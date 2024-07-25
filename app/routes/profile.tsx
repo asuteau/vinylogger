@@ -18,7 +18,7 @@ const ProfileRoute = () => {
   const {user} = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col md:hidden gap-4 text-xs h-full">
+    <section id="profile" className="p-8 flex flex-col md:hidden gap-4 text-xs h-full">
       <div className="flex flex-col">
         <span className="text-slate-950 dark:text-slate-50 font-bold">Id</span>
         <span className="text-slate-600 dark:text-slate-400">{user.id}</span>
@@ -41,7 +41,7 @@ const ProfileRoute = () => {
           <UserSignOut />
         </Button>
       </div>
-    </div>
+    </section>
   );
 };
 

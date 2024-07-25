@@ -1,15 +1,12 @@
 import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
-import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
-import {Suspense, useEffect, useState} from 'react';
-import {Input} from '@/components/ui/input';
+import {Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
+import {useEffect, useState} from 'react';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {Badge} from '@/components/ui/badge';
 import {authenticator} from '@/services/auth.server';
 import {search} from '@/services/discogs.api.database';
 import {useDebounceSubmit} from 'remix-utils/use-debounce-submit';
-import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
-import {HourglassHigh} from '@phosphor-icons/react/dist/icons/HourglassHigh';
 import SearchBar from '@/components/SearchBar';
 
 export const meta: MetaFunction = () => {
@@ -56,65 +53,69 @@ const SearchRoute = () => {
   };
 
   return (
-    <div className="relative flex flex-col w-full gap-4">
-      <Form id="search-form" className="w-full" onChange={handleSubmit} role="search">
-        <SearchBar
-          q={q || ''}
-          searching={searching || false}
-          placeholder="What vinyl are you looking for?"
-          onChange={handleChange}
-        />
-      </Form>
+    <section id="search">
+      <div className="p-8 sticky top-0 bg-slate-50/90 dark:bg-slate-700/90 backdrop-blur-sm">
+        <Form id="search-form" className="w-full" onChange={handleSubmit} role="search">
+          <SearchBar
+            q={q || ''}
+            searching={searching || false}
+            placeholder="What vinyl are you looking for?"
+            onChange={handleChange}
+          />
+        </Form>
+      </div>
 
-      {navigation.state === 'idle' &&
-        hasSearchResults &&
-        searchResults
-          .filter((result) => {
-            const title = result.title.toLowerCase();
-            return searchTerm
-              .toLowerCase()
-              .split(' ')
-              .every((word) => title.includes(word));
-          })
-          .sort((a, b) => (parseInt(a.year as string) > parseInt(b.year as string) ? -1 : 1))
-          .map((result) => {
-            return (
-              <NavLink
-                key={result.id}
-                to={`/search/masters/${result.id}`}
-                prefetch="none"
-                className={({isActive}) =>
-                  isActive
-                    ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
-                }
-                preventScrollReset
-              >
-                <div className="flex justify-start items-center gap-4">
-                  <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
-                  <div className="flex flex-col gap-1 items-start">
-                    <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
-                    <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
-                      {result.year}
-                    </span>
-                    {result.isInCollection && (
-                      <Badge variant="secondary">
-                        <Tag className="h-4 w-4" />
-                      </Badge>
-                    )}
-                    {result.isInWantlist && (
-                      <Badge variant="secondary">
-                        <Star className="h-4 w-4" />
-                      </Badge>
-                    )}
+      <div className="px-8 pb-8 flex flex-col gap-4">
+        {navigation.state === 'idle' &&
+          hasSearchResults &&
+          searchResults
+            .filter((result) => {
+              const title = result.title.toLowerCase();
+              return searchTerm
+                .toLowerCase()
+                .split(' ')
+                .every((word) => title.includes(word));
+            })
+            .sort((a, b) => (parseInt(a.year as string) > parseInt(b.year as string) ? -1 : 1))
+            .map((result) => {
+              return (
+                <NavLink
+                  key={result.id}
+                  to={`/search/masters/${result.id}`}
+                  prefetch="none"
+                  className={({isActive}) =>
+                    isActive
+                      ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
+                  }
+                  preventScrollReset
+                >
+                  <div className="flex justify-start items-center gap-4">
+                    <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
+                    <div className="flex flex-col gap-1 items-start">
+                      <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
+                      <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                        {result.year}
+                      </span>
+                      {result.isInCollection && (
+                        <Badge variant="secondary">
+                          <Tag className="h-4 w-4" />
+                        </Badge>
+                      )}
+                      {result.isInWantlist && (
+                        <Badge variant="secondary">
+                          <Star className="h-4 w-4" />
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </NavLink>
-            );
-          })}
+                </NavLink>
+              );
+            })}
 
-      {navigation.state === 'idle' && hasNoSearchResults && <h3>Oops! No vinyl records match your search.</h3>}
-    </div>
+        {navigation.state === 'idle' && hasNoSearchResults && <h3>Oops! No vinyl records match your search.</h3>}
+      </div>
+    </section>
   );
 };
 

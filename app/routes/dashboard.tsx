@@ -27,21 +27,19 @@ const Dashboard = () => {
   const {latestFromCollection, latestFromWantlist} = useLoaderData<typeof loader>();
 
   return (
-    <>
-      <section id="dashboard" className="space-y-8 md:space-y-16">
-        <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
-          <Await resolve={latestFromCollection}>
-            {(latestFromCollection) => <DashboardLastPurchases lastPurchases={latestFromCollection.releases} />}
-          </Await>
-        </Suspense>
+    <section id="dashboard" className="m-8 space-y-8 md:space-y-16">
+      <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+        <Await resolve={latestFromCollection}>
+          {(latestFromCollection) => <DashboardLastPurchases lastPurchases={latestFromCollection.releases} />}
+        </Await>
+      </Suspense>
 
-        <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
-          <Await resolve={latestFromWantlist}>
-            {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.wants} />}
-          </Await>
-        </Suspense>
-      </section>
-    </>
+      <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+        <Await resolve={latestFromWantlist}>
+          {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.wants} />}
+        </Await>
+      </Suspense>
+    </section>
   );
 };
 

@@ -1,6 +1,6 @@
-import {useLoaderData, Await, NavLink, Outlet, useFetcher} from '@remix-run/react';
-import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
-import {Suspense, useEffect, useState} from 'react';
+import {useLoaderData, Outlet, useFetcher} from '@remix-run/react';
+import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
+import {useEffect, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import CollectionItems from '@/components/CollectionItems';
 import {Drawer, DrawerContent} from '@/components/ui/drawer';
@@ -68,30 +68,28 @@ const WantlistRoute = () => {
   const hasNextPage = fetcher.data ? fetcher.data.items.pagination.pages > fetcher.data.items.pagination.page : true;
 
   return (
-    <>
-      <div className="relative">
-        <section id="wantlist" className="space-y-16 w-full pr-8">
-          <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
-        </section>
-
-        {fetcher.state === 'loading' && <div className="bg-blue-100">Loading...</div>}
-        {hasNextPage && <div id="wantlist-infinite-scroll" ref={ref} />}
-
-        {isMobile ? (
-          <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerContent>
-              <Outlet />
-            </DrawerContent>
-          </Drawer>
-        ) : (
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetContent>
-              <Outlet />
-            </SheetContent>
-          </Sheet>
-        )}
+    <section id="wantlist" className="m-8">
+      <div className="space-y-16 w-full pr-8">
+        <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
       </div>
-    </>
+
+      {fetcher.state === 'loading' && <div className="bg-blue-100">Loading...</div>}
+      {hasNextPage && <div id="wantlist-infinite-scroll" ref={ref} />}
+
+      {isMobile ? (
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent>
+            <Outlet />
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetContent>
+            <Outlet />
+          </SheetContent>
+        </Sheet>
+      )}
+    </section>
   );
 };
 

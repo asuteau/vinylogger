@@ -37,98 +37,102 @@ const SearchByVersionIdRoute = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      <Button variant="default" size="icon" onClick={handleBack}>
-        <CaretLeft className="h-4 w-4" />
-      </Button>
+    <section id="search-by-version">
+      <div className="p-8 sticky top-0 bg-slate-50/90 dark:bg-slate-700/90 backdrop-blur-sm">
+        <Button variant="outline" size="icon" onClick={handleBack}>
+          <CaretLeft className="h-4 w-4" />
+        </Button>
+      </div>
 
-      {release ? (
-        <Suspense
-          fallback={
-            <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
-          }
-        >
-          <Await resolve={release}>
-            {(release) => (
-              <div key={release.id} className="flex flex-col md:flex-row justify-start items-center gap-4">
-                {release.images ? (
-                  <div
-                    className="bg-cover bg-center w-64 aspect-square shadow-lg"
-                    style={{
-                      backgroundImage: `url(${release.images[0].uri})`,
-                    }}
-                  />
-                ) : (
-                  <div className="w-64 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
-                    <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
-                  </div>
-                )}
+      <div className="flex flex-col w-full gap-4 px-8 pb-8">
+        {release ? (
+          <Suspense
+            fallback={
+              <div className="mx-auto w-full max-w-xs md:max-w-sm 2xl:max-w-lg aspect-square bg-gray-50 rounded-lg" />
+            }
+          >
+            <Await resolve={release}>
+              {(release) => (
+                <div key={release.id} className="flex flex-col md:flex-row justify-start items-center gap-4">
+                  {release.images ? (
+                    <div
+                      className="bg-cover bg-center w-64 aspect-square shadow-lg"
+                      style={{
+                        backgroundImage: `url(${release.images[0].uri})`,
+                      }}
+                    />
+                  ) : (
+                    <div className="w-64 aspect-square shadow-lg bg-gray-100 border border-gray-300 flex items-center justify-center">
+                      <VinylRecord size={32} weight="duotone" className="fill-slate-900" />
+                    </div>
+                  )}
 
-                <div className="flex flex-col items-center md:items-start gap-4">
-                  <div className="flex flex-col items-center md:items-start gap-2">
-                    {release.formats && (
-                      <span className="text-sm md:text-lg font-bold line-clamp-2">{release.formats[0].name}</span>
-                    )}
-                    {release.formats &&
-                      release.formats[0].text &&
-                      (() => {
-                        const colors = [...new Set(extractColors(release.formats[0].text))];
-                        return (
-                          <div className="flex flex-col md:flex-row gap-0 md:gap-1">
-                            <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
-                              {release.formats[0].text}
-                            </span>
-                            <div className="flex justify-center md:justify-start">
-                              {colors.map((color) => (
-                                <VinylRecord key={color} size={24} weight="duotone" color={color.toLowerCase()} />
-                              ))}
+                  <div className="flex flex-col items-center md:items-start gap-4">
+                    <div className="flex flex-col items-center md:items-start gap-2">
+                      {release.formats && (
+                        <span className="text-sm md:text-lg font-bold line-clamp-2">{release.formats[0].name}</span>
+                      )}
+                      {release.formats &&
+                        release.formats[0].text &&
+                        (() => {
+                          const colors = [...new Set(extractColors(release.formats[0].text))];
+                          return (
+                            <div className="flex flex-col md:flex-row gap-0 md:gap-1">
+                              <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                                {release.formats[0].text}
+                              </span>
+                              <div className="flex justify-center md:justify-start">
+                                {colors.map((color) => (
+                                  <VinylRecord key={color} size={24} weight="duotone" color={color.toLowerCase()} />
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })()}
-                    <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
-                      <span>{release.year}</span> • <span>{release.country}</span>
-                    </span>
-                  </div>
+                          );
+                        })()}
+                      <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                        <span>{release.year}</span> • <span>{release.country}</span>
+                      </span>
+                    </div>
 
-                  <div className="flex gap-4">
-                    <Form action="have" method="post">
-                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
-                        <Tag className="h-4 w-4" />
-                      </Button>
+                    <div className="flex gap-4">
+                      <Form action="have" method="post">
+                        <Button className="md:hidden" variant="outline" size="icon" type="submit">
+                          <Tag className="h-4 w-4" />
+                        </Button>
 
-                      <Button className="hidden md:flex gap-2" variant="outline" type="submit">
-                        <Tag className="h-4 w-4" />
-                        Add to collection
-                      </Button>
-                    </Form>
+                        <Button className="hidden md:flex gap-2" variant="outline" type="submit">
+                          <Tag className="h-4 w-4" />
+                          Add to collection
+                        </Button>
+                      </Form>
 
-                    <Form action="want" method="post">
-                      <Button className="md:hidden" variant="outline" size="icon" type="submit">
-                        <Star className="h-4 w-4" />
-                      </Button>
+                      <Form action="want" method="post">
+                        <Button className="md:hidden" variant="outline" size="icon" type="submit">
+                          <Star className="h-4 w-4" />
+                        </Button>
 
-                      <Button className="hidden md:flex gap-2" variant="outline" type="submit">
-                        <Star className="h-4 w-4" />
-                        Add to wantlist
-                      </Button>
-                    </Form>
+                        <Button className="hidden md:flex gap-2" variant="outline" type="submit">
+                          <Star className="h-4 w-4" />
+                          Add to wantlist
+                        </Button>
+                      </Form>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </Await>
-        </Suspense>
-      ) : (
-        <ul>
-          <li>
-            <NavLink to="/" className="underline">
-              Back to dashboard
-            </NavLink>
-          </li>
-        </ul>
-      )}
-    </div>
+              )}
+            </Await>
+          </Suspense>
+        ) : (
+          <ul>
+            <li>
+              <NavLink to="/" className="underline">
+                Back to dashboard
+              </NavLink>
+            </li>
+          </ul>
+        )}
+      </div>
+    </section>
   );
 };
 
