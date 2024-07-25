@@ -10,6 +10,7 @@ import {search} from '@/services/discogs.api.database';
 import {useDebounceSubmit} from 'remix-utils/use-debounce-submit';
 import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
 import {HourglassHigh} from '@phosphor-icons/react/dist/icons/HourglassHigh';
+import SearchBar from '@/components/SearchBar';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];
@@ -35,6 +36,8 @@ const SearchRoute = () => {
   const navigation = useNavigation();
 
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q');
+  const hasSearchResults = searchResults !== null && searchResults.length > 0;
+  const hasNoSearchResults = searchResults !== null && searchResults.length === 0;
 
   useEffect(() => {
     const searchField = document.getElementById('q');
@@ -55,81 +58,62 @@ const SearchRoute = () => {
   return (
     <div className="relative flex flex-col w-full gap-4">
       <Form id="search-form" className="w-full" onChange={handleSubmit} role="search">
-        <div className="relative md:max-w-[50%]">
-          <MagnifyingGlass className="z-10 absolute top-1/2 left-3 transform -translate-y-1/2 fill-slate-500 dark:fill-slate-400" />
-          <Input
-            className="sticky top-0 backdrop-blur-xl pl-10"
-            placeholder="What do you want to add to your collection?"
-            defaultValue={q || ''}
-            id="q"
-            name="q"
-            onChange={handleChange}
-          />
-          <HourglassHigh
-            weight="fill"
-            className={`${!searching && 'hidden'} absolute top-1/2 right-3 transform -translate-y-1/2 fill-slate-500 dark:fill-slate-400`}
-          />
-        </div>
+        <SearchBar
+          q={q || ''}
+          searching={searching || false}
+          placeholder="What vinyl are you looking for?"
+          onChange={handleChange}
+        />
       </Form>
 
-      {navigation.state === 'loading' && <h3>Loading...</h3>}
+      {navigation.state === 'idle' &&
+        hasSearchResults &&
+        searchResults
+          .filter((result) => {
+            const title = result.title.toLowerCase();
+            return searchTerm
+              .toLowerCase()
+              .split(' ')
+              .every((word) => title.includes(word));
+          })
+          .sort((a, b) => (parseInt(a.year as string) > parseInt(b.year as string) ? -1 : 1))
+          .map((result) => {
+            return (
+              <NavLink
+                key={result.id}
+                to={`/search/masters/${result.id}`}
+                prefetch="none"
+                className={({isActive}) =>
+                  isActive
+                    ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
+                }
+                preventScrollReset
+              >
+                <div className="flex justify-start items-center gap-4">
+                  <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
+                  <div className="flex flex-col gap-1 items-start">
+                    <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
+                    <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
+                      {result.year}
+                    </span>
+                    {result.isInCollection && (
+                      <Badge variant="secondary">
+                        <Tag className="h-4 w-4" />
+                      </Badge>
+                    )}
+                    {result.isInWantlist && (
+                      <Badge variant="secondary">
+                        <Star className="h-4 w-4" />
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </NavLink>
+            );
+          })}
 
-      {navigation.state === 'idle' && (
-        <Suspense fallback={<h3>Loading...</h3>}>
-          <Await resolve={searchResults}>
-            {(searchResults) =>
-              searchResults ? (
-                searchResults
-                  .filter((result) => {
-                    const title = result.title.toLowerCase();
-                    return searchTerm
-                      .toLowerCase()
-                      .split(' ')
-                      .every((word) => title.includes(word));
-                  })
-                  .sort((a, b) => (parseInt(a.year as string) > parseInt(b.year as string) ? -1 : 1))
-                  .map((result) => {
-                    return (
-                      <NavLink
-                        key={result.id}
-                        to={`/search/masters/${result.id}`}
-                        prefetch="none"
-                        className={({isActive}) =>
-                          isActive
-                            ? 'bg-gray-200/50 dark:bg-gray-700/50 rounded-md'
-                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md'
-                        }
-                        preventScrollReset
-                      >
-                        <div className="flex justify-start items-center gap-4">
-                          <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
-                          <div className="flex flex-col gap-1 items-start">
-                            <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
-                            <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
-                              {result.year}
-                            </span>
-                            {result.isInCollection && (
-                              <Badge variant="secondary">
-                                <Tag className="h-4 w-4" />
-                              </Badge>
-                            )}
-                            {result.isInWantlist && (
-                              <Badge variant="secondary">
-                                <Star className="h-4 w-4" />
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      </NavLink>
-                    );
-                  })
-              ) : (
-                <h3>No results</h3>
-              )
-            }
-          </Await>
-        </Suspense>
-      )}
+      {navigation.state === 'idle' && hasNoSearchResults && <h3>Oops! No vinyl records match your search.</h3>}
     </div>
   );
 };
