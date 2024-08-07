@@ -9,6 +9,7 @@ import useMediaQuery from '@/hooks/use-media-query';
 import {authenticator} from '@/services/auth.server';
 import {getReleasesFromWantlist, Want, WantsResponse} from '@/services/discogs.api.user';
 import {User} from '@/services/discogs.strategy';
+import {SpinnerGap} from '@phosphor-icons/react/dist/icons/SpinnerGap';
 
 type Data = {
   user: User;
@@ -69,11 +70,11 @@ const WantlistRoute = () => {
 
   return (
     <section id="wantlist" className="m-8">
-      <div className="space-y-16 w-full pr-8">
+      <div className={`space-y-16 w-full ${fetcher.state === 'loading' && 'opacity-50'}`}>
         <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
       </div>
 
-      {fetcher.state === 'loading' && <div className="bg-blue-100">Loading...</div>}
+      {fetcher.state === 'loading' && <SpinnerGap size="24" className="animate-spin m-auto" />}
       {hasNextPage && <div id="wantlist-infinite-scroll" ref={ref} />}
 
       {isMobile ? (

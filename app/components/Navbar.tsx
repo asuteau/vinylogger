@@ -28,7 +28,7 @@ const NavbarItem = ({label, icon, to, total}: NavbarMenuItem) => {
     <NavLink
       to={to}
       prefetch="intent"
-      className="flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-800 hover:md:border-l-slate-100 h-full md:h-auto w-full font-bold text-slate-400"
+      className="flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-100 hover:dark:bg-slate-800 100 h-full md:h-auto w-full font-bold transition-colors duration-200 ease-in-out"
     >
       {isMobile && total ? (
         <Badge variant="secondary" className="h-5">
@@ -77,7 +77,7 @@ const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
   return (
     <section
       id="navbar"
-      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none border-t md:border-t-0 md:border-r border-slate-300 dark:border-slate-600 bg-slate-950"
+      className="layout-navbar flex md:flex-col md:pt-8 justify-between md:justify-start items-center md:items-start md:gap-4 shadow-inner md:shadow-none  md:border-r border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900"
     >
       <Logo className="hidden md:flex mx-8 my-6" />
       {menuItems.map((item) => (

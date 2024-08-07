@@ -9,6 +9,7 @@ import {getReleasesFromCollection, CollectionRelease, CollectionReleasesResponse
 import {useInView} from 'react-intersection-observer';
 import {User} from '@/services/discogs.strategy';
 import {Sheet, SheetContent} from '@/components/ui/sheet';
+import {SpinnerGap} from '@phosphor-icons/react/dist/icons/SpinnerGap';
 
 type Data = {
   user: User;
@@ -73,11 +74,11 @@ const Collection = () => {
 
   return (
     <section id="collection" className="m-8">
-      <div className="space-y-16 w-full">
+      <div className={`space-y-16 w-full ${fetcher.state === 'loading' && 'opacity-50'}`}>
         <CollectionItems lastPurchases={items} onClick={() => setOpen(true)} />
       </div>
 
-      {fetcher.state === 'loading' && <div className="bg-red-100">Loading...</div>}
+      {fetcher.state === 'loading' && <SpinnerGap size="24" className="animate-spin m-auto" />}
       {hasNextPage && <div id="collection-infinite-scroll" ref={ref} />}
 
       {isMobile ? (

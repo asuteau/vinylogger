@@ -7,12 +7,13 @@ body {
 }
 
 html.light > body {
-  background-color: theme('colors.slate.50');
+  background-color: theme('colors.white');
+  color: theme('colors.slate.500');
 }
 
 html.dark > body {
-  background-color: theme('colors.slate.950');
-  color: theme('colors.slate.100');
+  background-color: theme('colors.slate.900');
+  color: theme('colors.slate.400');
 }
 
 @layer base {
@@ -63,20 +64,20 @@ html.dark > body {
   }
 
   h1 {
-    @apply text-2xl md:text-4xl font-bold;
+    @apply text-2xl md:text-4xl font-bold text-slate-900 dark:text-slate-50;
   }
 
   h2 {
-    @apply text-xl md:text-3xl font-bold;
+    @apply text-xl md:text-3xl font-bold text-slate-900 dark:text-slate-50;
   }
 
   h3 {
-    @apply text-base md:text-xl font-bold;
+    @apply text-base md:text-xl font-bold text-slate-900 dark:text-slate-50;
   }
 }
 
 a.active:not(.logo) {
-  @apply text-slate-100 bg-slate-800 md:border-l-slate-100;
+  @apply text-slate-800 dark:text-slate-100 bg-slate-200 dark:bg-slate-700;
 }
 
 @layer utilities {

@@ -28,7 +28,9 @@ const CollectionItem = ({release, onClick}: CollectionItemProps) => {
       <li className="flex justify-start items-center gap-6">
         <img src={release.coverImage} className="h-24 md:h-48 aspect-square shadow-lg" />
         <div className="flex flex-col gap-1">
-          <span className="text-sm md:text-lg font-bold line-clamp-2">{release.title}</span>
+          <span className="text-sm md:text-lg font-bold line-clamp-2 text-slate-900 dark:text-slate-50">
+            {release.title}
+          </span>
           <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
             {release.format} • {release.artist}
           </span>

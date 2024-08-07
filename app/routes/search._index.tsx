@@ -54,7 +54,7 @@ const SearchRoute = () => {
 
   return (
     <section id="search">
-      <div className="p-8 sticky top-0 bg-slate-50/90 dark:bg-slate-700/90 backdrop-blur-sm">
+      <div className="p-8 sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
         <Form id="search-form" className="w-full" onChange={handleSubmit} role="search">
           <SearchBar
             q={q || ''}
@@ -93,7 +93,9 @@ const SearchRoute = () => {
                   <div className="flex justify-start items-center gap-4">
                     <img src={result.thumb} alt={result.title} className="h-24 md:h-24 aspect-square shadow-lg" />
                     <div className="flex flex-col gap-1 items-start">
-                      <span className="text-sm md:text-lg font-bold line-clamp-2">{result.title}</span>
+                      <span className="text-sm md:text-lg font-bold line-clamp-2 text-slate-900 dark:text-slate-50">
+                        {result.title}
+                      </span>
                       <span className="text-xs md:text-base line-clamp-2 text-slate-600 dark:text-slate-400">
                         {result.year}
                       </span>

@@ -16,10 +16,10 @@ const DashboardLastPurchasesItem = ({release}: {release: CollectionRelease}) => 
           className="w-full h-32 md:h-auto aspect-square hover:brightness-90 hover:scale-110 transition-all duration-300 ease-out"
         />
       </div>
-      <span className="text-xs md:text-base font-bold line-clamp-2 text-slate-950 dark:text-slate-50 mt-2">
+      <span className="text-xs md:text-base font-bold line-clamp-2 text-slate-900 dark:text-slate-50 mt-2">
         {release.title}
       </span>
-      <span className="text-xs md:text-base  text-slate-600 dark:text-slate-400 line-clamp-2">
+      <span className="text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
         {release.format} • {release.artist}
       </span>
       <div className="flex items-center text-xs md:text-base text-slate-600 dark:text-slate-400 line-clamp-2">
@@ -34,7 +34,7 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
   return (
     <section className="last-purchases w-full">
       <div className="flex items-end mb-6">
-        <h2 className="font-bold text-slate-950 dark:text-slate-50">Recently purchased</h2>
+        <h2>Recently purchased</h2>
         <Button variant="link" className="hidden md:block ml-auto" asChild>
           <NavLink to="/collection" prefetch="intent">
             Show collection

@@ -13,15 +13,9 @@ const Logo = ({className}: LogoProps) => {
   const isLight = theme === 'light';
 
   return (
-    <NavLink id="logo" to="/" className={`flex gap-2 md:gap-4 items-center font-logo ${className} logo`}>
-      <VinylRecord
-        size={isMobile ? 32 : 48}
-        weight="duotone"
-        className={isLight && isMobile ? 'fill-slate-900' : 'fill-slate-100'}
-      />
-      <h1 className={`font-['BricolageGrotesque'] ${isLight && isMobile ? 'text-slate-900' : 'text-slate-100'}`}>
-        Vinylogger
-      </h1>
+    <NavLink id="logo" to="/" className={`flex gap-2 items-center font-logo ${className} logo`}>
+      <VinylRecord size={isMobile ? 32 : 48} weight="duotone" className="fill-sky-700" />
+      <h1 className="font-['BricolageGrotesque'] text-slate-900 dark:text-slate-50">Vinylogger</h1>
     </NavLink>
   );
 };
