@@ -37,7 +37,9 @@ const Index = () => {
           </div>
           <Form action="/login" method="post" className="ml-auto">
             {error ? <div>{error.message}</div> : null}
-            <Button variant="default">Sign in with Discogs</Button>
+            <Button size="sm" variant="default">
+              Sign in with Discogs
+            </Button>
           </Form>
         </div>
       </header>
@@ -61,7 +63,7 @@ const Index = () => {
             {error ? <div>{error.message}</div> : null}
             <Button size="lg" variant="default">
               <VinylRecord size="24" className="mr-2" />
-              Sign in with Discogs
+              Get started
             </Button>
           </Form>
         </div>

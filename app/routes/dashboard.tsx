@@ -7,6 +7,7 @@ import DashboardLastPurchases from '@/components/DashboardLastPurchases';
 import DashboardLastWanted from '@/components/DashboardLastWanted';
 import {authenticator} from '@/services/auth.server';
 import {getReleasesFromCollection, getReleasesFromWantlist} from '@/services/discogs.api.user';
+import {Skeleton} from '@/components/ui/skeleton';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
@@ -28,13 +29,33 @@ const Dashboard = () => {
 
   return (
     <section id="dashboard" className="m-8 space-y-8 md:space-y-16">
-      <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-8">
+            <div className="flex">
+              <Skeleton className="w-[250px] md:w-[350px] h-8 rounded-xl" />
+              <Skeleton className="w-32 h-8 rounded-xl ml-auto hidden md:block" />
+            </div>
+            <Skeleton className="w-full h-48 md:h-[350px] rounded-xl ml-auto" />
+          </div>
+        }
+      >
         <Await resolve={latestFromCollection}>
           {(latestFromCollection) => <DashboardLastPurchases lastPurchases={latestFromCollection.releases} />}
         </Await>
       </Suspense>
 
-      <Suspense fallback={<div className="h-72 w-full bg-slate-100 rounded-lg" />}>
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-8">
+            <div className="flex">
+              <Skeleton className="w-[250px] md:w-[350px] h-8 rounded-xl" />
+              <Skeleton className="w-32 h-8 rounded-xl ml-auto hidden md:block" />
+            </div>
+            <Skeleton className="w-full h-48 md:h-[350px] rounded-xl ml-auto" />
+          </div>
+        }
+      >
         <Await resolve={latestFromWantlist}>
           {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.wants} />}
         </Await>
