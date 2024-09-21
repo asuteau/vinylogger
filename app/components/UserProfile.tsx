@@ -23,7 +23,7 @@ const UserProfile = ({className, avatar, username}: UserProfileProps) => {
   return (
     <div className={`flex items-center ${className}`}>
       <NavLink to="/profile">
-        <img src={avatar} className="w-8 md:w-10 aspect-square rounded-full" />
+        <img src={avatar} className="w-10 md:w-12 aspect-square rounded-full" />
       </NavLink>
       {!isMobile && (
         <DropdownMenu>
