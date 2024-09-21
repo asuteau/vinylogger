@@ -21,7 +21,7 @@ html.dark > body {
     display: grid;
     height: 100dvh;
     grid-template-columns: 1fr;
-    grid-template-rows: 64px 1fr 64px;
+    grid-template-rows: 56px 1fr 56px;
     @media screen(md) {
       grid-template-columns: 400px 1fr;
       grid-template-rows: 80px 1fr;

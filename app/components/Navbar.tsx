@@ -1,10 +1,10 @@
 import {HouseLine} from '@phosphor-icons/react/dist/icons/HouseLine';
-import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
 import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
 import {User} from '@phosphor-icons/react/dist/icons/User';
 import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
+import {Icon} from '@phosphor-icons/react/dist/lib/types';
 import {NavLink} from '@remix-run/react';
-import {ReactNode} from 'react';
 import Logo from '@/components/Logo';
 import {Badge} from '@/components/ui/badge';
 import useMediaQuery from '@/hooks/use-media-query';
@@ -16,29 +16,32 @@ type NavbarProps = {
 
 type NavbarMenuItem = {
   label: string;
-  icon: ReactNode;
+  icon: Icon;
   to: string;
   total?: number;
 };
 
-const NavbarItem = ({label, icon, to, total}: NavbarMenuItem) => {
+const NavbarItem = (menuItem: NavbarMenuItem) => {
   const isMobile = useMediaQuery();
 
   return (
     <NavLink
-      to={to}
+      to={menuItem.to}
       prefetch="intent"
-      className="flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-100 hover:dark:bg-slate-800 100 h-full md:h-auto w-full font-bold transition-colors duration-200 ease-in-out"
+      className="relative flex flex-col md:flex-row justify-center md:justify-start items-center text-sm md:text-base gap-1 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer hover:bg-slate-100 hover:dark:bg-slate-800 100 h-full md:h-auto w-full font-bold transition-colors duration-200 ease-in-out"
     >
-      {isMobile && total ? (
-        <Badge variant="secondary" className="h-5">
-          {total}
-        </Badge>
+      {isMobile && menuItem.total ? (
+        <>
+          <menuItem.icon weight="bold" className="h-6 w-6" />
+          <Badge variant="default" className="absolute top-2 right-1">
+            {menuItem.total}
+          </Badge>
+        </>
       ) : (
-        icon
+        <menuItem.icon weight="bold" className="h-6 w-6" />
       )}
-      <span>{label}</span>
-      {!isMobile && total && <span className="ml-auto">{total}</span>}
+      <span className="hidden md:block">{menuItem.label}</span>
+      {!isMobile && menuItem.total && <span className="ml-auto">{menuItem.total}</span>}
     </NavLink>
   );
 };
@@ -47,30 +50,25 @@ const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
   const menuItems: NavbarMenuItem[] = [
     {
       label: 'Home',
-      icon: <HouseLine weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
+      icon: HouseLine,
       to: '/dashboard',
     },
     {
       label: 'Search',
-      icon: <MagnifyingGlass weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
+      icon: MagnifyingGlass,
       to: '/search',
     },
     {
       label: 'Collection',
-      icon: <Tag weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
+      icon: Tag,
       to: '/collection',
       total: totalInCollection,
     },
     {
       label: 'Wantlist',
-      icon: <Star weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
+      icon: Heart,
       to: '/wantlist',
       total: totalInWantlist,
-    },
-    {
-      label: 'Profile',
-      icon: <User weight="bold" className="h-5 md:h-6 w-5 md:w-6" />,
-      to: '/profile',
     },
   ];
 
