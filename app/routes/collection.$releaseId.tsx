@@ -1,13 +1,13 @@
-import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
-import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
-import {Suspense} from 'react';
 import ReleaseDetails from '@/components/ReleaseDetails';
 import {Button} from '@/components/ui/button';
-import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
+import {useCollectionLoaderData} from '@/routes/collection';
 import {authenticator} from '@/services/auth.server';
 import {getReleaseById} from '@/services/discogs.api.database';
 import {removeReleaseFromCollection} from '@/services/discogs.api.user';
-import {useCollectionLoaderData} from '@/routes/collection';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
+import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
+import {Suspense} from 'react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User collection - Release'}];
@@ -60,7 +60,7 @@ const CollectionRoute = () => {
                         hidden
                       />
                       <Button className="flex gap-2" variant="default" type="submit">
-                        <Tag className="h-4 w-4" />
+                        <VinylRecord className="h-4 w-4" />
                         Remove from collection
                       </Button>
                     </Form>

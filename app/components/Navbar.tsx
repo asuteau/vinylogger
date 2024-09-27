@@ -1,13 +1,13 @@
-import {HouseLine} from '@phosphor-icons/react/dist/icons/HouseLine';
-import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
-import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
-import {User} from '@phosphor-icons/react/dist/icons/User';
-import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
-import {Icon} from '@phosphor-icons/react/dist/lib/types';
-import {NavLink} from '@remix-run/react';
 import Logo from '@/components/Logo';
 import {Badge} from '@/components/ui/badge';
 import useMediaQuery from '@/hooks/use-media-query';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
+import {House} from '@phosphor-icons/react/dist/icons/House';
+import {MagnifyingGlass} from '@phosphor-icons/react/dist/icons/MagnifyingGlass';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+// eslint-disable-next-line import/no-unresolved
+import {Icon} from '@phosphor-icons/react/dist/lib/types';
+import {NavLink} from '@remix-run/react';
 
 type NavbarProps = {
   totalInCollection?: number;
@@ -50,7 +50,7 @@ const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
   const menuItems: NavbarMenuItem[] = [
     {
       label: 'Home',
-      icon: HouseLine,
+      icon: House,
       to: '/dashboard',
     },
     {
@@ -60,7 +60,7 @@ const Navbar = ({totalInCollection, totalInWantlist}: NavbarProps) => {
     },
     {
       label: 'Collection',
-      icon: Tag,
+      icon: VinylRecord,
       to: '/collection',
       total: totalInCollection,
     },

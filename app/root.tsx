@@ -1,54 +1,35 @@
-import {cssBundleHref} from '@remix-run/css-bundle';
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-  useRouteError,
-} from '@remix-run/react';
-import {Analytics} from '@vercel/analytics/react';
+import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node';
+import {json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
 
-import tailwind from '@/styles/tailwind.css';
-import fonts from '@/styles/fonts.css';
-import type {LinksFunction, LoaderFunctionArgs} from '@vercel/remix';
-import Navbar from '@/components/Navbar';
-import Header from '@/components/Header';
-import {json} from '@vercel/remix';
-import {ThemeProvider, useTheme} from '@/contexts/theme-context';
+// import './tailwind.css';
+// import fonts from '@/styles/fonts.css';
+// import globals from '@/tailwind.css';
+import {Analytics} from '@vercel/analytics/react';
 import clsx from 'clsx';
-import {authenticator} from '@/services/auth.server';
+import Header from './components/Header';
+import Navbar from './components/Navbar';
+import {ThemeProvider, useTheme} from './contexts/theme-context';
+import {authenticator} from './services/auth.server';
+
+import './tailwind.css';
 
 export const links: LinksFunction = () => [
-  {rel: 'stylesheet', href: fonts},
-  {rel: 'stylesheet', href: tailwind},
-  ...(cssBundleHref ? [{rel: 'stylesheet', href: cssBundleHref}] : []),
+  {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
+  {
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous',
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+  },
 ];
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request);
   return json({user});
 };
-
-// export function ErrorBoundary() {
-//   const error = useRouteError();
-//   console.error(error);
-//   return (
-//     <html>
-//       <head>
-//         <title>Oh no!</title>
-//         <Meta />
-//         <Links />
-//       </head>
-//       <body>
-//         {/* add the UI you want your users to see */}
-//         <Scripts />
-//       </body>
-//     </html>
-//   );
-// }
 
 const App = () => {
   const {user} = useLoaderData<typeof loader>();
@@ -77,7 +58,6 @@ const App = () => {
 
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
         <Analytics />
       </body>
     </html>

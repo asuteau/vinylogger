@@ -1,14 +1,13 @@
-import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
-import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
-import {Suspense} from 'react';
-import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Button} from '@/components/ui/button';
-import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
-import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
-import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {extractColors} from '@/lib/utils';
 import {authenticator} from '@/services/auth.server';
 import {getReleaseById} from '@/services/discogs.api.database';
+import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+import {Await, Form, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
+import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
+import {Suspense} from 'react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Versions'}];
@@ -97,22 +96,22 @@ const SearchByVersionIdRoute = () => {
                     <div className="flex gap-4">
                       <Form action="have" method="post">
                         <Button className="md:hidden" variant="outline" size="icon" type="submit">
-                          <Tag className="h-4 w-4" />
+                          <VinylRecord className="h-4 w-4" />
                         </Button>
 
                         <Button className="hidden md:flex gap-2" variant="outline" type="submit">
-                          <Tag className="h-4 w-4" />
+                          <VinylRecord className="h-4 w-4" />
                           Add to collection
                         </Button>
                       </Form>
 
                       <Form action="want" method="post">
                         <Button className="md:hidden" variant="outline" size="icon" type="submit">
-                          <Star className="h-4 w-4" />
+                          <Heart className="h-4 w-4" />
                         </Button>
 
                         <Button className="hidden md:flex gap-2" variant="outline" type="submit">
-                          <Star className="h-4 w-4" />
+                          <Heart className="h-4 w-4" />
                           Add to wantlist
                         </Button>
                       </Form>
