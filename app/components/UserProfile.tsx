@@ -1,3 +1,4 @@
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Button} from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -22,9 +23,12 @@ const UserProfile = ({className, avatar, username}: UserProfileProps) => {
 
   return (
     <div className={`flex items-center ${className}`}>
-      <NavLink to="/profile">
-        <img src={avatar} alt="user-avatar" className="w-8 md:w-10 aspect-square rounded-full" />
-      </NavLink>
+      <Avatar asChild>
+        <NavLink to="/profile">
+          <AvatarImage src={avatar} alt="avatar" />
+          <AvatarFallback>CN</AvatarFallback>
+        </NavLink>
+      </Avatar>
       {!isMobile && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

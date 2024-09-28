@@ -1,16 +1,12 @@
 import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node';
-import {json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData} from '@remix-run/react';
+import {json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteError} from '@remix-run/react';
 
-// import './tailwind.css';
-// import fonts from '@/styles/fonts.css';
-// import globals from '@/tailwind.css';
 import {Analytics} from '@vercel/analytics/react';
 import clsx from 'clsx';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import {ThemeProvider, useTheme} from './contexts/theme-context';
 import {authenticator} from './services/auth.server';
-
 import './tailwind.css';
 
 export const links: LinksFunction = () => [
@@ -69,6 +65,26 @@ const AppWithProviders = () => {
     <ThemeProvider>
       <App />
     </ThemeProvider>
+  );
+};
+
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+
+  return (
+    <html lang="en">
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>Oh no!</h1>
+        <p>Something went wrong.</p>
+        <pre>{error.message}</pre>
+        <Scripts />
+      </body>
+    </html>
   );
 };
 
