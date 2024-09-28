@@ -30,21 +30,23 @@ const NavbarItem = (props: NavbarItemProps) => {
     <NavLink
       to={props.to}
       prefetch="intent"
-      className="relative flex flex-col md:flex-row justify-center md:justify-start items-center text-xs md:text-base gap-0 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer h-full md:h-auto w-full transition-colors duration-200 ease-in-out"
+      className="flex flex-col md:flex-row justify-center md:justify-start items-center text-xs md:text-base gap-0 md:gap-4 md:px-8 md:py-4 md:border-l-4 border-transparent hover:cursor-pointer h-full md:h-auto w-full transition-colors duration-200 ease-in-out"
     >
       {({isActive}) => (
         <>
           {isMobile && props.total ? (
-            <>
+            <div className="relative">
               <props.icon
+                weight={isActive ? 'duotone' : 'regular'}
                 className={`h-6 w-6 transition-all group-hover:scale-110 ${isActive ? 'fill-accent-foreground' : 'fill-muted-foreground'}`}
               />
-              <Badge variant="default" className="absolute top-1.5 right-2.5">
+              <Badge variant="default" className="absolute -top-1 -right-5">
                 {props.total}
               </Badge>
-            </>
+            </div>
           ) : (
             <props.icon
+              weight={isActive ? 'duotone' : 'regular'}
               className={`h-6 w-6 transition-all group-hover:scale-110 ${isActive ? 'fill-accent-foreground' : 'fill-muted-foreground'}`}
             />
           )}
