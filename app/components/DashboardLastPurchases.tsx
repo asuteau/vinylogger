@@ -1,7 +1,7 @@
-import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
-import {NavLink} from '@remix-run/react';
-import {Button} from '@/components/ui/button';
 import {CollectionRelease} from '@/services/discogs.api.user';
+import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
+import {useEffect, useState} from 'react';
+import {Carousel, CarouselApi, CarouselContent, CarouselItem} from './ui/carousel';
 
 type DashboardLastPurchasesProps = {
   lastPurchases: CollectionRelease[];
@@ -13,6 +13,7 @@ const DashboardLastPurchasesItem = ({release}: {release: CollectionRelease}) => 
       <div className="overflow-hidden shadow-lg">
         <img
           src={release.coverImage}
+          alt="cover"
           className="w-full h-32 md:h-auto aspect-square hover:brightness-90 hover:scale-110 transition-all duration-300 ease-out"
         />
       </div>
@@ -31,23 +32,58 @@ const DashboardLastPurchasesItem = ({release}: {release: CollectionRelease}) => 
 };
 
 const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) => {
-  return (
-    <section className="last-purchases w-full">
-      <div className="flex items-end mb-6">
-        <h2>Recently purchased</h2>
-        <Button variant="link" className="hidden md:block ml-auto" asChild>
-          <NavLink to="/collection" prefetch="intent">
-            Show collection
-          </NavLink>
-        </Button>
-      </div>
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+  const [currentRelease, setCurrentRelease] = useState<CollectionRelease>(lastPurchases[current]);
 
-      <div className="flex flex-nowrap md:grid md:grid-cols-[repeat(auto-fit,_minmax(192px,_1fr))] md:auto-rows-[0] md:grid-rows-[auto] gap-6 md:gap-x-6 md:gap-y-0 overflow-x-auto no-scrollbar md:overflow-hidden">
-        {lastPurchases.map((release) => {
-          return <DashboardLastPurchasesItem key={release.id} release={release} />;
-        })}
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on('select', () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+      setCurrentRelease(lastPurchases[api.selectedScrollSnap()]);
+    });
+  }, [api, lastPurchases]);
+
+  return (
+    <div className="flex flex-col h-full items-center justify-center">
+      <Carousel
+        setApi={setApi}
+        opts={{
+          align: 'start',
+        }}
+        orientation="vertical"
+        className="w-full max-w-xs aspect-square rounded-lg overflow-hidden drop-shadow-xl"
+      >
+        <CarouselContent className="-mt-4 h-[336px]">
+          {lastPurchases.map((release) => {
+            return (
+              <CarouselItem key={release.id} className="pt-4">
+                <img alt={`${release.id} cover`} src={release.coverImage} className="rounded-lg" />
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+      </Carousel>
+
+      <div className="pt-8 px-4 flex flex-col gap-2 text-center items-center">
+        <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
+        <span className="text-base text-muted-foreground line-clamp-1">{currentRelease.artist}</span>
+        <div className="flex gap-2 items-center">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+          </span>
+          <span className="text-xs text-muted-foreground line-clamp-1">{currentRelease.addedOn}</span>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

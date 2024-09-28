@@ -1,8 +1,8 @@
-import * as crypto from 'crypto';
-import createDebug from 'debug';
 import {DiscogsUserAgent, User} from '@/services/discogs.strategy';
 import {timeFromNow} from '@/utils/dates';
 import {cleanId} from '@/utils/strings';
+import * as crypto from 'crypto';
+import createDebug from 'debug';
 import {z} from 'zod';
 
 let debug = createDebug('discogs:api');
@@ -148,7 +148,7 @@ export const getReleasesFromCollection = async (
   const timestamp = Math.floor(Date.now() / 1000);
 
   const url = new URL(collectionURL.replace('{username}', user.username).replace('{folder_id}', '0'));
-  let params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.set('sort', 'added');
   params.set('sort_order', 'desc');
   params.set('page', page.toString());
