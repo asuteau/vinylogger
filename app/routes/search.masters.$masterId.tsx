@@ -1,14 +1,13 @@
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {authenticator} from '@/services/auth.server';
+import {getMasterReleaseVersions} from '@/services/discogs.api.database';
+import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
 import {Await, NavLink, useLoaderData, useNavigate} from '@remix-run/react';
 import {LoaderFunctionArgs, MetaFunction, defer, json} from '@vercel/remix';
 import {Suspense} from 'react';
-import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
-import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
-import {Star} from '@phosphor-icons/react/dist/icons/Star';
-import {CaretLeft} from '@phosphor-icons/react/dist/icons/CaretLeft';
-import {Button} from '@/components/ui/button';
-import {Badge} from '@/components/ui/badge';
-import {authenticator} from '@/services/auth.server';
-import {getMasterReleaseVersions} from '@/services/discogs.api.database';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search - Masters'}];
@@ -91,12 +90,12 @@ const SearchByMasterIdRoute = () => {
                               </span>
                               {version.isInCollection && (
                                 <Badge variant="secondary">
-                                  <Tag className="h-4 w-4" />
+                                  <VinylRecord className="h-4 w-4" />
                                 </Badge>
                               )}
                               {version.isInWantlist && (
                                 <Badge variant="secondary">
-                                  <Star className="h-4 w-4" />
+                                  <Heart className="h-4 w-4" />
                                 </Badge>
                               )}
                             </div>

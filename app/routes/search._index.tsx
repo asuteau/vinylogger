@@ -1,13 +1,13 @@
-import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
-import {Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
-import {useEffect, useState} from 'react';
-import {Tag} from '@phosphor-icons/react/dist/icons/Tag';
-import {Star} from '@phosphor-icons/react/dist/icons/Star';
+import SearchBar from '@/components/SearchBar';
 import {Badge} from '@/components/ui/badge';
 import {authenticator} from '@/services/auth.server';
 import {search} from '@/services/discogs.api.database';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
+import {VinylRecord} from '@phosphor-icons/react/dist/icons/VinylRecord';
+import {Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
+import {LoaderFunctionArgs, MetaFunction, json} from '@vercel/remix';
+import {useEffect, useState} from 'react';
 import {useDebounceSubmit} from 'remix-utils/use-debounce-submit';
-import SearchBar from '@/components/SearchBar';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Search'}];
@@ -101,12 +101,12 @@ const SearchRoute = () => {
                       </span>
                       {result.isInCollection && (
                         <Badge variant="secondary">
-                          <Tag className="h-4 w-4" />
+                          <VinylRecord className="h-4 w-4" />
                         </Badge>
                       )}
                       {result.isInWantlist && (
                         <Badge variant="secondary">
-                          <Star className="h-4 w-4" />
+                          <Heart className="h-4 w-4" />
                         </Badge>
                       )}
                     </div>

@@ -1,3 +1,5 @@
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Button} from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {Button} from '@/components/ui/button';
 import UserSignOut from '@/components/UserSignOut';
 import useMediaQuery from '@/hooks/use-media-query';
 import {NavLink} from '@remix-run/react';
@@ -22,9 +23,12 @@ const UserProfile = ({className, avatar, username}: UserProfileProps) => {
 
   return (
     <div className={`flex items-center ${className}`}>
-      <NavLink to="/profile">
-        <img src={avatar} className="w-10 md:w-12 aspect-square rounded-full" />
-      </NavLink>
+      <Avatar asChild>
+        <NavLink to="/profile">
+          <AvatarImage src={avatar} alt="avatar" />
+          <AvatarFallback>CN</AvatarFallback>
+        </NavLink>
+      </Avatar>
       {!isMobile && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

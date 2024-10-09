@@ -1,13 +1,11 @@
-import type {MetaFunction} from '@vercel/remix';
-import {defer} from '@vercel/remix';
-import type {LoaderFunctionArgs} from '@vercel/remix';
-import {Await, useLoaderData} from '@remix-run/react';
-import {Suspense} from 'react';
 import DashboardLastPurchases from '@/components/DashboardLastPurchases';
-import DashboardLastWanted from '@/components/DashboardLastWanted';
+import {Skeleton} from '@/components/ui/skeleton';
 import {authenticator} from '@/services/auth.server';
 import {getReleasesFromCollection, getReleasesFromWantlist} from '@/services/discogs.api.user';
-import {Skeleton} from '@/components/ui/skeleton';
+import {Await, useLoaderData} from '@remix-run/react';
+import type {LoaderFunctionArgs, MetaFunction} from '@vercel/remix';
+import {defer} from '@vercel/remix';
+import {Suspense} from 'react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - User dashboard'}];
@@ -28,15 +26,16 @@ const Dashboard = () => {
   const {latestFromCollection, latestFromWantlist} = useLoaderData<typeof loader>();
 
   return (
-    <section id="dashboard" className="m-8 space-y-8 md:space-y-16">
+    <section id="dashboard" className="h-full">
       <Suspense
         fallback={
-          <div className="flex flex-col gap-8">
-            <div className="flex">
-              <Skeleton className="w-[250px] md:w-[350px] h-8 rounded-xl" />
-              <Skeleton className="w-32 h-8 rounded-xl ml-auto hidden md:block" />
+          <div className="flex flex-col h-full items-center justify-center md:justify-start gap-10">
+            <Skeleton className="w-[300px] aspect-square rounded-xl mt-10" />
+            <div className="flex flex-col gap-4 items-center">
+              <Skeleton className="w-40 h-6 rounded-xl" />
+              <Skeleton className="w-40 h-6 rounded-xl" />
+              <Skeleton className="w-24 h-4 rounded-xl" />
             </div>
-            <Skeleton className="w-full h-48 md:h-[350px] rounded-xl ml-auto" />
           </div>
         }
       >
@@ -45,7 +44,7 @@ const Dashboard = () => {
         </Await>
       </Suspense>
 
-      <Suspense
+      {/* <Suspense
         fallback={
           <div className="flex flex-col gap-8">
             <div className="flex">
@@ -59,7 +58,7 @@ const Dashboard = () => {
         <Await resolve={latestFromWantlist}>
           {(latestFromWantlist) => <DashboardLastWanted lastWanted={latestFromWantlist.wants} />}
         </Await>
-      </Suspense>
+      </Suspense> */}
     </section>
   );
 };

@@ -1,12 +1,12 @@
-import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
-import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
-import {Suspense} from 'react';
 import ReleaseDetails from '@/components/ReleaseDetails';
 import {Button} from '@/components/ui/button';
-import {Star} from '@phosphor-icons/react/dist/icons/Star';
 import {authenticator} from '@/services/auth.server';
 import {getReleaseById} from '@/services/discogs.api.database';
 import {removeReleaseFromWantlist} from '@/services/discogs.api.user';
+import {Heart} from '@phosphor-icons/react/dist/icons/Heart';
+import {Await, Form, NavLink, useLoaderData, useNavigation} from '@remix-run/react';
+import {ActionFunctionArgs, LoaderFunctionArgs, MetaFunction, defer, json, redirect} from '@vercel/remix';
+import {Suspense} from 'react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Vinylogger'}, {name: 'description', content: 'Vinylogger - Wantlist - Release'}];
@@ -51,7 +51,7 @@ const CollectionRoute = () => {
 
                     <Form method="post">
                       <Button className="flex gap-2" variant="default" type="submit">
-                        <Star className="h-4 w-4" />
+                        <Heart className="h-4 w-4" />
                         Remove from wantlist
                       </Button>
                     </Form>
