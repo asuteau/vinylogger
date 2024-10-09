@@ -52,27 +52,28 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
   }, [api, lastPurchases]);
 
   return (
-    <div className="flex flex-col h-full items-center justify-center">
+    <div className="flex flex-col h-full items-center justify-center md:justify-start">
       <Carousel
         setApi={setApi}
         opts={{
           align: 'start',
         }}
         orientation="vertical"
-        className="w-full max-w-xs aspect-square rounded-lg overflow-hidden drop-shadow-xl"
+        className="aspect-square overflow-hidden w-full max-w-md"
       >
-        <CarouselContent className="-mt-4 h-[336px]">
+        <CarouselContent className="h-[400px] items-center">
           {lastPurchases.map((release) => {
             return (
-              <CarouselItem key={release.id} className="pt-4">
-                <img alt={`${release.id} cover`} src={release.coverImage} className="rounded-lg" />
+              <CarouselItem key={release.id} className="pt-14">
+                {/* <img alt={`${release.id} cover`} src={release.coverImage} className="rounded-lg" /> */}
+                <div className="backlight" style={{backgroundImage: `url(${release.coverImage})`}}></div>
               </CarouselItem>
             );
           })}
         </CarouselContent>
       </Carousel>
 
-      <div className="pt-8 px-4 flex flex-col gap-2 text-center items-center">
+      <div className="px-4 flex flex-col gap-2 text-center items-center">
         <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
         <span className="text-base text-muted-foreground line-clamp-1">{currentRelease.artist}</span>
         <div className="flex gap-2 items-center mt-2">
