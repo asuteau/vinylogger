@@ -75,7 +75,7 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
       <div className="pt-8 px-4 flex flex-col gap-2 text-center items-center">
         <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
         <span className="text-base text-muted-foreground line-clamp-1">{currentRelease.artist}</span>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center mt-2">
           <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
