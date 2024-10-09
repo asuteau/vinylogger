@@ -65,7 +65,6 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
           {lastPurchases.map((release) => {
             return (
               <CarouselItem key={release.id} className="pt-14">
-                {/* <img alt={`${release.id} cover`} src={release.coverImage} className="rounded-lg" /> */}
                 <div className="backlight" style={{backgroundImage: `url(${release.coverImage})`}}></div>
               </CarouselItem>
             );
