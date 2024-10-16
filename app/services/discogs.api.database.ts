@@ -1,9 +1,9 @@
+import {DiscogsUserAgent, User} from '@/services/discogs.strategy';
 import * as crypto from 'crypto';
 import createDebug from 'debug';
-import {DiscogsUserAgent, User} from '@/services/discogs.strategy';
 import {z} from 'zod';
 
-let debug = createDebug('discogs:api');
+const debug = createDebug('discogs:api');
 
 const releaseURL = 'https://api.discogs.com/releases/{release_id}';
 const searchURL = 'https://api.discogs.com/database/search';
@@ -14,7 +14,7 @@ const releaseSchema = z
     id: z.number(),
     title: z.string(),
     year: z.number(),
-    country: z.string(),
+    country: z.string().nullable(),
     images: z.array(
       z.object({
         uri: z.string(),
@@ -24,7 +24,7 @@ const releaseSchema = z
       z.object({
         name: z.string(),
         qty: z.string(),
-        text: z.optional(z.string()),
+        text: z.string().optional(),
       }),
     ),
   })
@@ -109,7 +109,7 @@ export const getReleaseById = async (user: User, releaseId: string): Promise<Rel
   const url = new URL(releaseURL.replace('{release_id}', releaseId));
   const urlString = url.toString();
 
-  debug('Get releases from database', urlString);
+  debug('Get release from database', urlString);
   const response = await fetch(urlString, {
     method: 'GET',
     headers: {
@@ -145,7 +145,7 @@ export const search = async (user: User, query: string): Promise<SearchResults> 
   const timestamp = Math.floor(Date.now() / 1000);
 
   const url = new URL(searchURL);
-  let params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.set('q', query);
   params.set('type', 'master');
   params.set('per_page', '20');
@@ -188,7 +188,7 @@ export const getMasterReleaseVersions = async (user: User, masterId: string): Pr
   const timestamp = Math.floor(Date.now() / 1000);
 
   const url = new URL(masterReleaseVersionsURL.replace('{master_id}', masterId));
-  let params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.set('per_page', '20');
   params.set('sort', 'released');
   params.set('sort_order', 'desc');

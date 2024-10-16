@@ -22,10 +22,10 @@ const paginationSchema = z
     per_page: z.number(),
     items: z.number(),
     urls: z.object({
-      first: z.optional(z.string()),
-      last: z.optional(z.string()),
-      prev: z.optional(z.string()),
-      next: z.optional(z.string()),
+      first: z.string().optional(),
+      last: z.string().optional(),
+      prev: z.string().optional(),
+      next: z.string().optional(),
     }),
   })
   .transform((pagination) => ({
@@ -53,7 +53,7 @@ const collectionReleaseSchema = z
       formats: z.array(
         z.object({
           name: z.string(),
-          text: z.optional(z.string()),
+          text: z.string().optional(),
         }),
       ),
     }),
