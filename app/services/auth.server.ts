@@ -1,13 +1,13 @@
-import {Authenticator} from 'remix-auth';
-import {sessionStorage} from '@/services/session.server';
 import {DiscogsStrategy, User} from '@/services/discogs.strategy';
+import {sessionStorage} from '@/services/session.server';
 import createDebug from 'debug';
+import {Authenticator} from 'remix-auth';
 
-let debug = createDebug('discogs:auth');
+const debug = createDebug('discogs:auth');
 
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export let authenticator = new Authenticator<User>(sessionStorage);
+export const authenticator = new Authenticator<User>(sessionStorage);
 
 const consumerKey = process.env.DISCOGS_API_CONSUMER_KEY;
 const consumerSecret = process.env.DISCOGS_API_CONSUMER_SECRET;
@@ -26,7 +26,7 @@ authenticator.use(
     {
       consumerKey,
       consumerSecret,
-      callbackURL: `${isInProduction ? appProductionUrl : 'http://localhost:3000'}/login/callback`,
+      callbackURL: `${isInProduction ? appProductionUrl : 'http://localhost:5173'}/login/callback`,
     },
     // Define what to do when the user is authenticated
     async ({accessToken, accessTokenSecret, profile}) => {

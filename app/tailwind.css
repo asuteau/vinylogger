@@ -142,4 +142,20 @@ body {
     filter: blur(12px) blur(12px);
     z-index: -1;
   }
+
+  .swiper {
+    height: 50vh;
+    padding-left: calc(25vw - 150px);
+  }
+
+  .swiper-slide {
+    background-color: grey;
+    background-image: none;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    height: 300px;
+    opacity: 1;
+  }
 }

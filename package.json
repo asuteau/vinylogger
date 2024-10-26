@@ -37,6 +37,7 @@
     "remix-auth": "^3.7.0",
     "remix-auth-oauth2": "^2.3.0",
     "remix-utils": "^7.7.0",
+    "swiper": "^11.1.14",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.0.0",

@@ -1,7 +1,10 @@
-import {CollectionRelease} from '@/services/discogs.api.user';
-import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
-import {useEffect, useState} from 'react';
-import {Carousel, CarouselApi, CarouselContent, CarouselItem} from './ui/carousel';
+import { CollectionRelease } from '@/services/discogs.api.user';
+import { CalendarDots } from '@phosphor-icons/react/dist/icons/CalendarDots';
+import { useEffect, useState } from 'react';
+import 'swiper/css';
+import { EffectCoverflow } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { CarouselApi } from './ui/carousel';
 
 type DashboardLastPurchasesProps = {
   lastPurchases: CollectionRelease[];
@@ -51,26 +54,53 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
     });
   }, [api, lastPurchases]);
 
+  const applyExtraClasses = (swiper) => {
+    // Clear old extra classes
+    swiper.slides.forEach((slide) => {
+      slide.classList.remove('swiper-slide-prev-prev', 'swiper-slide-next-next');
+    });
+
+    // Add classes based on the current active slide
+    const activeIndex = swiper.activeIndex;
+    const prevPrevSlide = swiper.slides[activeIndex - 2];
+    const nextNextSlide = swiper.slides[activeIndex + 2];
+
+    if (prevPrevSlide) prevPrevSlide.classList.add('swiper-slide-prev-prev');
+    if (nextNextSlide) nextNextSlide.classList.add('swiper-slide-next-next');
+  };
+
   return (
     <div className="flex flex-col h-full items-center justify-center md:justify-start">
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: 'start',
+      <Swiper
+        direction="vertical"
+        initialSlide={lastPurchases.length - 1}
+        effect={'coverflow'}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={'auto'}
+        coverflowEffect={{
+          rotate: -5,
+          stretch: 270,
+          depth: 100,
+          modifier: 1,
+          slideShadows: false,
         }}
-        orientation="vertical"
-        className="aspect-square overflow-hidden w-full max-w-md"
+        freeMode={false}
+        slideToClickedSlide={true}
+        allowTouchMove={true} /* Optionally invert slide movement */
+        resistanceRatio={0.5} /* Make swiping feel smoother */
+        modules={[EffectCoverflow]}
+        controller={{
+          inverse: true,
+        }}
       >
-        <CarouselContent className="h-[400px] items-center">
-          {lastPurchases.map((release) => {
-            return (
-              <CarouselItem key={release.id} className="pt-14">
-                <div className="backlight" style={{backgroundImage: `url(${release.coverImage})`}}></div>
-              </CarouselItem>
-            );
-          })}
-        </CarouselContent>
-      </Carousel>
+        {lastPurchases
+          .slice(0, 5)
+          .reverse()
+          .map((release) => (
+            <SwiperSlide key={release.id}></SwiperSlide>
+          ))}
+      </Swiper>
 
       <div className="px-4 flex flex-col gap-2 text-center items-center">
         <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
