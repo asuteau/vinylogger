@@ -1,10 +1,10 @@
-import { CollectionRelease } from '@/services/discogs.api.user';
-import { CalendarDots } from '@phosphor-icons/react/dist/icons/CalendarDots';
-import { useEffect, useState } from 'react';
+import {CollectionRelease} from '@/services/discogs.api.user';
+import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
+import {useEffect, useState} from 'react';
 import 'swiper/css';
-import { EffectCoverflow } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { CarouselApi } from './ui/carousel';
+import {EffectCoverflow} from 'swiper/modules';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {CarouselApi} from './ui/carousel';
 
 type DashboardLastPurchasesProps = {
   lastPurchases: CollectionRelease[];
@@ -70,7 +70,7 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
   };
 
   return (
-    <div className="flex flex-col h-full items-center justify-center md:justify-start">
+    <div className="flex flex-col gap-4 py-20 h-full">
       <Swiper
         direction="vertical"
         initialSlide={lastPurchases.length - 1}
@@ -98,20 +98,15 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
           .slice(0, 5)
           .reverse()
           .map((release) => (
-            <SwiperSlide key={release.id}></SwiperSlide>
+            <SwiperSlide key={release.id}>
+              <div className="album-cover" style={{backgroundImage: `url('${release.coverImage}')`}}></div>
+            </SwiperSlide>
           ))}
       </Swiper>
 
-      <div className="px-4 flex flex-col gap-2 text-center items-center">
-        <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
-        <span className="text-base text-muted-foreground line-clamp-1">{currentRelease.artist}</span>
-        <div className="flex gap-2 items-center mt-2">
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-          </span>
-          <span className="text-xs text-muted-foreground line-clamp-1">{currentRelease.addedOn}</span>
-        </div>
+      <div className="text-center">
+        <h1 className="text-4xl font-bold">Welcome to Remix!</h1>
+        <p className="text-lg">Edit this file at app/routes/_index.tsx</p>
       </div>
     </div>
   );

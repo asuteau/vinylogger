@@ -11,6 +11,63 @@ body {
   }
 }
 
+.swiper {
+  height: 100% !important;
+  width: 100% !important;
+  padding-left: calc(50vw - 150px) !important;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+  border-radius: 12px;
+}
+
+.swiper-slide .album-cover {
+  background-image: none;
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  border-radius: 12px;
+}
+
+/* Default state for non-active slides - no transition on first load */
+.swiper-slide:not(.swiper-slide-active) {
+  filter: blur(2px);
+}
+
+/* Adjacent slides should have less blur */
+.swiper-slide-prev:not(.swiper-slide-active),
+.swiper-slide-next:not(.swiper-slide-active) {
+  filter: blur(1px);
+}
+
+/* For slides further away (two positions away) */
+.swiper-slide-prev-prev:not(.swiper-slide-active),
+.swiper-slide-next-next:not(.swiper-slide-active) {
+  filter: blur(2px);
+}
+
+/* Active slide should have no blur */
+.swiper-slide-active {
+  filter: blur(0);
+}
+
+.swiper-slide-active .album-cover::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  position: absolute;
+  background: inherit;
+  filter: blur(20px) blur(20px);
+  z-index: -1;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -122,40 +179,5 @@ body {
       width: auto;
       overflow: auto;
     }
-  }
-
-  .backlight {
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 300px;
-    height: 300px;
-    position: relative;
-  }
-
-  .backlight:after {
-    content: '';
-    width: 100%;
-    height: 100%;
-    top: 0;
-    position: absolute;
-    background: inherit;
-    filter: blur(12px) blur(12px);
-    z-index: -1;
-  }
-
-  .swiper {
-    height: 50vh;
-    padding-left: calc(25vw - 150px);
-  }
-
-  .swiper-slide {
-    background-color: grey;
-    background-image: none;
-    background-position: center;
-    background-size: cover;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    height: 300px;
-    opacity: 1;
   }
 }

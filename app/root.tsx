@@ -3,6 +3,7 @@ import {json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, us
 
 import {Analytics} from '@vercel/analytics/react';
 import clsx from 'clsx';
+import 'swiper/css';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import {ThemeProvider, useTheme} from './contexts/theme-context';
