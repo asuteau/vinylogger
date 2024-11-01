@@ -1,9 +1,8 @@
 import {CollectionRelease} from '@/services/discogs.api.user';
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {EffectCoverflow} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {CarouselApi} from './ui/carousel';
 
 type DashboardLastPurchasesProps = {
   lastPurchases: CollectionRelease[];
@@ -34,24 +33,9 @@ const DashboardLastPurchasesItem = ({release}: {release: CollectionRelease}) => 
 };
 
 const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) => {
-  const [api, setApi] = useState<CarouselApi>();
+  const stackedReleases = lastPurchases.slice().reverse();
   const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
-  const [currentRelease, setCurrentRelease] = useState<CollectionRelease>(lastPurchases[current]);
-
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-      setCurrentRelease(lastPurchases[api.selectedScrollSnap()]);
-    });
-  }, [api, lastPurchases]);
+  const [currentRelease, setCurrentRelease] = useState<CollectionRelease>(stackedReleases[current]);
 
   const applyExtraClasses = (swiper) => {
     // Clear old extra classes
@@ -87,17 +71,21 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
         freeMode={false}
         slideToClickedSlide={true}
         initialSlide={lastPurchases.length - 1}
-        onSlideChange={applyExtraClasses}
-        onSwiper={applyExtraClasses}
+        onSlideChange={(swiper) => {
+          setCurrent(swiper.activeIndex + 1);
+          setCurrentRelease(stackedReleases[swiper.activeIndex]);
+          applyExtraClasses(swiper);
+        }}
+        onSwiper={(swiper) => {
+          setCurrent(swiper.activeIndex + 1);
+          applyExtraClasses(swiper);
+        }}
       >
-        {lastPurchases
-          .slice()
-          .reverse()
-          .map((release) => (
-            <SwiperSlide key={release.id}>
-              <div className="album-cover" style={{backgroundImage: `url('${release.coverImage}')`}}></div>
-            </SwiperSlide>
-          ))}
+        {stackedReleases.map((release) => (
+          <SwiperSlide key={release.id}>
+            <div className="album-cover" style={{backgroundImage: `url('${release.coverImage}')`}}></div>
+          </SwiperSlide>
+        ))}
       </Swiper>
 
       <div className="px-4 flex flex-col gap-2 text-center items-center">
