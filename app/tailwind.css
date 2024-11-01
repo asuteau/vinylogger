@@ -37,19 +37,19 @@ body {
 
 /* Default state for non-active slides - no transition on first load */
 .swiper-slide:not(.swiper-slide-active) {
-  filter: blur(2px);
+  filter: blur(4px);
 }
 
 /* Adjacent slides should have less blur */
 .swiper-slide-prev:not(.swiper-slide-active),
 .swiper-slide-next:not(.swiper-slide-active) {
-  filter: blur(1px);
+  filter: blur(2px);
 }
 
 /* For slides further away (two positions away) */
 .swiper-slide-prev-prev:not(.swiper-slide-active),
 .swiper-slide-next-next:not(.swiper-slide-active) {
-  filter: blur(2px);
+  filter: blur(4px);
 }
 
 /* Active slide should have no blur */
