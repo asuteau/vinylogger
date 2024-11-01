@@ -53,7 +53,7 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
   };
 
   return (
-    <div className="flex flex-col gap-4 py-16 h-full">
+    <div className="flex flex-col gap-4 h-full">
       <Swiper
         direction="vertical"
         modules={[EffectCoverflow]}
@@ -88,7 +88,7 @@ const DashboardLastPurchases = ({lastPurchases}: DashboardLastPurchasesProps) =>
         ))}
       </Swiper>
 
-      <div className="px-4 flex flex-col gap-2 text-center items-center">
+      <div className="px-4 pb-16 flex flex-col gap-2 text-center items-center">
         <span className="text-2xl font-bold line-clamp-1">{currentRelease.title}</span>
         <span className="text-base text-muted-foreground line-clamp-1">{currentRelease.artist}</span>
         <div className="flex gap-2 items-center mt-2">
