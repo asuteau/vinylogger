@@ -29,9 +29,9 @@ const Dashboard = () => {
     <section id="dashboard" className="h-full">
       <Suspense
         fallback={
-          <div className="flex flex-col h-full items-center justify-center md:justify-start gap-10">
-            <Skeleton className="w-[300px] aspect-square rounded-xl mt-10" />
-            <div className="flex flex-col gap-4 items-center">
+          <div className="flex flex-col h-full items-center justify-center md:justify-start gap-10 py-16">
+            <Skeleton className="w-[300px] aspect-square rounded-xl mt-16" />
+            <div className="flex flex-col gap-4 items-center mt-16">
               <Skeleton className="w-40 h-6 rounded-xl" />
               <Skeleton className="w-40 h-6 rounded-xl" />
               <Skeleton className="w-24 h-4 rounded-xl" />
