@@ -1,7 +1,6 @@
 import {CollectionRelease} from '@/services/discogs.api.user';
 import {CalendarDots} from '@phosphor-icons/react/dist/icons/CalendarDots';
 import {useEffect, useState} from 'react';
-import 'swiper/css';
 import {EffectCoverflow} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {CarouselApi} from './ui/carousel';
