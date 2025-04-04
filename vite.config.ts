@@ -30,6 +30,7 @@ export default defineConfig({
         short_name: 'vinylogger',
         description: 'Handle your vinyl collection effortlessly with Vinylogger',
         theme_color: '#ffffff',
+        start_url: '/dashboard',
       },
 
       workbox: {
