@@ -1,6 +1,9 @@
-import { vitePlugin as remix } from "@remix-run/dev";
-import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import {vitePlugin as remix} from '@remix-run/dev';
+import {RemixVitePWA} from '@vite-pwa/remix';
+import {defineConfig} from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+
+const {RemixVitePWAPlugin, RemixPWAPreset} = RemixVitePWA();
 
 export default defineConfig({
   plugins: [
@@ -9,8 +12,41 @@ export default defineConfig({
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
+        v3_singleFetch: true,
+        v3_lazyRouteDiscovery: true,
       },
+      presets: [RemixPWAPreset()],
     }),
     tsconfigPaths(),
+    RemixVitePWAPlugin({
+      registerType: 'prompt',
+      injectRegister: false,
+
+      pwaAssets: {
+        disabled: false,
+        config: true,
+      },
+
+      manifest: {
+        name: 'create-pwa-remix',
+        short_name: 'create-pwa-remix',
+        description: 'PWA dummy app with Remix',
+        theme_color: '#ffffff',
+      },
+
+      workbox: {
+        globPatterns: ['**/*.{js,html,css,png,svg,ico}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
+
+      devOptions: {
+        enabled: true,
+        suppressWarnings: true,
+        navigateFallback: '/',
+        navigateFallbackAllowlist: [/^\/$/],
+        type: 'module',
+      },
+    }),
   ],
 });

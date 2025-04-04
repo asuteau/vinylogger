@@ -1,11 +1,12 @@
 import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node';
 import {json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteError} from '@remix-run/react';
-
 import {Analytics} from '@vercel/analytics/react';
 import clsx from 'clsx';
 import 'swiper/css';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
+import {PWAAssets} from './components/PWAAssets';
+import PWABadge from './components/PWABadge';
 import {ThemeProvider, useTheme} from './contexts/theme-context';
 import {authenticator} from './services/auth.server';
 import './tailwind.css';
@@ -38,6 +39,7 @@ const App = () => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        <PWAAssets />
         <Links />
       </head>
       <body>
@@ -55,6 +57,7 @@ const App = () => {
 
         <ScrollRestoration />
         <Scripts />
+        <PWABadge />
         <Analytics />
       </body>
     </html>
