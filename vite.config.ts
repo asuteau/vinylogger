@@ -36,6 +36,17 @@ export default defineConfig({
         globPatterns: ['**/*.{js,html,css,png,svg,ico}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^\/login\/callback/,
+            handler: 'NetworkOnly', // Ensures OAuth callbacks are not cached
+            options: {
+              cacheableResponse: {
+                statuses: [200, 302], // Handle redirects
+              },
+            },
+          },
+        ],
       },
 
       devOptions: {
