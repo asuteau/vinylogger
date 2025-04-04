@@ -12,8 +12,6 @@ export default defineConfig({
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
-        v3_singleFetch: true,
-        v3_lazyRouteDiscovery: true,
       },
       presets: [RemixPWAPreset()],
     }),
@@ -28,9 +26,9 @@ export default defineConfig({
       },
 
       manifest: {
-        name: 'create-pwa-remix',
-        short_name: 'create-pwa-remix',
-        description: 'PWA dummy app with Remix',
+        name: 'vinylogger',
+        short_name: 'vinylogger',
+        description: 'Handle your vinyl collection effortlessly with Vinylogger',
         theme_color: '#ffffff',
       },
 
