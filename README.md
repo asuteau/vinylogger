@@ -44,6 +44,10 @@ Vinylogger was built from the ground up with power users in mind. While Discogs 
 # Install dependencies
 npm install
 
+# Set up environment variables in .env (API keys to generate from Discogs)
+DISCOGS_API_CONSUMER_KEY=your_consumer_key
+DISCOGS_API_CONSUMER_SECRET=your_consumer_secret
+
 # Start development server
 npm run dev
 ```
