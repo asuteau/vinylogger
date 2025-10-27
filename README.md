@@ -1,4 +1,4 @@
-# 🎵 Vinylogger
+# Vinylogger
 
 A user-centric vinyl collection management app built for power users. A modern alternative to Discogs with a focus on mobile-first experience and intuitive workflows.
 
@@ -15,6 +15,13 @@ A user-centric vinyl collection management app built for power users. A modern a
 - **User Feed** - Get notified when labels have in stock records from your wantlist
 - **Social Features** - Discover new records through community recommendations
 - **Enhanced Analytics** - Insights about your collection and listening habits
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="./screenshots/home-light.webp" width="35%" alt="Home page - Light mode">
+  <img src="./screenshots/search-light.webp" width="35%" alt="Search - Light mode">
+</p>
 
 ## 🚀 Tech Stack
 
